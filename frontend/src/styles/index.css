@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap');
+
+:root {
+  --aryass-white: #ffffff;
+  --aryass-ink: #081120;
+  --aryass-ink-soft: #44526a;
+  --aryass-blue: #2563eb;
+  --aryass-blue-deep: #123b97;
+  --aryass-blue-soft: #dbeafe;
+  --aryass-gold: #d4af37;
+  --aryass-gold-soft: #fff1c5;
+  --aryass-border: rgba(8, 17, 32, 0.08);
+  --aryass-border-strong: rgba(37, 99, 235, 0.16);
+  --aryass-surface: #f7f9ff;
+  --aryass-surface-strong: #ffffff;
+  --aryass-surface-muted: rgba(255, 255, 255, 0.72);
+  --aryass-shadow:
+    0 28px 90px rgba(15, 23, 42, 0.09),
+    0 18px 42px rgba(15, 23, 42, 0.06);
+  --aryass-shadow-soft: 0 16px 42px rgba(15, 23, 42, 0.08);
+  --aryass-radius-xl: 32px;
+  --aryass-radius-lg: 24px;
+  --aryass-radius-md: 18px;
+  --aryass-body-font: 'Inter', 'Segoe UI', sans-serif;
+  --aryass-display-font: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
+
+  font-family: var(--aryass-body-font);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--aryass-ink);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.09), transparent 26%),
+    linear-gradient(180deg, #fbfcff 0%, #f6f8fd 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--aryass-ink);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.09), transparent 26%),
+    linear-gradient(180deg, #fbfcff 0%, #f6f8fd 100%);
+  overflow-x: hidden;
+}
+
+body,
+input,
+select,
+button,
+textarea {
+  font-family: var(--aryass-body-font);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--aryass-display-font);
+}
+
+p {
+  margin: 0;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.aryass-brand {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.aryass-brand.is-light {
+  color: var(--aryass-white);
+}
+
+.aryass-brand__symbol {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 196px;
+  max-width: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #000000;
+  box-shadow:
+    0 16px 30px rgba(15, 23, 42, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.aryass-brand__symbol::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.aryass-brand__image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.aryass-brand__copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.aryass-brand__tag {
+  color: rgba(68, 82, 106, 0.92);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.aryass-brand.is-light .aryass-brand__tag {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .aryass-brand {
+    gap: 12px;
+  }
+
+  .aryass-brand__symbol {
+    width: 160px;
+    border-radius: 16px;
+  }
+
+  .aryass-brand__tag {
+    font-size: 0.78rem;
+  }
+}

@@ -1,0 +1,28 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-amit">
+      <circle cx="80" cy="80" r="80" />
+    </clipPath>
+    <linearGradient id="bg-amit" x1="16" y1="10" x2="146" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FBFF" />
+      <stop offset="1" stop-color="#DDE9F7" />
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#clip-amit)">
+    <rect width="160" height="160" fill="url(#bg-amit)" />
+    <circle cx="128" cy="26" r="22" fill="#E7EEF8" />
+    <circle cx="28" cy="132" r="34" fill="#D4E2F4" />
+    <path d="M30 168C34 122 56 102 80 102C104 102 126 122 130 168H30Z" fill="#233B52" />
+    <path d="M53 111C58 105 69 101 80 101C91 101 102 105 107 111V168H53V111Z" fill="#F7FAFF" />
+    <path d="M67 110L80 124L93 110L80 102L67 110Z" fill="#17314A" />
+    <ellipse cx="80" cy="62" rx="28" ry="32" fill="#DCA885" />
+    <path d="M52 60C52 41 63 26 80 26C97 26 108 41 108 60V68H52V60Z" fill="#152939" />
+    <path d="M59 39C66 33 73 30 80 30C89 30 97 35 103 44" stroke="#1C3144" stroke-width="5" stroke-linecap="round" />
+    <ellipse cx="69" cy="67" rx="3.2" ry="3.4" fill="#1A2230" />
+    <ellipse cx="91" cy="67" rx="3.2" ry="3.4" fill="#1A2230" />
+    <path d="M72 78C77 83 83 83 88 78" stroke="#B7685F" stroke-width="3.2" stroke-linecap="round" />
+    <path d="M70 84C72 90 76 94 80 94C84 94 88 90 90 84" stroke="#8F4D44" stroke-width="3.6" stroke-linecap="round" />
+    <path d="M47 168C52 126 64 104 80 104C96 104 108 126 113 168H47Z" fill="#2B4B68" />
+    <path d="M58 117C64 120 72 122 80 122C88 122 96 120 102 117" stroke="#D8B792" stroke-width="2.4" stroke-linecap="round" />
+  </g>
+</svg>

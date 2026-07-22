@@ -1,0 +1,29 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-rahul">
+      <circle cx="80" cy="80" r="80" />
+    </clipPath>
+    <linearGradient id="bg-rahul" x1="18" y1="12" x2="140" y2="152" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FAFF" />
+      <stop offset="1" stop-color="#DCE9F8" />
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#clip-rahul)">
+    <rect width="160" height="160" fill="url(#bg-rahul)" />
+    <circle cx="117" cy="34" r="24" fill="#E7EEF8" />
+    <circle cx="37" cy="142" r="40" fill="#D5E1F4" />
+    <path d="M31 168C35 122 57 102 81 102C105 102 127 122 131 168H31Z" fill="#24384E" />
+    <path d="M54 108L80 132L106 108V168H54V108Z" fill="#F8FBFF" />
+    <path d="M67 111L80 126L93 111L80 103L67 111Z" fill="#0F2238" />
+    <path d="M48 168C52 125 63 103 80 103C97 103 108 125 112 168H48Z" fill="#1E3A56" />
+    <ellipse cx="80" cy="63" rx="28" ry="32" fill="#E6B08C" />
+    <path d="M53 61C53 41 65 25 81 25C97 25 109 41 109 61V67H53V61Z" fill="#132433" />
+    <path d="M55 63C58 45 67 35 81 35C95 35 104 45 107 63C101 57 95 54 86 54H74C66 54 60 57 55 63Z" fill="#1C2F43" />
+    <ellipse cx="69" cy="67" rx="3.2" ry="3.6" fill="#1D2430" />
+    <ellipse cx="91" cy="67" rx="3.2" ry="3.6" fill="#1D2430" />
+    <path d="M73 78C77 81 83 81 87 78" stroke="#B96961" stroke-width="3.2" stroke-linecap="round" />
+    <path d="M60 48C64 41 72 36 81 36C90 36 98 41 102 48" stroke="#203347" stroke-width="5" stroke-linecap="round" />
+    <path d="M53 90C60 97 69 101 80 101C91 101 100 97 107 90" fill="#D39A73" />
+    <path d="M61 116C67 120 73 122 80 122C87 122 93 120 99 116" stroke="#D6B48E" stroke-width="2.4" stroke-linecap="round" />
+  </g>
+</svg>

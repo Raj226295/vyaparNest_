@@ -1,0 +1,686 @@
+.aryass-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+
+.aryass-auth-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.aryass-auth-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.12), transparent 24%),
+    linear-gradient(180deg, rgba(247, 249, 255, 0.82), rgba(241, 245, 255, 0.94));
+  backdrop-filter: blur(18px);
+}
+
+.aryass-auth-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1180px);
+  border-radius: 34px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 70px 160px rgba(0, 0, 0, 0.5),
+    0 32px 70px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  transform: translateY(18px) scale(0.985);
+  transition: transform 240ms ease;
+  overflow: hidden;
+}
+
+.aryass-auth-overlay.is-open .aryass-auth-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.aryass-auth-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 26%),
+    radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.08), transparent 28%);
+  pointer-events: none;
+}
+
+.aryass-auth-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.78);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.aryass-auth-close:hover,
+.aryass-auth-close:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.32);
+  box-shadow: 0 0 22px rgba(37, 99, 235, 0.12);
+}
+
+.aryass-auth-close-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.aryass-auth-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  min-height: 720px;
+}
+
+.aryass-auth-showcase,
+.aryass-auth-panel {
+  min-width: 0;
+}
+
+.aryass-auth-showcase {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding: 34px 48px 42px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 24%),
+    linear-gradient(180deg, #2563eb 0%, #1d4ed8 56%, #123b97 100%);
+}
+
+.aryass-auth-showcase .aryass-brand__symbol {
+  width: 224px;
+}
+
+.aryass-auth-topbar {
+  display: flex;
+}
+
+.aryass-auth-top-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #60a5fa;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.aryass-auth-top-tag-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.aryass-auth-showcase-copy h2 {
+  color: var(--aryass-white);
+  font-size: clamp(3rem, 5vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.07em;
+}
+
+.aryass-auth-showcase-copy p {
+  max-width: 26ch;
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.08rem;
+  line-height: 1.72;
+}
+
+.aryass-auth-showcase-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.aryass-auth-showcase-stat {
+  padding: 24px 20px 22px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.aryass-auth-showcase-stat strong {
+  display: block;
+  color: var(--aryass-white);
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.aryass-auth-showcase-stat span {
+  display: block;
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.94rem;
+}
+
+.aryass-auth-showcase-list {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aryass-auth-showcase-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.58;
+}
+
+.aryass-auth-showcase-check {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.aryass-auth-support-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  margin-top: auto;
+  padding: 24px 26px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+    rgba(7, 11, 20, 0.32);
+}
+
+.aryass-auth-support-card-icon-shell {
+  width: 54px;
+  height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: rgba(37, 99, 235, 0.12);
+  color: #60a5fa;
+}
+
+.aryass-auth-support-card-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.aryass-auth-support-card strong {
+  display: block;
+  color: var(--aryass-white);
+  font-size: 1.05rem;
+}
+
+.aryass-auth-support-card p {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+}
+
+.aryass-auth-panel {
+  display: grid;
+  align-content: center;
+  gap: 24px;
+  padding: 56px 44px 40px;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 26%),
+    rgba(255, 255, 255, 0.96);
+}
+
+.aryass-auth-panel-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.aryass-auth-panel-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  width: fit-content;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: #60a5fa;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.aryass-auth-panel-copy h2 {
+  color: var(--aryass-white);
+  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+}
+
+.aryass-auth-panel-copy p {
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.75;
+}
+
+.aryass-auth-form {
+  display: grid;
+  gap: 18px;
+}
+
+.aryass-auth-field {
+  display: grid;
+  gap: 10px;
+}
+
+.aryass-auth-field > span:first-child {
+  color: var(--aryass-white);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.aryass-auth-input-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 62px;
+  padding: 0 16px 0 48px;
+  border-radius: 18px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.aryass-auth-input-shell:hover,
+.aryass-auth-input-shell:focus-within {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.34);
+  box-shadow:
+    0 16px 28px rgba(0, 0, 0, 0.18),
+    0 0 0 4px rgba(37, 99, 235, 0.06);
+}
+
+.aryass-auth-input-icon {
+  position: absolute;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  color: #60a5fa;
+}
+
+.aryass-auth-input-shell input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--aryass-white);
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.aryass-auth-input-shell input::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.aryass-auth-password-toggle {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.aryass-auth-password-toggle-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.aryass-auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.aryass-auth-row a,
+.aryass-auth-support-link {
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.aryass-auth-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.aryass-auth-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #2563eb;
+}
+
+.aryass-auth-submit,
+.aryass-auth-link-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  width: 100%;
+  border-radius: 18px;
+  font-weight: 700;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.aryass-auth-submit:hover,
+.aryass-auth-submit:focus-visible,
+.aryass-auth-link-card:hover,
+.aryass-auth-link-card:focus-visible {
+  transform: translateY(-1px);
+}
+
+.aryass-auth-submit {
+  border: 0;
+  color: #ffffff;
+  background: linear-gradient(135deg, #93c5fd 0%, #2563eb 60%, #123b97 100%);
+  box-shadow:
+    0 22px 36px rgba(37, 99, 235, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.aryass-auth-submit:disabled {
+  opacity: 0.68;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.aryass-auth-submit-icon,
+.aryass-auth-link-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.aryass-auth-footer {
+  display: grid;
+  gap: 14px;
+}
+
+.aryass-auth-link-card {
+  justify-content: flex-start;
+  padding: 0 18px;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--aryass-white);
+  text-align: left;
+}
+
+.aryass-auth-link-card span {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.aryass-auth-link-card strong {
+  color: #60a5fa;
+}
+
+.aryass-auth-link-icon {
+  margin-left: auto;
+}
+
+.aryass-auth-support-link {
+  justify-self: center;
+}
+
+@media (max-width: 980px) {
+  .aryass-auth-dialog {
+    width: min(100%, 760px);
+  }
+
+  .aryass-auth-layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .aryass-auth-showcase,
+  .aryass-auth-panel {
+    padding: 30px 26px;
+  }
+}
+
+@media (max-width: 720px) {
+  .aryass-auth-overlay {
+    padding: 12px;
+  }
+
+  .aryass-auth-showcase .aryass-brand__symbol {
+    width: 176px;
+  }
+
+  .aryass-auth-showcase-copy h2 {
+    font-size: 2.7rem;
+  }
+
+  .aryass-auth-showcase-copy p {
+    max-width: none;
+    font-size: 1rem;
+  }
+
+  .aryass-auth-showcase-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .aryass-auth-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* Restored blue-white mobile theme */
+.aryass-auth-backdrop {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.12), transparent 22%),
+    linear-gradient(180deg, rgba(247, 249, 255, 0.82), rgba(241, 245, 255, 0.94));
+}
+
+.aryass-auth-dialog {
+  border-color: rgba(37, 99, 235, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.82)),
+    rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 40px 90px rgba(15, 23, 42, 0.14),
+    0 18px 38px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.aryass-auth-close {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--aryass-ink-soft);
+}
+
+.aryass-auth-showcase {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 24%),
+    linear-gradient(180deg, #2563eb 0%, #1d4ed8 54%, #123b97 100%);
+}
+
+.aryass-auth-top-tag,
+.aryass-auth-support-card-icon-shell,
+.aryass-auth-showcase-check {
+  color: #dbeafe;
+}
+
+.aryass-auth-panel {
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 26%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.aryass-auth-panel-kicker {
+  color: var(--aryass-blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.aryass-auth-panel-copy h2,
+.aryass-auth-field > span:first-child,
+.aryass-auth-link-card,
+.aryass-auth-input-shell input {
+  color: var(--aryass-ink);
+}
+
+.aryass-auth-panel-copy p,
+.aryass-auth-row a,
+.aryass-auth-support-link,
+.aryass-auth-checkbox,
+.aryass-auth-link-card span {
+  color: var(--aryass-ink-soft);
+}
+
+.aryass-auth-input-shell {
+  border-color: rgba(37, 99, 235, 0.14);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+.aryass-auth-input-shell:hover,
+.aryass-auth-input-shell:focus-within {
+  box-shadow:
+    0 16px 28px rgba(15, 23, 42, 0.08),
+    0 0 0 4px rgba(37, 99, 235, 0.06);
+}
+
+.aryass-auth-input-icon {
+  color: var(--aryass-blue);
+}
+
+.aryass-auth-input-shell input::placeholder {
+  color: rgba(68, 82, 106, 0.62);
+}
+
+.aryass-auth-phone-shell {
+  gap: 14px;
+  padding-right: 16px;
+}
+
+.aryass-auth-phone-code {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 100%;
+  padding-right: 18px;
+  border-right: 1px solid rgba(37, 99, 235, 0.12);
+  flex-shrink: 0;
+}
+
+.aryass-auth-phone-flag {
+  width: 22px;
+  height: 15px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(8, 17, 32, 0.08);
+}
+
+.aryass-auth-phone-code-select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  appearance: none;
+  color: var(--aryass-ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding-right: 14px;
+}
+
+.aryass-auth-phone-code-caret {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  color: rgba(68, 82, 106, 0.7);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.aryass-auth-checkbox input {
+  accent-color: var(--aryass-blue);
+}
+
+.aryass-auth-link-card {
+  border-color: rgba(37, 99, 235, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.aryass-auth-link-card strong {
+  color: var(--aryass-blue);
+}
+
+.aryass-auth-support-link {
+  color: var(--aryass-blue);
+}
+
+@media (max-width: 720px) {
+  .aryass-auth-phone-shell {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+
+  .aryass-auth-phone-code {
+    width: calc(100% - 2px);
+    min-height: 54px;
+    padding: 0 16px 0 0;
+    margin-left: -4px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.12);
+  }
+
+  .aryass-auth-phone-shell input {
+    min-height: 56px;
+  }
+}
+
+
