@@ -185,6 +185,10 @@ function extractPincodeLocation(payload) {
   return { city, state, country }
 }
 
+function ArrowButtonGif({ className = '' }) {
+  return <img src="/fast-forward.gif" alt="" className={className} aria-hidden="true" />
+}
+
 function Icon({ name, className = '' }) {
   const sharedProps = {
     viewBox: '0 0 24 24',
@@ -1355,7 +1359,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                 onClick={() => navigateToHome('#dashboard')}
               >
                 <span>Go To Dashboard</span>
-                <Icon name="arrow-right" className="partner-wizard-btn-icon" />
+                <ArrowButtonGif className="partner-wizard-btn-icon" />
               </button>
 
               <button
@@ -1364,7 +1368,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                 onClick={() => navigateToHome('#top')}
               >
                 <span>Back to Home</span>
-                <Icon name="arrow-right" className="partner-wizard-btn-icon" />
+                <ArrowButtonGif className="partner-wizard-btn-icon" />
               </button>
             </div>
           </div>
@@ -1762,7 +1766,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                       onClick={handleNext}
                     >
                       <span>Next</span>
-                      <Icon name="arrow-right" className="partner-wizard-btn-icon" />
+                      <ArrowButtonGif className="partner-wizard-btn-icon" />
                     </button>
                   ) : (
                     <button
@@ -1771,7 +1775,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                       onClick={handleProceedPayment}
                     >
                       <span>Proceed to Payment</span>
-                      <Icon name="arrow-right" className="partner-wizard-btn-icon" />
+                      <ArrowButtonGif className="partner-wizard-btn-icon" />
                     </button>
                   )}
                 </div>

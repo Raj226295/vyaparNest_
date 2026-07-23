@@ -30,6 +30,7 @@ function CategoriesMegaMenu({
   onCategorySelect,
   renderCategoryIcon,
   getCategoryHref,
+  allCategoriesHref = '#all-categories',
 }) {
   const arrowStyle =
     typeof arrowLeft === 'number'
@@ -62,7 +63,7 @@ function CategoriesMegaMenu({
 
           <a
             className="categories-mega-menu-all-link"
-            href="#categories"
+            href={allCategoriesHref}
             onClick={onCategorySelect}
           >
             <span>View all categories</span>

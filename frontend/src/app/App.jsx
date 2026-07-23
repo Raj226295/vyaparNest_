@@ -4,13 +4,27 @@ import PartnerRegistrationPage from '../features/public-home/PartnerRegistration
 
 const partnerRegistrationHash = '#partner-register'
 const partnerLoginHash = '#partner-login'
+const categoriesHash = '#all-categories'
+const aiAssistHash = '#ai-assist'
 
 function getCurrentScreen() {
   if (typeof window === 'undefined') {
     return 'home'
   }
 
-  return window.location.hash === partnerRegistrationHash ? 'partner-register' : 'home'
+  if (window.location.hash === partnerRegistrationHash) {
+    return 'partner-register'
+  }
+
+  if (window.location.hash === categoriesHash) {
+    return 'categories'
+  }
+
+  if (window.location.hash === aiAssistHash) {
+    return 'ai-assist'
+  }
+
+  return 'home'
 }
 
 function App() {
@@ -82,6 +96,7 @@ function App() {
         onOpenPartnerRegistration={openPartnerRegistration}
         onOpenPartnerLogin={openPartnerLogin}
         partnerLoginRequestId={partnerLoginRequestId}
+        currentScreen={currentScreen}
       />
 
       {currentScreen === 'partner-register' ? (

@@ -1676,6 +1676,8 @@
 .partner-wizard-btn-icon {
   width: 18px;
   height: 18px;
+  display: block;
+  object-fit: contain;
 }
 
 @media (max-width: 1200px) {

@@ -1,12 +1,19 @@
 ﻿import { useEffect, useRef, useState } from 'react'
+import CategoriesMegaMenu from './CategoriesMegaMenu.jsx'
 import PartnerLoginModal from './PartnerLoginModal.jsx'
 import './PublicHomePage.css'
 
+const homeHash = '#top'
+const categoriesHash = '#all-categories'
+const aiAssistHash = '#ai-assist'
+const workflowHash = '#how-it-works'
+const providersHash = '#providers'
+
 const primaryNavLinks = [
-  { label: 'Home', href: '#top' },
-  { label: 'Categories', href: '#categories', hasChevron: true, isActive: true },
-  { label: 'AI Assist', href: '#how-it-works' },
-  { label: 'Dashboard', href: '#providers' },
+  { key: 'home', label: 'Home', href: homeHash },
+  { key: 'categories', label: 'Categories', href: categoriesHash, hasChevron: true },
+  { key: 'ai-assist', label: 'AI Assist', href: aiAssistHash },
+  { key: 'dashboard', label: 'Dashboard', href: providersHash },
 ]
 
 const popularSearches = [
@@ -95,6 +102,163 @@ const categoryCards = [
   },
 ]
 
+const allCategoriesCards = [
+  {
+    title: 'Accounting',
+    servicesLabel: '128+ Services',
+    description: 'Bookkeeping, Audit, Financial Reporting & more',
+    image: '/category-icons/tax.gif',
+    accentColor: '#e2aa10',
+    iconSurface: 'linear-gradient(180deg, #fff5d8 0%, #fff0c9 100%)',
+  },
+  {
+    title: 'App Development',
+    servicesLabel: '156+ Services',
+    description: 'Android, iOS, Flutter, React Native & more',
+    image: '/category-icons/applications.gif',
+    accentColor: '#5fbf45',
+    iconSurface: 'linear-gradient(180deg, #ebf9e4 0%, #dcf0d5 100%)',
+  },
+  {
+    title: 'Business Consultant',
+    servicesLabel: '98+ Services',
+    description: 'Strategy, Plan, Growth Consulting & more',
+    image: '/category-icons/user.gif',
+    accentColor: '#8a52eb',
+    iconSurface: 'linear-gradient(180deg, #f3eafd 0%, #eadcff 100%)',
+  },
+  {
+    title: 'Business Loans',
+    servicesLabel: '64+ Services',
+    description: 'Unsecured, Secured, Working Capital & more',
+    image: '/category-icons/analytics.gif',
+    accentColor: '#ff9416',
+    iconSurface: 'linear-gradient(180deg, #fff1e3 0%, #ffe4cf 100%)',
+  },
+  {
+    title: 'Website Development',
+    servicesLabel: '210+ Services',
+    description: 'Business, E-commerce, CMS & Custom Websites',
+    image: '/category-icons/web.gif',
+    accentColor: '#4985ff',
+    iconSurface: 'linear-gradient(180deg, #ecf2ff 0%, #dee8ff 100%)',
+  },
+  {
+    title: 'Digital Marketing',
+    servicesLabel: '342+ Services',
+    description: 'SEO, PPC, SMM, Email Marketing & more',
+    image: '/category-icons/analytics.gif',
+    accentColor: '#ff5b73',
+    iconSurface: 'linear-gradient(180deg, #fff0f2 0%, #ffe2e9 100%)',
+  },
+  {
+    title: 'Graphic Design',
+    servicesLabel: '186+ Services',
+    description: 'Logo, Branding, Banner, Brochure & more',
+    image: '/category-icons/graphic-designer.gif',
+    accentColor: '#e0a500',
+    iconSurface: 'linear-gradient(180deg, #fff6dd 0%, #ffedc8 100%)',
+  },
+  {
+    title: 'Video Editing',
+    servicesLabel: '112+ Services',
+    description: 'YouTube, Ads, Reels, Corporate Video & more',
+    image: '/category-icons/movie-camera.gif',
+    accentColor: '#447eff',
+    iconSurface: 'linear-gradient(180deg, #edf3ff 0%, #dfe9ff 100%)',
+  },
+  {
+    title: 'GST & Tax Services',
+    servicesLabel: '89+ Services',
+    description: 'GST Registration, Filing, Return & Compliance',
+    image: '/category-icons/tax.gif',
+    accentColor: '#5dbb45',
+    iconSurface: 'linear-gradient(180deg, #eef8e7 0%, #dff0d3 100%)',
+  },
+  {
+    title: 'CA Services',
+    servicesLabel: '78+ Services',
+    description: 'Income Tax, ROC, Compliance & Advisory',
+    image: '/category-icons/contract.gif',
+    accentColor: '#8c56ea',
+    iconSurface: 'linear-gradient(180deg, #f3eafb 0%, #e8ddff 100%)',
+  },
+  {
+    title: 'Legal Consultant',
+    servicesLabel: '75+ Services',
+    description: 'Legal Advice, Notices, Contracts & Documentation',
+    image: '/category-icons/contract.gif',
+    accentColor: '#18a59b',
+    iconSurface: 'linear-gradient(180deg, #e6f8f5 0%, #d5f0ea 100%)',
+  },
+  {
+    title: 'Company Registration',
+    servicesLabel: '92+ Services',
+    description: 'Private Limited, LLP, OPC & Sole Proprietorship',
+    image: '/category-icons/mission.gif',
+    accentColor: '#8c56ea',
+    iconSurface: 'linear-gradient(180deg, #f1e8ff 0%, #e5dbff 100%)',
+  },
+  {
+    title: 'Social Media Marketing',
+    servicesLabel: '123+ Services',
+    description: 'Content, Management, Paid Ads & Growth',
+    image: '/category-icons/web-data.gif',
+    accentColor: '#ff5c73',
+    iconSurface: 'linear-gradient(180deg, #fff0f2 0%, #ffe1e8 100%)',
+  },
+  {
+    title: 'SEO Services',
+    servicesLabel: '168+ Services',
+    description: 'On-Page, Off-Page, Technical SEO & Local SEO',
+    image: '/category-seo.gif',
+    accentColor: '#457fff',
+    iconSurface: 'linear-gradient(180deg, #edf3ff 0%, #dfe8ff 100%)',
+  },
+  {
+    title: 'Content Writing',
+    servicesLabel: '97+ Services',
+    description: 'Website Content, Blogs, Articles & More',
+    image: '/category-comments.gif',
+    accentColor: '#ff8c14',
+    iconSurface: 'linear-gradient(180deg, #fff3e6 0%, #ffe6cf 100%)',
+  },
+  {
+    title: 'Photography',
+    servicesLabel: '84+ Services',
+    description: 'Events, Products, Portraits & Brand Shoots',
+    image: '/category-photo.gif',
+    accentColor: '#4a80ff',
+    iconSurface: 'linear-gradient(180deg, #eef3ff 0%, #e0e8ff 100%)',
+  },
+  {
+    title: 'Interior Design',
+    servicesLabel: '73+ Services',
+    description: 'Home, Office, Space Planning & Decor',
+    image: '/category-icons/vector.gif',
+    accentColor: '#17a296',
+    iconSurface: 'linear-gradient(180deg, #e8f8f5 0%, #d6efe9 100%)',
+  },
+  {
+    title: 'Home Services',
+    servicesLabel: '144+ Services',
+    description: 'Cleaning, Repairs, Maintenance & Setup',
+    image: '/category-icons/cleaning-service.gif',
+    accentColor: '#5ab948',
+    iconSurface: 'linear-gradient(180deg, #eef8e8 0%, #ddf0d4 100%)',
+  },
+  {
+    title: 'AI Automation',
+    servicesLabel: '69+ Services',
+    description: 'Chatbots, Workflow Tools, CRM Automation & more',
+    image: '/category-icons/mission.gif',
+    accentColor: '#5468ff',
+    iconSurface: 'linear-gradient(180deg, #edf0ff 0%, #e0e4ff 100%)',
+  },
+]
+
+const categoriesMenuCards = allCategoriesCards.slice(0, 8)
+const categoryFilterOptions = allCategoriesCards
 const platformMetrics = [
   { value: '10,000+', label: 'Service Providers', icon: 'users' },
   { value: '50,000+', label: 'Requests Completed', icon: 'document' },
@@ -276,6 +440,217 @@ const footerGroups = [
   },
 ]
 
+const footerSocials = [
+  { label: 'Facebook', icon: 'facebook' },
+  { label: 'Instagram', icon: 'instagram' },
+  { label: 'YouTube', icon: 'youtube' },
+]
+
+const aiAssistConversations = [
+  {
+    id: 'gst-registration',
+    title: 'GST registration process',
+    timeLabel: 'Today, 10:30 AM',
+    messages: [
+      {
+        id: 'gst-user-1',
+        role: 'user',
+        text: 'How to register a private limited company?',
+        time: '10:30 AM',
+      },
+      {
+        id: 'gst-assistant-1',
+        role: 'assistant',
+        type: 'list',
+        intro: 'To register a Private Limited Company in India, follow these main steps:',
+        items: [
+          'Obtain Digital Signature Certificate (DSC)',
+          'Apply for Director Identification Number (DIN)',
+          'Name Approval via RUN (Reserve Unique Name)',
+          'File Incorporation Application (SPICe+ Form)',
+          'Get Certificate of Incorporation',
+        ],
+        outro: 'Would you like a detailed step-by-step guide for any of these steps?',
+      },
+      {
+        id: 'gst-user-2',
+        role: 'user',
+        text: 'Yes, please provide step-by-step guide.',
+        time: '10:31 AM',
+      },
+      {
+        id: 'gst-assistant-typing',
+        role: 'assistant',
+        type: 'typing',
+      },
+    ],
+  },
+  {
+    id: 'logo-brand',
+    title: 'I need a logo for my brand',
+    timeLabel: 'Today, 09:15 AM',
+    messages: [
+      {
+        id: 'logo-user-1',
+        role: 'user',
+        text: 'I need a premium logo for my new GST consultancy brand.',
+        time: '09:15 AM',
+      },
+      {
+        id: 'logo-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'I can help you with logo ideas, brand colors, typography suggestions, and also recommend verified logo designers near your city.',
+      },
+    ],
+  },
+  {
+    id: 'private-limited',
+    title: 'How to start a private limited...',
+    timeLabel: 'Yesterday, 04:20 PM',
+    messages: [
+      {
+        id: 'private-user-1',
+        role: 'user',
+        text: 'How do I start a private limited business in Bihar?',
+        time: '04:20 PM',
+      },
+      {
+        id: 'private-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'Start with name reservation, DSC, DIN, incorporation filing, and bank account setup. I can also connect you with CA and compliance professionals for complete registration support.',
+      },
+    ],
+  },
+  {
+    id: 'income-tax',
+    title: 'Income tax filing for business',
+    timeLabel: 'Yesterday, 11:45 AM',
+    messages: [
+      {
+        id: 'tax-user-1',
+        role: 'user',
+        text: 'What documents do I need for business income tax filing?',
+        time: '11:45 AM',
+      },
+      {
+        id: 'tax-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'You usually need PAN, bank statements, purchase and sales invoices, expense records, GST reports if applicable, and previous return details.',
+      },
+    ],
+  },
+  {
+    id: 'digital-marketing',
+    title: 'Digital marketing services',
+    timeLabel: '21 May 2025, 03:30 PM',
+    messages: [
+      {
+        id: 'dm-user-1',
+        role: 'user',
+        text: 'Which digital marketing service is best for lead generation?',
+        time: '03:30 PM',
+      },
+      {
+        id: 'dm-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'For lead generation, paid ads, landing page optimization, local SEO, and WhatsApp funnel automation usually work best together.',
+      },
+    ],
+  },
+  {
+    id: 'ca-near-me',
+    title: 'CA near me',
+    timeLabel: '20 May 2025, 10:10 AM',
+    messages: [
+      {
+        id: 'ca-user-1',
+        role: 'user',
+        text: 'Can you suggest verified CA services near Purnia, Bihar?',
+        time: '10:10 AM',
+      },
+      {
+        id: 'ca-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'Yes. I can shortlist verified CA professionals for GST filing, ROC compliance, income tax, and company registration based on your business type.',
+      },
+    ],
+  },
+  {
+    id: 'loan-eligibility',
+    title: 'Business loan eligibility',
+    timeLabel: '19 May 2025, 05:00 PM',
+    messages: [
+      {
+        id: 'loan-user-1',
+        role: 'user',
+        text: 'How do I check business loan eligibility for my startup?',
+        time: '05:00 PM',
+      },
+      {
+        id: 'loan-assistant-1',
+        role: 'assistant',
+        type: 'text',
+        text: 'Lenders usually check your business age, turnover, banking history, credit score, GST returns, and filed ITRs. I can help you prepare the checklist.',
+      },
+    ],
+  },
+]
+
+function ArrowButtonGif({ className = '' }) {
+  return <img src="/fast-forward.gif" alt="" className={className} aria-hidden="true" />
+}
+
+function AiAssistMascot({ className = '' }) {
+  return (
+    <div className={`vn-home-ai-mascot ${className}`} aria-hidden="true">
+      <span className="vn-home-ai-mascot-spark is-left">
+        <Icon type="spark" className="vn-home-ai-mascot-spark-icon" />
+      </span>
+      <span className="vn-home-ai-mascot-spark is-right">
+        <Icon type="spark" className="vn-home-ai-mascot-spark-icon" />
+      </span>
+      <img
+        src="/vyaparnest-ai-assist-robot-user.png"
+        alt=""
+        className="vn-home-ai-mascot-image"
+      />
+    </div>
+  )
+}
+
+function normalizeHash(hash) {
+  if (!hash || hash === '#') {
+    return homeHash
+  }
+
+  return hash
+}
+
+function getActivePrimaryNavKey(currentScreen, activeHash) {
+  if (currentScreen === 'ai-assist' || activeHash === aiAssistHash) {
+    return 'ai-assist'
+  }
+
+  if (currentScreen === 'categories' || activeHash === categoriesHash || activeHash === '#categories') {
+    return 'categories'
+  }
+
+  if (activeHash === workflowHash) {
+    return 'ai-assist'
+  }
+
+  if (activeHash === providersHash) {
+    return 'dashboard'
+  }
+
+  return 'home'
+}
+
 function Icon({ type, className = '' }) {
   const sharedProps = {
     className,
@@ -329,6 +704,27 @@ function Icon({ type, className = '' }) {
       return (
         <svg {...sharedProps}>
           <path d="m6.5 9.5 5.5 5 5.5-5" />
+        </svg>
+      )
+    case 'plus':
+      return (
+        <svg {...sharedProps}>
+          <path d="M12 5.2v13.6" />
+          <path d="M5.2 12h13.6" />
+        </svg>
+      )
+    case 'message-circle':
+      return (
+        <svg {...sharedProps}>
+          <path d="M7.2 17.8 4.8 19l.6-2.7a7.1 7.1 0 1 1 1.8 1.5Z" />
+        </svg>
+      )
+    case 'more-vertical':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="12" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="17.5" r="1.2" fill="currentColor" stroke="none" />
         </svg>
       )
     case 'users':
@@ -419,6 +815,50 @@ function Icon({ type, className = '' }) {
           <path d="m11.8 14.5 2.2-2.2" />
         </svg>
       )
+    case 'paperclip':
+      return (
+        <svg {...sharedProps}>
+          <path d="m9.4 12.5 5.4-5.4a2.8 2.8 0 1 1 4 4l-7.2 7.3a4.4 4.4 0 1 1-6.2-6.3l7.1-7" />
+        </svg>
+      )
+    case 'thumbs-up':
+      return (
+        <svg {...sharedProps}>
+          <path d="M8.2 10.6V19H5.4a1.4 1.4 0 0 1-1.4-1.4v-5.6a1.4 1.4 0 0 1 1.4-1.4h2.8Z" />
+          <path d="M8.2 18.8h6.1a2 2 0 0 0 1.9-1.4l1.3-4.1a2 2 0 0 0-1.9-2.6h-3.5l.4-2.2a2.3 2.3 0 0 0-4.3-1.5l-2 3.6" />
+        </svg>
+      )
+    case 'thumbs-down':
+      return (
+        <svg {...sharedProps}>
+          <path d="M8.2 13.4V5H5.4A1.4 1.4 0 0 0 4 6.4V12a1.4 1.4 0 0 0 1.4 1.4h2.8Z" />
+          <path d="M8.2 5.2h6.1a2 2 0 0 1 1.9 1.4l1.3 4.1a2 2 0 0 1-1.9 2.6h-3.5l.4 2.2a2.3 2.3 0 0 1-4.3 1.5l-2-3.6" />
+        </svg>
+      )
+    case 'copy':
+      return (
+        <svg {...sharedProps}>
+          <rect x="9" y="9" width="9" height="10" rx="2" />
+          <path d="M7 15H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1" />
+        </svg>
+      )
+    case 'double-check':
+      return (
+        <svg {...sharedProps}>
+          <path d="m5 13.2 2.5 2.5 4.6-4.8" />
+          <path d="m10.1 13.2 2.5 2.5 6.4-6.8" />
+        </svg>
+      )
+    case 'trash':
+      return (
+        <svg {...sharedProps}>
+          <path d="M4.8 7.2h14.4" />
+          <path d="M9.3 7.2V5.7A1.7 1.7 0 0 1 11 4h2a1.7 1.7 0 0 1 1.7 1.7v1.5" />
+          <path d="m7.2 7.2.7 11a1.8 1.8 0 0 0 1.8 1.7h4.6a1.8 1.8 0 0 0 1.8-1.7l.7-11" />
+          <path d="M10 10.8v5.1" />
+          <path d="M14 10.8v5.1" />
+        </svg>
+      )
     case 'check-circle':
       return (
         <svg {...sharedProps}>
@@ -455,24 +895,142 @@ function Icon({ type, className = '' }) {
           <path d="m10 8.8 5 3.2-5 3.2Z" fill="currentColor" stroke="none" />
         </svg>
       )
+    case 'facebook':
+      return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M13.8 20v-6.2h2.4l.4-2.8h-2.8V9.2c0-.8.2-1.4 1.5-1.4H17V5.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 4v1.8H8.6v2.8h2.3V20h2.9Z" />
+        </svg>
+      )
+    case 'instagram':
+      return (
+        <svg {...sharedProps}>
+          <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="4.3" />
+          <circle cx="12" cy="12" r="3.7" />
+          <circle cx="17.2" cy="6.9" r="0.8" fill="currentColor" stroke="none" />
+        </svg>
+      )
+    case 'linkedin':
+      return (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="6.4" cy="7.2" r="1.8" />
+          <path d="M4.9 10.1h2.9V19H4.9v-8.9Zm4.8 0h2.8v1.2h.1c.4-.8 1.4-1.6 3-1.6 3.2 0 3.8 2.1 3.8 4.9V19h-3v-3.8c0-.9 0-2.1-1.3-2.1s-1.5 1-1.5 2V19H9.7v-8.9Z" />
+        </svg>
+      )
+    case 'youtube':
+      return (
+        <svg {...sharedProps}>
+          <rect x="3.7" y="6.7" width="16.6" height="10.6" rx="3.2" />
+          <path d="m10.3 9.6 5.2 2.4-5.2 2.4V9.6Z" fill="currentColor" stroke="none" />
+        </svg>
+      )
+    case 'check':
+      return (
+        <svg {...sharedProps}>
+          <path d="m6.8 12.2 3.2 3.1 7.2-7.3" />
+        </svg>
+      )
+    case 'grid-dots':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="7" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="17" cy="7" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="7" cy="12" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="17" cy="12" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="7" cy="17" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="17" r="1.4" fill="currentColor" stroke="none" />
+          <circle cx="17" cy="17" r="1.4" fill="currentColor" stroke="none" />
+        </svg>
+      )
     default:
       return null
   }
 }
 
-function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partnerLoginRequestId }) {
+function PublicHomePage({
+  onOpenPartnerRegistration,
+  onOpenPartnerLogin,
+  partnerLoginRequestId,
+  currentScreen = 'home',
+}) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [partnerMenuOpen, setPartnerMenuOpen] = useState(false)
+  const [categoriesMenuOpen, setCategoriesMenuOpen] = useState(false)
+  const [categoriesPageFilterOpen, setCategoriesPageFilterOpen] = useState(false)
+  const [categoriesPageSearchTerm, setCategoriesPageSearchTerm] = useState('')
+  const [selectedCategoryTitle, setSelectedCategoryTitle] = useState('All Categories')
+  const [selectedAiConversationId, setSelectedAiConversationId] = useState(aiAssistConversations[0].id)
+  const [showAllAiConversations, setShowAllAiConversations] = useState(false)
+  const [aiComposerText, setAiComposerText] = useState('')
   const [partnerLoginOpen, setPartnerLoginOpen] = useState(false)
+  const [activeHash, setActiveHash] = useState(() =>
+    typeof window === 'undefined' ? homeHash : normalizeHash(window.location.hash)
+  )
   const partnerMenuRef = useRef(null)
+  const categoriesNavRef = useRef(null)
+  const categoriesMenuRef = useRef(null)
+  const categoriesPageFilterRef = useRef(null)
+  const categoriesPageSectionRef = useRef(null)
+  const categoriesPageCardRefs = useRef(new Map())
+  const isCategoriesScreen = currentScreen === 'categories'
+  const isAiAssistScreen = currentScreen === 'ai-assist'
+  const activePrimaryNavKey = getActivePrimaryNavKey(currentScreen, activeHash)
+  const selectedCategory =
+    selectedCategoryTitle === 'All Categories'
+      ? null
+      : categoryFilterOptions.find((category) => category.title === selectedCategoryTitle) ?? null
+  const filteredCategoryOptions = categoryFilterOptions.filter((category) =>
+    category.title.toLowerCase().includes(categoriesPageSearchTerm.trim().toLowerCase())
+  )
+  const displayedCategories = selectedCategory
+    ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
+    : allCategoriesCards
+  const visibleAiConversations = showAllAiConversations
+    ? aiAssistConversations
+    : aiAssistConversations.slice(0, 6)
+  const selectedAiConversation =
+    aiAssistConversations.find((conversation) => conversation.id === selectedAiConversationId) ??
+    aiAssistConversations[0]
+  const visibleCategoryCount = displayedCategories.length
+  const categoriesPageCountLabel = `Explore ${visibleCategoryCount} trusted ${
+    visibleCategoryCount === 1 ? 'service' : 'services'
+  } to grow your business`
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined
+    }
+
+    const syncHash = () => {
+      setActiveHash(normalizeHash(window.location.hash))
+    }
+
+    syncHash()
+    window.addEventListener('hashchange', syncHash)
+
+    return () => window.removeEventListener('hashchange', syncHash)
+  }, [])
 
   useEffect(() => {
     if (partnerLoginRequestId > 0) {
       setPartnerLoginOpen(true)
       setMobileNavOpen(false)
       setPartnerMenuOpen(false)
+      setCategoriesMenuOpen(false)
     }
   }, [partnerLoginRequestId])
+
+  useEffect(() => {
+    setCategoriesMenuOpen(false)
+  }, [currentScreen])
+
+  useEffect(() => {
+    if (!isCategoriesScreen) {
+      setCategoriesPageFilterOpen(false)
+      setCategoriesPageSearchTerm('')
+    }
+  }, [isCategoriesScreen])
 
   useEffect(() => {
     if (!partnerLoginOpen) {
@@ -522,6 +1080,58 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
     }
   }, [partnerMenuOpen])
 
+  useEffect(() => {
+    if (!categoriesMenuOpen) {
+      return undefined
+    }
+
+    const handlePointerDown = (event) => {
+      if (categoriesNavRef.current && !categoriesNavRef.current.contains(event.target)) {
+        setCategoriesMenuOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setCategoriesMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [categoriesMenuOpen])
+
+  useEffect(() => {
+    if (!categoriesPageFilterOpen) {
+      return undefined
+    }
+
+    const handlePointerDown = (event) => {
+      if (categoriesPageFilterRef.current && !categoriesPageFilterRef.current.contains(event.target)) {
+        setCategoriesPageFilterOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setCategoriesPageFilterOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [categoriesPageFilterOpen])
+
   const closePartnerLogin = () => {
     setPartnerLoginOpen(false)
 
@@ -534,16 +1144,19 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
   const handleOpenPartnerRegistration = () => {
     setMobileNavOpen(false)
     setPartnerMenuOpen(false)
+    setCategoriesMenuOpen(false)
     onOpenPartnerRegistration()
   }
 
   const handleOpenPartnerLogin = () => {
     setMobileNavOpen(false)
     setPartnerMenuOpen(false)
+    setCategoriesMenuOpen(false)
     onOpenPartnerLogin()
   }
 
   const openPartnerMenu = () => {
+    setCategoriesMenuOpen(false)
     setPartnerMenuOpen(true)
   }
 
@@ -551,15 +1164,136 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
     setPartnerMenuOpen(false)
   }
 
+  const openCategoriesMenu = () => {
+    setPartnerMenuOpen(false)
+    setCategoriesMenuOpen(true)
+  }
+
+  const closeCategoriesMenu = () => {
+    setCategoriesMenuOpen(false)
+  }
+
+  const handleCategoriesBlur = (event) => {
+    if (categoriesNavRef.current && categoriesNavRef.current.contains(event.relatedTarget)) {
+      return
+    }
+
+    setCategoriesMenuOpen(false)
+  }
+
+  const handlePrimaryNavSelect = () => {
+    setMobileNavOpen(false)
+    setPartnerMenuOpen(false)
+    setCategoriesMenuOpen(false)
+    setCategoriesPageFilterOpen(false)
+  }
+
+  const renderCategoryVisual = (category, imageClassName, iconClassName) => {
+    if (category.image) {
+      return <img src={category.image} alt="" className={imageClassName} loading="lazy" />
+    }
+
+    return <Icon type={category.icon ?? 'grid-dots'} className={iconClassName} />
+  }
+
+  const toggleCategoriesPageFilter = () => {
+    setCategoriesPageFilterOpen((open) => !open)
+  }
+
+  const selectCategoryFilter = (categoryTitle) => {
+    setSelectedCategoryTitle(categoryTitle)
+    setCategoriesPageFilterOpen(false)
+    setCategoriesPageSearchTerm('')
+  }
+
+  const handleCreateAiChat = () => {
+    setSelectedAiConversationId(aiAssistConversations[0].id)
+    setAiComposerText('')
+  }
+
+  const handleAiComposerSubmit = (event) => {
+    event.preventDefault()
+    setAiComposerText('')
+  }
+
+  const renderAiConversationMessage = (message) => {
+    if (message.type === 'typing') {
+      return (
+        <div key={message.id} className="vn-home-ai-message-row is-assistant is-typing">
+          <span className="vn-home-ai-avatar is-small">AI</span>
+          <div className="vn-home-ai-typing-bubble" aria-label="Vyapar AI is typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )
+    }
+
+    if (message.role === 'user') {
+      return (
+        <div key={message.id} className="vn-home-ai-message-row is-user">
+          <div className="vn-home-ai-message-bubble is-user">
+            <p>{message.text}</p>
+            <div className="vn-home-ai-message-meta">
+              <span>{message.time}</span>
+              <Icon type="double-check" className="vn-home-ai-message-status" />
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div key={message.id} className="vn-home-ai-message-row is-assistant">
+        <span className="vn-home-ai-avatar">AI</span>
+        <div className="vn-home-ai-message-stack">
+          <div className="vn-home-ai-message-bubble is-assistant">
+            {message.type === 'list' ? (
+              <>
+                <p>{message.intro}</p>
+                <ol className="vn-home-ai-message-list">
+                  {message.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+                <p className="vn-home-ai-message-outro">{message.outro}</p>
+              </>
+            ) : (
+              <p>{message.text}</p>
+            )}
+          </div>
+
+          <div className="vn-home-ai-message-actions">
+            <button type="button" aria-label="Like response">
+              <Icon type="thumbs-up" className="vn-home-ai-message-action-icon" />
+            </button>
+            <button type="button" aria-label="Dislike response">
+              <Icon type="thumbs-down" className="vn-home-ai-message-action-icon" />
+            </button>
+            <button type="button" aria-label="Copy response">
+              <Icon type="copy" className="vn-home-ai-message-action-icon" />
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="vn-home-shell" id="top">
+    <div
+      className={`vn-home-shell${isCategoriesScreen ? ' is-categories-screen' : ''}${
+        isAiAssistScreen ? ' is-ai-assist-screen' : ''
+      }`}
+      id="top"
+    >
       <div className="vn-home-glow vn-home-glow-left" aria-hidden="true"></div>
       <div className="vn-home-glow vn-home-glow-right" aria-hidden="true"></div>
 
       <header className="vn-home-header">
         <div className="vn-home-shell-inner is-fluid">
           <div className="vn-home-header-bar">
-            <a className="vn-home-brand" href="#top" onClick={() => setMobileNavOpen(false)}>
+            <a className="vn-home-brand" href="#top" onClick={handlePrimaryNavSelect}>
               <img src="/vyaparnest-home-logo-reference.jpeg" alt="VyaparNest" />
             </a>
 
@@ -577,19 +1311,71 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
             <div id="vn-home-nav-panel" className={`vn-home-nav-area${mobileNavOpen ? ' is-open' : ''}`}>
               <div className="vn-home-nav-primary">
                 <nav className="vn-home-nav-links" aria-label="Primary">
-                  {primaryNavLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className={link.isActive ? 'is-active' : ''}
-                      onClick={() => setMobileNavOpen(false)}
-                    >
-                      {link.label}
-                      {link.hasChevron ? (
-                        <Icon type="chevron-down" className="vn-home-nav-link-chevron" />
-                      ) : null}
-                    </a>
-                  ))}
+                  {primaryNavLinks.map((link) => {
+                    const isActive = activePrimaryNavKey === link.key
+
+                    if (link.key === 'categories') {
+                      return (
+                        <div
+                          key={link.key}
+                          ref={categoriesNavRef}
+                          className={`vn-home-categories-nav-wrap${categoriesMenuOpen ? ' is-open' : ''}`}
+                          onMouseEnter={openCategoriesMenu}
+                          onMouseLeave={closeCategoriesMenu}
+                          onFocus={openCategoriesMenu}
+                          onBlur={handleCategoriesBlur}
+                        >
+                          <a
+                            id="categories-nav-trigger"
+                            href={link.href}
+                            className={isActive ? 'is-active' : ''}
+                            aria-current={isActive ? 'page' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={categoriesMenuOpen}
+                            onClick={handlePrimaryNavSelect}
+                          >
+                            {link.label}
+                            <Icon type="chevron-down" className="vn-home-nav-link-chevron" />
+                          </a>
+
+                          <CategoriesMegaMenu
+                            categories={categoriesMenuCards}
+                            isOpen={categoriesMenuOpen}
+                            menuRef={categoriesMenuRef}
+                            onMouseEnter={openCategoriesMenu}
+                            onMouseLeave={closeCategoriesMenu}
+                            onFocus={openCategoriesMenu}
+                            onBlur={handleCategoriesBlur}
+                            onCategorySelect={handlePrimaryNavSelect}
+                            renderCategoryIcon={(category) =>
+                              renderCategoryVisual(
+                                category,
+                                'categories-menu-item-image',
+                                'categories-menu-item-icon-svg'
+                              )
+                            }
+                            getCategoryHref={() => categoriesHash}
+                            allCategoriesHref={categoriesHash}
+                          />
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <a
+                        key={link.key}
+                        href={link.href}
+                        className={isActive ? 'is-active' : ''}
+                        aria-current={isActive ? 'page' : undefined}
+                        onClick={handlePrimaryNavSelect}
+                      >
+                        {link.label}
+                        {link.hasChevron ? (
+                          <Icon type="chevron-down" className="vn-home-nav-link-chevron" />
+                        ) : null}
+                      </a>
+                    )
+                  })}
                 </nav>
               </div>
 
@@ -672,7 +1458,7 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
                           onClick={handleOpenPartnerRegistration}
                         >
                           Become a Partner
-                          <Icon type="arrow-right" className="vn-home-partner-menu-primary-icon" />
+                          <ArrowButtonGif className="vn-home-partner-menu-primary-icon" />
                         </button>
                         <a
                           className="vn-home-partner-menu-secondary"
@@ -698,345 +1484,671 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
         </div>
       </header>
 
-      <main>
-        <section className="vn-home-hero">
-          <div className="vn-home-shell-inner is-fluid">
-            <div className="vn-home-hero-banner">
-              <video
-                className="vn-home-hero-video"
-                src="/vyaparnest-homepage-banner-reference.mp4"
-                poster="/vyaparnest-home-banner.jpg"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-              <div className="vn-home-hero-video-overlay"></div>
-            </div>
-          </div>
-        </section>
-
-        <div className="vn-home-content">
-          <section className="vn-home-section vn-home-categories-section" id="categories">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-section-head">
-                <div>
-                  <h2>Explore Popular Categories</h2>
-                </div>
-                <a href="#providers" className="vn-home-section-link">
-                  View All Categories
-                  <Icon type="arrow-right" className="vn-home-section-link-icon" />
-                </a>
-              </div>
-
-              <div className="vn-home-category-grid">
-                {categoryCards.map((category) => (
-                  <article key={category.title} className="vn-home-category-card">
-                    <span className="vn-home-category-icon">
-                      {category.image ? (
-                        <img
-                          src={category.image}
-                          alt=""
-                          className="vn-home-category-icon-image"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <Icon type={category.icon} className="vn-home-category-icon-svg" />
-                      )}
-                    </span>
-                    <h3>{category.title}</h3>
-                    <p>{category.experts}</p>
-                  </article>
-                ))}
+      <main
+        className={`vn-home-main${isCategoriesScreen ? ' is-categories-screen' : ''}${
+          isAiAssistScreen ? ' is-ai-assist-screen' : ''
+        }`}
+      >
+        {!isCategoriesScreen && !isAiAssistScreen ? (
+          <section className="vn-home-hero">
+            <div className="vn-home-shell-inner is-fluid">
+              <div className="vn-home-hero-banner">
+                <video
+                  className="vn-home-hero-video"
+                  src="/vyaparnest-homepage-banner-reference.mp4"
+                  poster="/vyaparnest-home-banner.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+                <div className="vn-home-hero-video-overlay"></div>
               </div>
             </div>
           </section>
+        ) : null}
 
-          <section className="vn-home-section">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-metrics-strip">
-                {platformMetrics.map((metric) => (
-                  <article key={metric.label} className="vn-home-metric-card">
-                    <span className="vn-home-metric-icon">
-                      <Icon type={metric.icon} className="vn-home-metric-icon-svg" />
-                    </span>
-                    <div>
-                      <strong>{metric.value}</strong>
-                      <p>{metric.label}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="vn-home-section vn-home-workflow-section" id="how-it-works">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-section-head is-centered vn-home-workflow-head">
-                <div>
-                  <h2>
-                    How <span>VyaparNest</span> Works?
-                  </h2>
-                </div>
-              </div>
-
-              <div className="vn-home-workflow-grid">
-                {workflowSteps.map((step, index) => (
-                  <div key={step.title} className="vn-home-workflow-step">
-                    <article className="vn-home-workflow-card">
-                      <span className="vn-home-workflow-icon">
-                        {step.image ? (
-                          <img
-                            src={step.image}
-                            alt=""
-                            className="vn-home-workflow-icon-image"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <Icon type={step.icon} className="vn-home-workflow-icon-svg" />
-                        )}
-                      </span>
-                      <div className="vn-home-workflow-copy">
-                        <span className="vn-home-workflow-index">{String(index + 1).padStart(2, '0')}</span>
-                        <h3>{step.title}</h3>
-                        <p>{step.description}</p>
-                      </div>
-                    </article>
-                    {index < workflowSteps.length - 1 ? (
-                      <span className="vn-home-workflow-arrow" aria-hidden="true">
-                        <span className="vn-home-workflow-arrow-line"></span>
-                        <Icon type="arrow-right" className="vn-home-workflow-arrow-icon" />
-                      </span>
-                    ) : null}
+        <div
+          className={`vn-home-content${isCategoriesScreen ? ' is-categories-page' : ''}${
+            isAiAssistScreen ? ' is-ai-assist-page' : ''
+          }`}
+        >
+          {isCategoriesScreen ? (
+            <section className="vn-home-section vn-home-categories-page" id="all-categories">
+              <div className="vn-home-shell-inner" ref={categoriesPageSectionRef}>
+                <div className="vn-home-categories-page-head">
+                  <div className="vn-home-categories-page-title">
+                    <h1>
+                      All <span>Categories</span>
+                      <Icon type="spark" className="vn-home-categories-page-title-mark" />
+                    </h1>
+                    <p>{categoriesPageCountLabel}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
 
-          <section className="vn-home-section" id="providers">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-section-head">
-                <div>
-                  <h2>Recommended Professionals</h2>
-                </div>
-                <a href="#top" className="vn-home-section-link">
-                  View All
-                  <Icon type="arrow-right" className="vn-home-section-link-icon" />
-                </a>
-              </div>
-
-              <div className="vn-home-provider-grid">
-                {featuredProviders.map((provider) => (
-                  <article
-                    key={provider.name}
-                    className="vn-home-provider-card"
-                    style={{ '--provider-accent': provider.accent }}
+                  <div
+                    className={`vn-home-categories-page-filter-wrap${categoriesPageFilterOpen ? ' is-open' : ''}`}
+                    ref={categoriesPageFilterRef}
                   >
-                    <div className="vn-home-provider-head">
-                      <span className="vn-home-provider-avatar">{provider.initials}</span>
-                      <div>
-                        <h3>{provider.name}</h3>
-                        <p>{provider.service}</p>
+                    <button
+                      type="button"
+                      className="vn-home-categories-page-filter"
+                      aria-expanded={categoriesPageFilterOpen}
+                      aria-haspopup="dialog"
+                      onClick={toggleCategoriesPageFilter}
+                    >
+                      <span className="vn-home-categories-page-filter-value">
+                        <span className="vn-home-categories-page-filter-value-icon">
+                          {renderCategoryVisual(
+                            selectedCategory ?? { icon: 'grid-dots' },
+                            'vn-home-categories-page-filter-image',
+                            'vn-home-categories-page-filter-svg'
+                          )}
+                        </span>
+                        <span>{selectedCategoryTitle}</span>
+                      </span>
+                      <Icon type="chevron-down" className="vn-home-categories-page-filter-icon" />
+                    </button>
+
+                    <div
+                      className={`vn-home-categories-page-dropdown${categoriesPageFilterOpen ? ' is-open' : ''}`}
+                      role="dialog"
+                      aria-label="Select category"
+                      aria-hidden={!categoriesPageFilterOpen}
+                    >
+                      <div className="vn-home-categories-page-dropdown-search">
+                        <Icon type="search" className="vn-home-categories-page-dropdown-search-icon" />
+                        <input
+                          type="search"
+                          value={categoriesPageSearchTerm}
+                          onChange={(event) => setCategoriesPageSearchTerm(event.target.value)}
+                          placeholder="Search category..."
+                          aria-label="Search category"
+                        />
                       </div>
-                    </div>
 
-                    <div className="vn-home-provider-location">
-                      <Icon type="location" className="vn-home-provider-location-icon" />
-                      <span>{provider.location}</span>
-                    </div>
+                      <button
+                        type="button"
+                        className={`vn-home-categories-page-dropdown-option is-featured${
+                          selectedCategoryTitle === 'All Categories' ? ' is-selected' : ''
+                        }`}
+                        onClick={() => selectCategoryFilter('All Categories')}
+                      >
+                        <span className="vn-home-categories-page-dropdown-option-copy">
+                          <span className="vn-home-categories-page-dropdown-option-icon">
+                            <Icon type="grid-dots" className="vn-home-categories-page-dropdown-option-svg" />
+                          </span>
+                          <span>All Categories</span>
+                        </span>
+                        {selectedCategoryTitle === 'All Categories' ? (
+                          <Icon type="check" className="vn-home-categories-page-dropdown-check" />
+                        ) : null}
+                      </button>
 
-                    <div className="vn-home-provider-badges">
-                      <span className="vn-home-provider-verified">
-                        <Icon type="shield" className="vn-home-provider-verified-icon" />
-                        Verified
-                      </span>
-                      <span className="vn-home-provider-rating">
-                        <Icon type="star" className="vn-home-provider-meta-icon" />
-                        {provider.rating} ({provider.reviews})
-                      </span>
-                    </div>
+                      <div className="vn-home-categories-page-dropdown-list">
+                        {filteredCategoryOptions.length > 0 ? (
+                          filteredCategoryOptions.map((category) => (
+                            <button
+                              type="button"
+                              key={category.title}
+                              className={`vn-home-categories-page-dropdown-option${
+                                selectedCategoryTitle === category.title ? ' is-selected' : ''
+                              }`}
+                              onClick={() => selectCategoryFilter(category.title)}
+                            >
+                              <span className="vn-home-categories-page-dropdown-option-copy">
+                                <span className="vn-home-categories-page-dropdown-option-icon">
+                                  {renderCategoryVisual(
+                                    category,
+                                    'vn-home-categories-page-dropdown-option-image',
+                                    'vn-home-categories-page-dropdown-option-svg'
+                                  )}
+                                </span>
+                                <span>{category.title}</span>
+                              </span>
+                              {selectedCategoryTitle === category.title ? (
+                                <Icon type="check" className="vn-home-categories-page-dropdown-check" />
+                              ) : null}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="vn-home-categories-page-dropdown-empty">
+                            No matching categories found.
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="vn-home-provider-stats">
-                      <span>
-                        <Icon type="calendar" className="vn-home-provider-meta-icon" />
-                        {provider.years}
-                      </span>
-                      <span>
-                        <Icon type="briefcase" className="vn-home-provider-meta-icon" />
-                        {provider.projects}
-                      </span>
-                    </div>
-
-                    <div className="vn-home-provider-actions">
-                      <a href="#top" className="vn-home-provider-link">
-                        View Profile
-                      </a>
-                      <button type="button" className="vn-home-provider-button" onClick={handleOpenPartnerLogin}>
-                        Send Request
+                      <button
+                        type="button"
+                        className="vn-home-categories-page-dropdown-footer"
+                        onClick={() => selectCategoryFilter('All Categories')}
+                      >
+                        <span className="vn-home-categories-page-dropdown-footer-copy">
+                          <Icon type="grid-dots" className="vn-home-categories-page-dropdown-footer-icon" />
+                          <span>View All Categories</span>
+                        </span>
+                        <ArrowButtonGif className="vn-home-categories-page-dropdown-footer-arrow" />
                       </button>
                     </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
+                  </div>
+                </div>
 
-          <section className="vn-home-section" id="for-business">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-promo-grid">
-                <article className="vn-home-promo-card is-dark">
-                  <div className="vn-home-promo-icon">
-                    <img
-                      src="/promo-icons/file.gif"
-                      alt=""
-                      className="vn-home-promo-icon-image"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="vn-home-promo-copy">
-                    <h3>Can&apos;t Find the Right Professional?</h3>
-                    <p>
-                      Post your requirement and get responses from suitable verified professionals.
-                    </p>
-                  </div>
-                  <a className="vn-home-promo-button" href="#providers">
-                    Post Your Requirement
-                  </a>
-                </article>
+                <div
+                  className={`vn-home-categories-page-grid${
+                    selectedCategory ? ' is-filtered' : ''
+                  }`}
+                >
+                  {displayedCategories.map((category) => (
+                    <article
+                      key={category.title}
+                      ref={(node) => {
+                        if (node) {
+                          categoriesPageCardRefs.current.set(category.title, node)
+                        } else {
+                          categoriesPageCardRefs.current.delete(category.title)
+                        }
+                      }}
+                      className={`vn-home-categories-page-card${
+                        selectedCategoryTitle === category.title ? ' is-selected' : ''
+                      }`}
+                      style={{
+                        '--vn-category-accent': category.accentColor ?? '#d4af37',
+                        '--vn-category-icon-surface':
+                          category.iconSurface ?? 'linear-gradient(180deg, #fbf8f1, #f4efe4)',
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => selectCategoryFilter(category.title)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          selectCategoryFilter(category.title)
+                        }
+                      }}
+                    >
+                      <span className="vn-home-categories-page-icon">
+                        {renderCategoryVisual(
+                          category,
+                          'vn-home-categories-page-icon-image',
+                          'vn-home-categories-page-icon-svg'
+                        )}
+                      </span>
 
-                <article className="vn-home-promo-card is-gold">
-                  <div className="vn-home-promo-icon">
-                    <img
-                      src="/promo-icons/briefcase.gif"
-                      alt=""
-                      className="vn-home-promo-icon-image"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="vn-home-promo-copy">
-                    <h3>Are You a Service Provider?</h3>
-                    <p>List your business on VyaparNest and grow your business online.</p>
-                  </div>
-                  <button type="button" className="vn-home-promo-button is-dark" onClick={handleOpenPartnerRegistration}>
-                    List Your Business
-                  </button>
-                </article>
-              </div>
-            </div>
-          </section>
+                      <div className="vn-home-categories-page-card-copy">
+                        <h3>{category.title}</h3>
+                        <p>{category.description}</p>
+                      </div>
 
-          <section className="vn-home-section vn-home-testimonials-section" id="testimonials">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-section-head is-centered">
-                <div>
-                  <h2>What Our Customers Say</h2>
+                      <div className="vn-home-categories-page-card-footer">
+                        <span className="vn-home-categories-page-card-services">
+                          {category.servicesLabel}
+                        </span>
+                        <span className="vn-home-categories-page-card-arrow">
+                          <ArrowButtonGif className="vn-home-categories-page-card-arrow-icon" />
+                        </span>
+                      </div>
+                    </article>
+                  ))}
                 </div>
               </div>
-
-              <div className="vn-home-testimonial-grid">
-                {testimonials.map((testimonial) => (
-                  <article key={testimonial.name} className="vn-home-testimonial-card">
-                    <span className="vn-home-testimonial-quote-mark" aria-hidden="true">
-                      &ldquo;
-                    </span>
-                    <p className="vn-home-testimonial-quote">&ldquo;{testimonial.quote}&rdquo;</p>
-                    <div className="vn-home-testimonial-foot">
-                      <div className="vn-home-testimonial-person">
-                        <div className="vn-home-testimonial-avatar">
-                          {testimonial.avatar ? (
-                            <img src={testimonial.avatar} alt={testimonial.name} loading="lazy" />
-                          ) : (
-                            testimonial.name
-                              .split(' ')
-                              .map((part) => part[0])
-                              .join('')
-                              .slice(0, 2)
-                          )}
-                        </div>
-                        <div>
-                          <strong>{testimonial.name}</strong>
-                          <span>{testimonial.role}</span>
-                        </div>
+            </section>
+          ) : isAiAssistScreen ? (
+            <section className="vn-home-section vn-home-ai-assist-page" id="ai-assist">
+              <div className="vn-home-shell-inner is-fluid">
+                <div className="vn-home-ai-assist-layout">
+                  <aside className="vn-home-ai-sidebar">
+                    <div className="vn-home-ai-sidebar-head">
+                      <div>
+                        <h2>Chat History</h2>
                       </div>
-                      <div className="vn-home-testimonial-stars" aria-label={`${testimonial.stars} star rating`}>
-                        {Array.from({ length: testimonial.stars }).map((_, starIndex) => (
-                          <span key={`${testimonial.name}-star-${starIndex}`}>★</span>
-                        ))}
+                      <button
+                        type="button"
+                        className="vn-home-ai-new-chat"
+                        onClick={handleCreateAiChat}
+                      >
+                        <Icon type="plus" className="vn-home-ai-new-chat-icon" />
+                        <span>New Chat</span>
+                      </button>
+                    </div>
+
+                    <div className="vn-home-ai-history-list">
+                      {visibleAiConversations.map((conversation) => {
+                        const isActive = conversation.id === selectedAiConversation.id
+
+                        return (
+                          <button
+                            key={conversation.id}
+                            type="button"
+                            className={`vn-home-ai-history-item${isActive ? ' is-active' : ''}`}
+                            onClick={() => setSelectedAiConversationId(conversation.id)}
+                          >
+                            <span className="vn-home-ai-history-item-icon">
+                              <Icon
+                                type="message-circle"
+                                className="vn-home-ai-history-item-icon-svg"
+                              />
+                            </span>
+                            <span className="vn-home-ai-history-item-copy">
+                              <strong>{conversation.title}</strong>
+                              <small>{conversation.timeLabel}</small>
+                            </span>
+                            <Icon
+                              type="more-vertical"
+                              className="vn-home-ai-history-item-more"
+                            />
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <div className="vn-home-ai-sidebar-actions">
+                      <button
+                        type="button"
+                        className="vn-home-ai-history-more"
+                        onClick={() => setShowAllAiConversations((open) => !open)}
+                      >
+                        <span>{showAllAiConversations ? 'Show Less History' : 'View More History'}</span>
+                        <Icon type="chevron-down" className="vn-home-ai-history-more-icon" />
+                      </button>
+                      <button
+                        type="button"
+                        className="vn-home-ai-history-delete"
+                        aria-label="Delete chat history"
+                      >
+                        <Icon type="trash" className="vn-home-ai-history-delete-icon" />
+                      </button>
+                    </div>
+                  </aside>
+
+                  <section className="vn-home-ai-chat-panel">
+                    <div className="vn-home-ai-chat-hero">
+                      <AiAssistMascot className="vn-home-ai-chat-mascot" />
+                      <div className="vn-home-ai-chat-hero-copy">
+                        <h1>
+                          Hello! I'm <span>Vyapar AI</span>
+                          <Icon type="spark" className="vn-home-ai-chat-hero-mark" />
+                        </h1>
+                        <p>
+                          Your smart business assistant to find services, get guidance and grow your
+                          business.
+                        </p>
                       </div>
                     </div>
-                  </article>
-                ))}
-              </div>
 
-              <div className="vn-home-testimonial-dots" aria-hidden="true">
-                <span className="is-active"></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </section>
+                    <div className="vn-home-ai-chat-thread">
+                      {selectedAiConversation.messages.map((message) =>
+                        renderAiConversationMessage(message)
+                      )}
+                    </div>
 
-          <section className="vn-home-section vn-home-guides-section" id="articles">
-            <div className="vn-home-shell-inner">
-              <div className="vn-home-section-head">
-                <div>
-                  <h2>Latest Business Guides</h2>
+                    <form className="vn-home-ai-composer" onSubmit={handleAiComposerSubmit}>
+                      <input
+                        type="text"
+                        value={aiComposerText}
+                        onChange={(event) => setAiComposerText(event.target.value)}
+                        placeholder="Type your message here..."
+                        aria-label="Type your message"
+                      />
+                      <button
+                        type="button"
+                        className="vn-home-ai-composer-attach"
+                        aria-label="Attach file"
+                      >
+                        <Icon type="paperclip" className="vn-home-ai-composer-attach-icon" />
+                      </button>
+                      <button type="submit" className="vn-home-ai-composer-send" aria-label="Send message">
+                        <Icon type="send" className="vn-home-ai-composer-send-icon" />
+                      </button>
+                    </form>
+
+                    <p className="vn-home-ai-disclaimer">
+                      <Icon type="shield" className="vn-home-ai-disclaimer-icon" />
+                      <span>Vyapar AI can make mistakes. Please verify important information.</span>
+                    </p>
+                  </section>
                 </div>
-                <a href="#top" className="vn-home-section-link">
-                  View all Articles
-                  <Icon type="arrow-right" className="vn-home-section-link-icon" />
-                </a>
               </div>
+            </section>
+          ) : (
+            <>
+              <section className="vn-home-section vn-home-categories-section" id="categories">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-section-head">
+                    <div>
+                      <h2>Explore Popular Categories</h2>
+                    </div>
+                    <a href={categoriesHash} className="vn-home-section-link">
+                      View All Categories
+                      <ArrowButtonGif className="vn-home-section-link-icon" />
+                    </a>
+                  </div>
 
-              <div className="vn-home-guide-grid">
-                {guides.map((guide) => (
-                  <article key={guide.title} className="vn-home-guide-card">
-                    <div className="vn-home-guide-media">
-                      <img src={guide.image} alt={guide.title} className="vn-home-guide-media-image is-default" />
-                      {guide.hoverImage ? (
+                  <div className="vn-home-category-grid">
+                    {categoryCards.map((category) => (
+                      <article key={category.title} className="vn-home-category-card">
+                        <span className="vn-home-category-icon">
+                          {category.image ? (
+                            <img
+                              src={category.image}
+                              alt=""
+                              className="vn-home-category-icon-image"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <Icon type={category.icon} className="vn-home-category-icon-svg" />
+                          )}
+                        </span>
+                        <h3>{category.title}</h3>
+                        <p>{category.experts}</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-metrics-strip">
+                    {platformMetrics.map((metric) => (
+                      <article key={metric.label} className="vn-home-metric-card">
+                        <span className="vn-home-metric-icon">
+                          <Icon type={metric.icon} className="vn-home-metric-icon-svg" />
+                        </span>
+                        <div>
+                          <strong>{metric.value}</strong>
+                          <p>{metric.label}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section vn-home-workflow-section" id="how-it-works">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-section-head is-centered vn-home-workflow-head">
+                    <div>
+                      <h2>
+                        How <span>VyaparNest</span> Works?
+                      </h2>
+                    </div>
+                  </div>
+
+                  <div className="vn-home-workflow-grid">
+                    {workflowSteps.map((step, index) => (
+                      <div key={step.title} className="vn-home-workflow-step">
+                        <article className="vn-home-workflow-card">
+                          <span className="vn-home-workflow-icon">
+                            {step.image ? (
+                              <img
+                                src={step.image}
+                                alt=""
+                                className="vn-home-workflow-icon-image"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <Icon type={step.icon} className="vn-home-workflow-icon-svg" />
+                            )}
+                          </span>
+                          <div className="vn-home-workflow-copy">
+                            <span className="vn-home-workflow-index">{String(index + 1).padStart(2, '0')}</span>
+                            <h3>{step.title}</h3>
+                            <p>{step.description}</p>
+                          </div>
+                        </article>
+                        {index < workflowSteps.length - 1 ? (
+                          <span className="vn-home-workflow-arrow" aria-hidden="true">
+                            <span className="vn-home-workflow-arrow-line"></span>
+                            <Icon type="arrow-right" className="vn-home-workflow-arrow-icon" />
+                          </span>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section" id="providers">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-section-head">
+                    <div>
+                      <h2>Recommended Professionals</h2>
+                    </div>
+                    <a href="#top" className="vn-home-section-link">
+                      View All
+                      <ArrowButtonGif className="vn-home-section-link-icon" />
+                    </a>
+                  </div>
+
+                  <div className="vn-home-provider-grid">
+                    {featuredProviders.map((provider) => (
+                      <article
+                        key={provider.name}
+                        className="vn-home-provider-card"
+                        style={{ '--provider-accent': provider.accent }}
+                      >
+                        <div className="vn-home-provider-head">
+                          <span className="vn-home-provider-avatar">{provider.initials}</span>
+                          <div>
+                            <h3>{provider.name}</h3>
+                            <p>{provider.service}</p>
+                          </div>
+                        </div>
+
+                        <div className="vn-home-provider-location">
+                          <Icon type="location" className="vn-home-provider-location-icon" />
+                          <span>{provider.location}</span>
+                        </div>
+
+                        <div className="vn-home-provider-badges">
+                          <span className="vn-home-provider-verified">
+                            <Icon type="shield" className="vn-home-provider-verified-icon" />
+                            Verified
+                          </span>
+                          <span className="vn-home-provider-rating">
+                            <Icon type="star" className="vn-home-provider-meta-icon" />
+                            {provider.rating} ({provider.reviews})
+                          </span>
+                        </div>
+
+                        <div className="vn-home-provider-stats">
+                          <span>
+                            <Icon type="calendar" className="vn-home-provider-meta-icon" />
+                            {provider.years}
+                          </span>
+                          <span>
+                            <Icon type="briefcase" className="vn-home-provider-meta-icon" />
+                            {provider.projects}
+                          </span>
+                        </div>
+
+                        <div className="vn-home-provider-actions">
+                          <a href="#top" className="vn-home-provider-link">
+                            View Profile
+                          </a>
+                          <button type="button" className="vn-home-provider-button" onClick={handleOpenPartnerLogin}>
+                            Send Request
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section" id="for-business">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-promo-grid">
+                    <article className="vn-home-promo-card is-dark">
+                      <div className="vn-home-promo-icon">
                         <img
-                          src={guide.hoverImage}
+                          src="/promo-icons/file.gif"
                           alt=""
-                          aria-hidden="true"
-                          className="vn-home-guide-media-image is-hover"
+                          className="vn-home-promo-icon-image"
                           loading="lazy"
                         />
-                      ) : null}
+                      </div>
+                      <div className="vn-home-promo-copy">
+                        <h3>Can&apos;t Find the Right Professional?</h3>
+                        <p>
+                          Post your requirement and get responses from suitable verified professionals.
+                        </p>
+                      </div>
+                      <a className="vn-home-promo-button" href="#providers">
+                        Post Your Requirement
+                      </a>
+                    </article>
+
+                    <article className="vn-home-promo-card is-gold">
+                      <div className="vn-home-promo-icon">
+                        <img
+                          src="/promo-icons/briefcase.gif"
+                          alt=""
+                          className="vn-home-promo-icon-image"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="vn-home-promo-copy">
+                        <h3>Are You a Service Provider?</h3>
+                        <p>List your business on VyaparNest and grow your business online.</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="vn-home-promo-button is-dark"
+                        onClick={handleOpenPartnerRegistration}
+                      >
+                        List Your Business
+                      </button>
+                    </article>
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section vn-home-testimonials-section" id="testimonials">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-section-head is-centered">
+                    <div>
+                      <h2>What Our Customers Say</h2>
                     </div>
-                    <div className="vn-home-guide-copy">
-                      <span>{guide.category}</span>
-                      <h3>{guide.title}</h3>
-                      <p>
-                        <span>{guide.date}</span>
-                        <strong>•</strong>
-                        <span>{guide.readTime}</span>
-                      </p>
+                  </div>
+
+                  <div className="vn-home-testimonial-grid">
+                    {testimonials.map((testimonial) => (
+                      <article key={testimonial.name} className="vn-home-testimonial-card">
+                        <span className="vn-home-testimonial-quote-mark" aria-hidden="true">
+                          &ldquo;
+                        </span>
+                        <p className="vn-home-testimonial-quote">&ldquo;{testimonial.quote}&rdquo;</p>
+                        <div className="vn-home-testimonial-foot">
+                          <div className="vn-home-testimonial-person">
+                            <div className="vn-home-testimonial-avatar">
+                              {testimonial.avatar ? (
+                                <img src={testimonial.avatar} alt={testimonial.name} loading="lazy" />
+                              ) : (
+                                testimonial.name
+                                  .split(' ')
+                                  .map((part) => part[0])
+                                  .join('')
+                                  .slice(0, 2)
+                              )}
+                            </div>
+                            <div>
+                              <strong>{testimonial.name}</strong>
+                              <span>{testimonial.role}</span>
+                            </div>
+                          </div>
+                          <div
+                            className="vn-home-testimonial-stars"
+                            aria-label={`${testimonial.stars} star rating`}
+                          >
+                            {Array.from({ length: testimonial.stars }).map((_, starIndex) => (
+                              <span key={`${testimonial.name}-star-${starIndex}`}>★</span>
+                            ))}
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+
+                  <div className="vn-home-testimonial-dots" aria-hidden="true">
+                    <span className="is-active"></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="vn-home-section vn-home-guides-section" id="articles">
+                <div className="vn-home-shell-inner">
+                  <div className="vn-home-section-head">
+                    <div>
+                      <h2>Latest Business Guides</h2>
                     </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
+                    <a href="#top" className="vn-home-section-link">
+                      View all Articles
+                      <ArrowButtonGif className="vn-home-section-link-icon" />
+                    </a>
+                  </div>
+
+                  <div className="vn-home-guide-grid">
+                    {guides.map((guide) => (
+                      <article key={guide.title} className="vn-home-guide-card">
+                        <div className="vn-home-guide-media">
+                          <img
+                            src={guide.image}
+                            alt={guide.title}
+                            className="vn-home-guide-media-image is-default"
+                          />
+                          {guide.hoverImage ? (
+                            <img
+                              src={guide.hoverImage}
+                              alt=""
+                              aria-hidden="true"
+                              className="vn-home-guide-media-image is-hover"
+                              loading="lazy"
+                            />
+                          ) : null}
+                        </div>
+                        <div className="vn-home-guide-copy">
+                          <span>{guide.category}</span>
+                          <h3>{guide.title}</h3>
+                          <p>
+                            <span>{guide.date}</span>
+                            <strong>•</strong>
+                            <span>{guide.readTime}</span>
+                          </p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
         </div>
       </main>
 
       <footer className="vn-home-footer">
-        <div className="vn-home-shell-inner vn-home-footer-grid">
-          <div className="vn-home-footer-brand">
-            <img src="/vyaparnest-footer-logo-user.png" alt="VyaparNest" />
-            <p>Your business. Our platform. Grow together.</p>
-            <div className="vn-home-footer-socials">
-              <a href="#top">Facebook</a>
-              <a href="#top">Instagram</a>
-              <a href="#top">LinkedIn</a>
-              <a href="#top">YouTube</a>
+        <div className="vn-home-shell-inner">
+          <div className="vn-home-footer-main">
+            <div className="vn-home-footer-brand">
+              <a className="vn-home-footer-brand-lockup" href="#top" aria-label="VyaparNest home">
+                <img
+                  src="/vyaparnest-footer-brand-lockup-user.png"
+                  alt="VyaparNest"
+                  className="vn-home-footer-brand-logo"
+                />
+              </a>
+              <div className="vn-home-footer-socials">
+                {footerSocials.map((social) => (
+                  <a key={social.label} href="#top" aria-label={social.label} title={social.label}>
+                    <Icon type={social.icon} className="vn-home-footer-social-icon" />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="vn-home-footer-links">
             {footerGroups.map((group) => (
-              <div key={group.title}>
+              <div key={group.title} className="vn-home-footer-column">
                 <h3>{group.title}</h3>
                 {group.links.map((link) => (
                   <a key={link} href="#top">
@@ -1048,14 +2160,18 @@ function PublicHomePage({ onOpenPartnerRegistration, onOpenPartnerLogin, partner
 
             <div className="vn-home-footer-newsletter">
               <h3>Newsletter</h3>
-              <p>Subscribe to get updates and offers in your inbox.</p>
+              <p>Subscribe for get updates and offers in your inbox.</p>
               <form onSubmit={(event) => event.preventDefault()}>
                 <input type="email" placeholder="Enter your email" aria-label="Enter your email" />
                 <button type="submit" aria-label="Subscribe">
-                  <Icon type="arrow-right" className="vn-home-footer-newsletter-icon" />
+                  <Icon type="send" className="vn-home-footer-newsletter-icon" />
                 </button>
               </form>
             </div>
+          </div>
+
+          <div className="vn-home-footer-bottom">
+            <p>© 2026 VyaparNest. All rights reserved.</p>
           </div>
         </div>
       </footer>
