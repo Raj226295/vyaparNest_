@@ -6,6 +6,7 @@ const partnerRegistrationHash = '#partner-register'
 const partnerLoginHash = '#partner-login'
 const categoriesHash = '#all-categories'
 const aiAssistHash = '#ai-assist'
+const serviceProvidersHashPrefix = '#service-providers/'
 
 function getCurrentScreen() {
   if (typeof window === 'undefined') {
@@ -18,6 +19,10 @@ function getCurrentScreen() {
 
   if (window.location.hash === categoriesHash) {
     return 'categories'
+  }
+
+  if (window.location.hash.startsWith(serviceProvidersHashPrefix)) {
+    return 'service-providers'
   }
 
   if (window.location.hash === aiAssistHash) {

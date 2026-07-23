@@ -13,7 +13,7 @@ const primaryNavLinks = [
   { key: 'home', label: 'Home', href: homeHash },
   { key: 'categories', label: 'Categories', href: categoriesHash, hasChevron: true },
   { key: 'ai-assist', label: 'AI Assist', href: aiAssistHash },
-  { key: 'dashboard', label: 'Dashboard', href: providersHash },
+  { key: 'dashboard', label: 'About Us', href: providersHash },
 ]
 
 const popularSearches = [
@@ -1220,8 +1220,9 @@ function PublicHomePage({
   const [selectedAiConversationId, setSelectedAiConversationId] = useState(
     initialAiAssistConversations[0].id
   )
-  const [showAllAiConversations, setShowAllAiConversations] = useState(false)
   const [aiComposerText, setAiComposerText] = useState('')
+  const [aiMessageFeedback, setAiMessageFeedback] = useState({})
+  const [copiedAiMessageId, setCopiedAiMessageId] = useState(null)
   const [partnerLoginOpen, setPartnerLoginOpen] = useState(false)
   const [activeHash, setActiveHash] = useState(() =>
     typeof window === 'undefined' ? homeHash : normalizeHash(window.location.hash)
@@ -1234,6 +1235,7 @@ function PublicHomePage({
   const categoriesPageCardRefs = useRef(new Map())
   const aiThreadRef = useRef(null)
   const aiReplyTimeoutsRef = useRef([])
+  const aiCopyResetTimeoutRef = useRef(null)
   const isCategoriesScreen = currentScreen === 'categories'
   const isAiAssistScreen = currentScreen === 'ai-assist'
   const activePrimaryNavKey = getActivePrimaryNavKey(currentScreen, activeHash)
@@ -1247,9 +1249,6 @@ function PublicHomePage({
   const displayedCategories = selectedCategory
     ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
     : allCategoriesCards
-  const visibleAiConversations = showAllAiConversations
-    ? aiConversations
-    : aiConversations.slice(0, 6)
   const selectedAiConversation =
     aiConversations.find((conversation) => conversation.id === selectedAiConversationId) ??
     aiConversations[0]
@@ -1425,6 +1424,9 @@ function PublicHomePage({
     () => () => {
       aiReplyTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
       aiReplyTimeoutsRef.current = []
+      if (aiCopyResetTimeoutRef.current) {
+        window.clearTimeout(aiCopyResetTimeoutRef.current)
+      }
     },
     []
   )
@@ -1522,7 +1524,6 @@ function PublicHomePage({
 
     setAiConversations((currentConversations) => [nextConversation, ...currentConversations])
     setSelectedAiConversationId(nextConversationId)
-    setShowAllAiConversations(false)
     setAiComposerText('')
   }
 
@@ -1635,10 +1636,35 @@ function PublicHomePage({
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       try {
         await navigator.clipboard.writeText(copyText)
+        setCopiedAiMessageId(message.id)
+        if (aiCopyResetTimeoutRef.current) {
+          window.clearTimeout(aiCopyResetTimeoutRef.current)
+        }
+        aiCopyResetTimeoutRef.current = window.setTimeout(() => {
+          setCopiedAiMessageId(null)
+          aiCopyResetTimeoutRef.current = null
+        }, 1500)
       } catch {
         // no-op fallback for unsupported clipboard cases
       }
     }
+  }
+
+  const handleAiMessageReaction = (messageId, reaction) => {
+    setAiMessageFeedback((currentFeedback) => {
+      const currentReaction = currentFeedback[messageId] ?? null
+
+      if (currentReaction === reaction) {
+        const nextFeedback = { ...currentFeedback }
+        delete nextFeedback[messageId]
+        return nextFeedback
+      }
+
+      return {
+        ...currentFeedback,
+        [messageId]: reaction,
+      }
+    })
   }
 
   const renderAiConversationMessage = (message) => {
@@ -1669,6 +1695,9 @@ function PublicHomePage({
       )
     }
 
+    const currentReaction = aiMessageFeedback[message.id] ?? null
+    const isCopied = copiedAiMessageId === message.id
+
     return (
       <div key={message.id} className="vn-home-ai-message-row is-assistant">
         <span className="vn-home-ai-avatar">AI</span>
@@ -1690,13 +1719,30 @@ function PublicHomePage({
           </div>
 
           <div className="vn-home-ai-message-actions">
-            <button type="button" aria-label="Like response">
+            <button
+              type="button"
+              className={currentReaction === 'like' ? 'is-liked' : ''}
+              aria-label={currentReaction === 'like' ? 'Remove like' : 'Like response'}
+              aria-pressed={currentReaction === 'like'}
+              onClick={() => handleAiMessageReaction(message.id, 'like')}
+            >
               <Icon type="thumbs-up" className="vn-home-ai-message-action-icon" />
             </button>
-            <button type="button" aria-label="Dislike response">
+            <button
+              type="button"
+              className={currentReaction === 'dislike' ? 'is-disliked' : ''}
+              aria-label={currentReaction === 'dislike' ? 'Remove dislike' : 'Dislike response'}
+              aria-pressed={currentReaction === 'dislike'}
+              onClick={() => handleAiMessageReaction(message.id, 'dislike')}
+            >
               <Icon type="thumbs-down" className="vn-home-ai-message-action-icon" />
             </button>
-            <button type="button" aria-label="Copy response" onClick={() => handleCopyAiMessage(message)}>
+            <button
+              type="button"
+              className={isCopied ? 'is-copied' : ''}
+              aria-label={isCopied ? 'Response copied' : 'Copy response'}
+              onClick={() => handleCopyAiMessage(message)}
+            >
               <Icon type="copy" className="vn-home-ai-message-action-icon" />
             </button>
           </div>
@@ -2120,79 +2166,34 @@ function PublicHomePage({
             <section className="vn-home-section vn-home-ai-assist-page" id="ai-assist">
               <div className="vn-home-shell-inner is-fluid">
                 <div className="vn-home-ai-assist-layout">
-                  <aside className="vn-home-ai-sidebar">
-                    <div className="vn-home-ai-sidebar-head">
-                      <div>
-                        <h2>Chat History</h2>
-                      </div>
-                      <button
-                        type="button"
-                        className="vn-home-ai-new-chat"
-                        onClick={handleCreateAiChat}
-                      >
-                        <Icon type="plus" className="vn-home-ai-new-chat-icon" />
-                        <span>New Chat</span>
-                      </button>
-                    </div>
-
-                    <div className="vn-home-ai-history-list">
-                      {visibleAiConversations.map((conversation) => {
-                        const isActive = conversation.id === selectedAiConversation.id
-
-                        return (
-                          <button
-                            key={conversation.id}
-                            type="button"
-                            className={`vn-home-ai-history-item${isActive ? ' is-active' : ''}`}
-                            onClick={() => setSelectedAiConversationId(conversation.id)}
-                          >
-                            <span className="vn-home-ai-history-item-icon">
-                              <Icon
-                                type="message-circle"
-                                className="vn-home-ai-history-item-icon-svg"
-                              />
-                            </span>
-                            <span className="vn-home-ai-history-item-copy">
-                              <strong>{conversation.title}</strong>
-                              <small>{conversation.timeLabel}</small>
-                            </span>
-                            <Icon
-                              type="more-vertical"
-                              className="vn-home-ai-history-item-more"
-                            />
-                          </button>
-                        )
-                      })}
-                    </div>
-
-                    <div className="vn-home-ai-sidebar-actions">
-                      <button
-                        type="button"
-                        className="vn-home-ai-history-more"
-                        onClick={() => setShowAllAiConversations((open) => !open)}
-                      >
-                        <span>{showAllAiConversations ? 'Show Less History' : 'View More History'}</span>
-                        <Icon type="chevron-down" className="vn-home-ai-history-more-icon" />
-                      </button>
-                      <button
-                        type="button"
-                        className="vn-home-ai-history-delete"
-                        aria-label="Delete chat history"
-                        onClick={handleDeleteAiConversation}
-                      >
-                        <Icon type="trash" className="vn-home-ai-history-delete-icon" />
-                      </button>
-                    </div>
-                  </aside>
-
-                  <section className="vn-home-ai-chat-panel">
+                  <section className="vn-home-ai-chat-panel is-full-width">
                     <div className="vn-home-ai-chat-hero">
                       <AiAssistMascot className="vn-home-ai-chat-mascot" />
                       <div className="vn-home-ai-chat-hero-copy">
-                        <h1>
-                          Hello! I'm <span>Vyapar AI</span>
-                          <Icon type="spark" className="vn-home-ai-chat-hero-mark" />
-                        </h1>
+                        <div className="vn-home-ai-chat-hero-top">
+                          <h1>
+                            Hello! I'm <span>Vyapar AI</span>
+                            <Icon type="spark" className="vn-home-ai-chat-hero-mark" />
+                          </h1>
+                          <div className="vn-home-ai-chat-hero-actions">
+                            <button
+                              type="button"
+                              className="vn-home-ai-new-chat"
+                              onClick={handleCreateAiChat}
+                            >
+                              <Icon type="plus" className="vn-home-ai-new-chat-icon" />
+                              <span>New Chat</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="vn-home-ai-history-delete"
+                              aria-label="Delete chat history"
+                              onClick={handleDeleteAiConversation}
+                            >
+                              <Icon type="trash" className="vn-home-ai-history-delete-icon" />
+                            </button>
+                          </div>
+                        </div>
                         <p>
                           Your smart business assistant to find services, get guidance and grow your
                           business.
