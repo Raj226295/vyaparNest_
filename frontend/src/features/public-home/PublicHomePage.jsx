@@ -446,7 +446,7 @@ const footerSocials = [
   { label: 'YouTube', icon: 'youtube' },
 ]
 
-const aiAssistConversations = [
+const initialAiAssistConversations = [
   {
     id: 'gst-registration',
     title: 'GST registration process',
@@ -479,9 +479,11 @@ const aiAssistConversations = [
         time: '10:31 AM',
       },
       {
-        id: 'gst-assistant-typing',
+        id: 'gst-assistant-2',
         role: 'assistant',
-        type: 'typing',
+        type: 'text',
+        text:
+          'Sure. Start with DSC for all directors, then apply for DIN, reserve your company name, complete SPICe+ incorporation filing, and finally get your PAN, TAN, and incorporation certificate. If you want, I can also tell you which VyaparNest category is best for registration support.',
       },
     ],
   },
@@ -600,6 +602,260 @@ const aiAssistConversations = [
     ],
   },
 ]
+
+const aiAssistCategoryAliases = {
+  accounting: 'Accounting',
+  app: 'App Development',
+  application: 'App Development',
+  business: 'Business Consultant',
+  consultant: 'Business Consultant',
+  loan: 'Business Loans',
+  loans: 'Business Loans',
+  website: 'Website Development',
+  web: 'Website Development',
+  digital: 'Digital Marketing',
+  marketing: 'Digital Marketing',
+  graphic: 'Graphic Design',
+  logo: 'Graphic Design',
+  video: 'Video Editing',
+  gst: 'GST & Tax Services',
+  tax: 'GST & Tax Services',
+  ca: 'CA Services',
+  legal: 'Legal Consultant',
+  company: 'Company Registration',
+  registration: 'Company Registration',
+  social: 'Social Media Marketing',
+  seo: 'SEO Services',
+  content: 'Content Writing',
+  photography: 'Photography',
+  photographer: 'Photography',
+  interior: 'Interior Design',
+  home: 'Home Services',
+  cleaning: 'Home Services',
+  ai: 'AI Automation',
+  automation: 'AI Automation',
+}
+
+function normalizeAiText(value) {
+  return value.toLowerCase().replace(/[^a-z0-9&+\s]/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
+function getCurrentTimeLabel() {
+  return new Date().toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  })
+}
+
+function getCurrentDateLabel() {
+  return `Today, ${getCurrentTimeLabel()}`
+}
+
+function getConversationPreviewTitle(prompt) {
+  const trimmedPrompt = prompt.trim()
+
+  if (trimmedPrompt.length <= 30) {
+    return trimmedPrompt
+  }
+
+  return `${trimmedPrompt.slice(0, 27).trim()}...`
+}
+
+function findRelevantCategory(prompt) {
+  const normalizedPrompt = normalizeAiText(prompt)
+
+  for (const category of allCategoriesCards) {
+    if (normalizedPrompt.includes(normalizeAiText(category.title))) {
+      return category
+    }
+  }
+
+  for (const [alias, categoryTitle] of Object.entries(aiAssistCategoryAliases)) {
+    if (normalizedPrompt.includes(alias)) {
+      return allCategoriesCards.find((category) => category.title === categoryTitle) ?? null
+    }
+  }
+
+  return null
+}
+
+function generateAiAssistResponse(prompt) {
+  const normalizedPrompt = normalizeAiText(prompt)
+  const matchedCategory = findRelevantCategory(prompt)
+  const topCategories = allCategoriesCards.slice(0, 6).map((category) => category.title)
+  const providerNames = featuredProviders.map((provider) => provider.name)
+
+  if (!normalizedPrompt) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text: 'Please type your website or service-related question, and I will help you with VyaparNest.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('hello') ||
+    normalizedPrompt.includes('hi') ||
+    normalizedPrompt.includes('hey')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text:
+        'Hello! I am Vyapar AI.\n\nI can help you explore services on VyaparNest, explain categories, guide partner registration, suggest professionals, and answer website-related questions.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('what can you do') ||
+    normalizedPrompt.includes('who are you') ||
+    normalizedPrompt.includes('website related')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'list',
+      intro: 'I can help you with these VyaparNest website tasks:',
+      items: [
+        'Find the right service category for your requirement',
+        'Explain how partner registration and login works',
+        'Suggest featured professionals and popular services',
+        'Guide you on posting requirements and using the platform',
+        'Answer page, section, category, and workflow-related questions',
+      ],
+      outro: 'Ask me anything about services, categories, partner onboarding, dashboard, or website usage.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('partner') ||
+    normalizedPrompt.includes('list my business') ||
+    normalizedPrompt.includes('become a partner')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'list',
+      intro: 'To join VyaparNest as a partner, follow this flow on the website:',
+      items: [
+        'Click "Partner with us" from the top navigation',
+        'Open the registration wizard and enter your basic details',
+        'Add business information, services, and service area',
+        'Upload documents for verification',
+        'Complete payment to activate your partner account',
+      ],
+      outro: 'After activation, you can manage your profile, leads, and visibility from the partner flow.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('login') ||
+    normalizedPrompt.includes('sign in') ||
+    normalizedPrompt.includes('partner login')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text:
+        'You can use the Login button in the navbar to access your account.\n\nFor partner access, open the partner login flow and continue with your mobile number and OTP verification.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('how it works') ||
+    normalizedPrompt.includes('process') ||
+    normalizedPrompt.includes('workflow') ||
+    normalizedPrompt.includes('post requirement')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'list',
+      intro: 'VyaparNest website works in 4 simple steps:',
+      items: workflowSteps.map((step) => `${step.title} - ${step.description}`),
+      outro: 'You can start from the homepage search bar, category section, or AI Assist to move faster.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('category') ||
+    normalizedPrompt.includes('categories') ||
+    normalizedPrompt.includes('services available') ||
+    normalizedPrompt.includes('what services')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'list',
+      intro: 'VyaparNest currently highlights these popular service categories:',
+      items: topCategories,
+      outro: `You can also open the All Categories page to explore ${allCategoriesCards.length} service groups like GST, websites, digital marketing, photography, business consulting, and more.`,
+    }
+  }
+
+  if (matchedCategory) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text: `${matchedCategory.title} is available on VyaparNest.\n\nServices: ${matchedCategory.servicesLabel}\nWhat it covers: ${matchedCategory.description}\n\nIf you want, I can also suggest whether this category is better for your requirement or recommend nearby professionals.`,
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('professional') ||
+    normalizedPrompt.includes('provider') ||
+    normalizedPrompt.includes('expert') ||
+    normalizedPrompt.includes('recommend')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text: `VyaparNest already showcases featured professionals like ${providerNames.join(', ')}.\n\nYou can compare service type, city, ratings, experience, and project count before sending a request.`,
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('search') ||
+    normalizedPrompt.includes('find service') ||
+    normalizedPrompt.includes('near me')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text:
+        'Use the top search bar to search services and keep the location set to Purnia, Bihar for local discovery.\n\nYou can also open categories and choose the closest matching service card for faster results.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('dashboard') ||
+    normalizedPrompt.includes('manage profile') ||
+    normalizedPrompt.includes('profile')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text:
+        'The Dashboard area is meant for managing your account activity, requests, and business visibility.\n\nFor partners, it connects with registration, leads, and profile progress sections.',
+    }
+  }
+
+  if (
+    normalizedPrompt.includes('support') ||
+    normalizedPrompt.includes('help') ||
+    normalizedPrompt.includes('contact')
+  ) {
+    return {
+      role: 'assistant',
+      type: 'text',
+      text: `You can use sections like ${footerGroups[0].links.join(', ')} and ${footerGroups[2].links.join(', ')} from the footer for support and company information.\n\nIf you tell me your issue, I can guide you to the right page or category.`,
+    }
+  }
+
+  return {
+    role: 'assistant',
+    type: 'text',
+    text:
+      'I can answer VyaparNest website-related questions about categories, partner onboarding, login, featured professionals, search, dashboard, and service discovery.\n\nTry asking something like "Which category is best for GST filing?", "How do I become a partner?", or "How does this website work?"',
+  }
+}
 
 function ArrowButtonGif({ className = '' }) {
   return <img src="/fast-forward.gif" alt="" className={className} aria-hidden="true" />
@@ -960,7 +1216,10 @@ function PublicHomePage({
   const [categoriesPageFilterOpen, setCategoriesPageFilterOpen] = useState(false)
   const [categoriesPageSearchTerm, setCategoriesPageSearchTerm] = useState('')
   const [selectedCategoryTitle, setSelectedCategoryTitle] = useState('All Categories')
-  const [selectedAiConversationId, setSelectedAiConversationId] = useState(aiAssistConversations[0].id)
+  const [aiConversations, setAiConversations] = useState(initialAiAssistConversations)
+  const [selectedAiConversationId, setSelectedAiConversationId] = useState(
+    initialAiAssistConversations[0].id
+  )
   const [showAllAiConversations, setShowAllAiConversations] = useState(false)
   const [aiComposerText, setAiComposerText] = useState('')
   const [partnerLoginOpen, setPartnerLoginOpen] = useState(false)
@@ -973,6 +1232,8 @@ function PublicHomePage({
   const categoriesPageFilterRef = useRef(null)
   const categoriesPageSectionRef = useRef(null)
   const categoriesPageCardRefs = useRef(new Map())
+  const aiThreadRef = useRef(null)
+  const aiReplyTimeoutsRef = useRef([])
   const isCategoriesScreen = currentScreen === 'categories'
   const isAiAssistScreen = currentScreen === 'ai-assist'
   const activePrimaryNavKey = getActivePrimaryNavKey(currentScreen, activeHash)
@@ -987,11 +1248,11 @@ function PublicHomePage({
     ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
     : allCategoriesCards
   const visibleAiConversations = showAllAiConversations
-    ? aiAssistConversations
-    : aiAssistConversations.slice(0, 6)
+    ? aiConversations
+    : aiConversations.slice(0, 6)
   const selectedAiConversation =
-    aiAssistConversations.find((conversation) => conversation.id === selectedAiConversationId) ??
-    aiAssistConversations[0]
+    aiConversations.find((conversation) => conversation.id === selectedAiConversationId) ??
+    aiConversations[0]
   const visibleCategoryCount = displayedCategories.length
   const categoriesPageCountLabel = `Explore ${visibleCategoryCount} trusted ${
     visibleCategoryCount === 1 ? 'service' : 'services'
@@ -1132,6 +1393,42 @@ function PublicHomePage({
     }
   }, [categoriesPageFilterOpen])
 
+  useEffect(() => {
+    if (!isAiAssistScreen) {
+      return undefined
+    }
+
+    const syncOverflow = () => {
+      document.body.style.overflow = window.innerWidth > 1200 ? 'hidden' : ''
+      document.body.style.background = '#ffffff'
+    }
+
+    syncOverflow()
+    window.addEventListener('resize', syncOverflow)
+
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.background = ''
+      window.removeEventListener('resize', syncOverflow)
+    }
+  }, [isAiAssistScreen])
+
+  useEffect(() => {
+    if (!selectedAiConversation || !aiThreadRef.current) {
+      return
+    }
+
+    aiThreadRef.current.scrollTop = aiThreadRef.current.scrollHeight
+  }, [selectedAiConversation])
+
+  useEffect(
+    () => () => {
+      aiReplyTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId))
+      aiReplyTimeoutsRef.current = []
+    },
+    []
+  )
+
   const closePartnerLogin = () => {
     setPartnerLoginOpen(false)
 
@@ -1207,13 +1504,141 @@ function PublicHomePage({
   }
 
   const handleCreateAiChat = () => {
-    setSelectedAiConversationId(aiAssistConversations[0].id)
+    const nextConversationId = `ai-chat-${Date.now()}`
+    const nextConversation = {
+      id: nextConversationId,
+      title: 'New Chat',
+      timeLabel: getCurrentDateLabel(),
+      messages: [
+        {
+          id: `${nextConversationId}-assistant-welcome`,
+          role: 'assistant',
+          type: 'text',
+          text:
+            'Welcome to Vyapar AI.\n\nAsk me anything about VyaparNest services, categories, partner registration, login, or how to use the website.',
+        },
+      ],
+    }
+
+    setAiConversations((currentConversations) => [nextConversation, ...currentConversations])
+    setSelectedAiConversationId(nextConversationId)
+    setShowAllAiConversations(false)
     setAiComposerText('')
+  }
+
+  const handleDeleteAiConversation = () => {
+    setAiConversations((currentConversations) => {
+      if (currentConversations.length <= 1) {
+        const replacementConversation = {
+          id: `ai-chat-${Date.now()}`,
+          title: 'New Chat',
+          timeLabel: getCurrentDateLabel(),
+          messages: [
+            {
+              id: `ai-chat-${Date.now()}-assistant-reset`,
+              role: 'assistant',
+              type: 'text',
+              text: 'Chat history cleared. Ask me anything about the VyaparNest website.',
+            },
+          ],
+        }
+
+        setSelectedAiConversationId(replacementConversation.id)
+        return [replacementConversation]
+      }
+
+      const remainingConversations = currentConversations.filter(
+        (conversation) => conversation.id !== selectedAiConversationId
+      )
+
+      if (remainingConversations.length > 0) {
+        setSelectedAiConversationId(remainingConversations[0].id)
+      }
+
+      return remainingConversations
+    })
   }
 
   const handleAiComposerSubmit = (event) => {
     event.preventDefault()
+    const trimmedMessage = aiComposerText.trim()
+
+    if (!trimmedMessage) {
+      return
+    }
+
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      text: trimmedMessage,
+      time: getCurrentTimeLabel(),
+    }
+    const typingMessage = {
+      id: `typing-${Date.now()}`,
+      role: 'assistant',
+      type: 'typing',
+    }
+    const assistantMessage = {
+      id: `assistant-${Date.now()}`,
+      ...generateAiAssistResponse(trimmedMessage),
+    }
+    const targetConversationId = selectedAiConversationId
+
+    setAiConversations((currentConversations) =>
+      currentConversations.map((conversation) => {
+        if (conversation.id !== targetConversationId) {
+          return conversation
+        }
+
+        const isFreshConversation =
+          conversation.title === 'New Chat' ||
+          conversation.messages.every((message) => message.role !== 'user')
+
+        return {
+          ...conversation,
+          title: isFreshConversation ? getConversationPreviewTitle(trimmedMessage) : conversation.title,
+          timeLabel: getCurrentDateLabel(),
+          messages: [...conversation.messages, userMessage, typingMessage],
+        }
+      })
+    )
     setAiComposerText('')
+
+    const timeoutId = window.setTimeout(() => {
+      setAiConversations((currentConversations) =>
+        currentConversations.map((conversation) => {
+          if (conversation.id !== targetConversationId) {
+            return conversation
+          }
+
+          return {
+            ...conversation,
+            messages: conversation.messages.map((message) =>
+              message.id === typingMessage.id ? assistantMessage : message
+            ),
+          }
+        })
+      )
+
+      aiReplyTimeoutsRef.current = aiReplyTimeoutsRef.current.filter((id) => id !== timeoutId)
+    }, 1000)
+
+    aiReplyTimeoutsRef.current.push(timeoutId)
+  }
+
+  const handleCopyAiMessage = async (message) => {
+    const copyText =
+      message.type === 'list'
+        ? `${message.intro}\n${message.items.map((item, index) => `${index + 1}. ${item}`).join('\n')}\n${message.outro}`
+        : message.text
+
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(copyText)
+      } catch {
+        // no-op fallback for unsupported clipboard cases
+      }
+    }
   }
 
   const renderAiConversationMessage = (message) => {
@@ -1271,7 +1696,7 @@ function PublicHomePage({
             <button type="button" aria-label="Dislike response">
               <Icon type="thumbs-down" className="vn-home-ai-message-action-icon" />
             </button>
-            <button type="button" aria-label="Copy response">
+            <button type="button" aria-label="Copy response" onClick={() => handleCopyAiMessage(message)}>
               <Icon type="copy" className="vn-home-ai-message-action-icon" />
             </button>
           </div>
@@ -1753,6 +2178,7 @@ function PublicHomePage({
                         type="button"
                         className="vn-home-ai-history-delete"
                         aria-label="Delete chat history"
+                        onClick={handleDeleteAiConversation}
                       >
                         <Icon type="trash" className="vn-home-ai-history-delete-icon" />
                       </button>
@@ -1774,7 +2200,7 @@ function PublicHomePage({
                       </div>
                     </div>
 
-                    <div className="vn-home-ai-chat-thread">
+                    <div className="vn-home-ai-chat-thread" ref={aiThreadRef}>
                       {selectedAiConversation.messages.map((message) =>
                         renderAiConversationMessage(message)
                       )}

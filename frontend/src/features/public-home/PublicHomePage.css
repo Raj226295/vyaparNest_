@@ -1034,22 +1034,27 @@
     linear-gradient(180deg, #050505 0, #0b0b0f 156px, #ffffff 156px, #ffffff 100%);
 }
 
+.vn-home-shell.is-ai-assist-screen .vn-home-glow {
+  display: none;
+}
+
 .vn-home-content.is-categories-page {
   margin-top: 0;
   padding-top: 34px;
 }
 
 .vn-home-content.is-ai-assist-page {
-  margin-top: -10px;
+  margin-top: 0;
   height: 100%;
   background: #ffffff;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 0;
+  padding-bottom: 8px;
   overflow: hidden;
 }
 
 .vn-home-main.is-ai-assist-screen {
   min-height: 0;
+  background: #ffffff;
   overflow: hidden;
 }
 
@@ -1378,6 +1383,7 @@
   color: inherit;
   font-size: 0.95rem;
   line-height: 1.55;
+  white-space: pre-line;
 }
 
 .vn-home-ai-message-list {
