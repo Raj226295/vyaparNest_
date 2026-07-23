@@ -8,6 +8,7 @@ const categoriesHash = '#all-categories'
 const aiAssistHash = '#ai-assist'
 const workflowHash = '#how-it-works'
 const providersHash = '#providers'
+const serviceProvidersHashPrefix = '#service-providers/'
 
 const primaryNavLinks = [
   { key: 'home', label: 'Home', href: homeHash },
@@ -108,6 +109,7 @@ const allCategoriesCards = [
     servicesLabel: '128+ Services',
     description: 'Bookkeeping, Audit, Financial Reporting & more',
     image: '/category-icons/tax.gif',
+    heroImage: '/service-provider-heroes/accounting-services-hero-user.png',
     accentColor: '#e2aa10',
     iconSurface: 'linear-gradient(180deg, #fff5d8 0%, #fff0c9 100%)',
   },
@@ -116,6 +118,8 @@ const allCategoriesCards = [
     servicesLabel: '156+ Services',
     description: 'Android, iOS, Flutter, React Native & more',
     image: '/category-icons/applications.gif',
+    heroImage: '/web-developer.gif',
+    heroImageFit: 'contain',
     accentColor: '#5fbf45',
     iconSurface: 'linear-gradient(180deg, #ebf9e4 0%, #dcf0d5 100%)',
   },
@@ -124,6 +128,7 @@ const allCategoriesCards = [
     servicesLabel: '98+ Services',
     description: 'Strategy, Plan, Growth Consulting & more',
     image: '/category-icons/user.gif',
+    heroImage: '/service-provider-heroes/business-consulting-hero.png',
     accentColor: '#8a52eb',
     iconSurface: 'linear-gradient(180deg, #f3eafd 0%, #eadcff 100%)',
   },
@@ -132,6 +137,7 @@ const allCategoriesCards = [
     servicesLabel: '64+ Services',
     description: 'Unsecured, Secured, Working Capital & more',
     image: '/category-icons/analytics.gif',
+    heroImage: '/market-sections/guide-growth-hover.png',
     accentColor: '#ff9416',
     iconSurface: 'linear-gradient(180deg, #fff1e3 0%, #ffe4cf 100%)',
   },
@@ -140,6 +146,7 @@ const allCategoriesCards = [
     servicesLabel: '210+ Services',
     description: 'Business, E-commerce, CMS & Custom Websites',
     image: '/category-icons/web.gif',
+    heroImage: '/market-sections/guide-website-hover.png',
     accentColor: '#4985ff',
     iconSurface: 'linear-gradient(180deg, #ecf2ff 0%, #dee8ff 100%)',
   },
@@ -148,6 +155,7 @@ const allCategoriesCards = [
     servicesLabel: '342+ Services',
     description: 'SEO, PPC, SMM, Email Marketing & more',
     image: '/category-icons/analytics.gif',
+    heroImage: '/market-sections/guide-marketing-hover.png',
     accentColor: '#ff5b73',
     iconSurface: 'linear-gradient(180deg, #fff0f2 0%, #ffe2e9 100%)',
   },
@@ -156,6 +164,7 @@ const allCategoriesCards = [
     servicesLabel: '186+ Services',
     description: 'Logo, Branding, Banner, Brochure & more',
     image: '/category-icons/graphic-designer.gif',
+    heroImage: '/market-sections/guide-branding-hover.png',
     accentColor: '#e0a500',
     iconSurface: 'linear-gradient(180deg, #fff6dd 0%, #ffedc8 100%)',
   },
@@ -164,6 +173,8 @@ const allCategoriesCards = [
     servicesLabel: '112+ Services',
     description: 'YouTube, Ads, Reels, Corporate Video & more',
     image: '/category-icons/movie-camera.gif',
+    heroImage: '/category-icons/movie-camera.gif',
+    heroImageFit: 'contain',
     accentColor: '#447eff',
     iconSurface: 'linear-gradient(180deg, #edf3ff 0%, #dfe9ff 100%)',
   },
@@ -172,6 +183,7 @@ const allCategoriesCards = [
     servicesLabel: '89+ Services',
     description: 'GST Registration, Filing, Return & Compliance',
     image: '/category-icons/tax.gif',
+    heroImage: '/service-provider-heroes/accounting-services-hero-user.png',
     accentColor: '#5dbb45',
     iconSurface: 'linear-gradient(180deg, #eef8e7 0%, #dff0d3 100%)',
   },
@@ -180,6 +192,7 @@ const allCategoriesCards = [
     servicesLabel: '78+ Services',
     description: 'Income Tax, ROC, Compliance & Advisory',
     image: '/category-icons/contract.gif',
+    heroImage: '/service-provider-heroes/accounting-services-hero-user.png',
     accentColor: '#8c56ea',
     iconSurface: 'linear-gradient(180deg, #f3eafb 0%, #e8ddff 100%)',
   },
@@ -188,6 +201,8 @@ const allCategoriesCards = [
     servicesLabel: '75+ Services',
     description: 'Legal Advice, Notices, Contracts & Documentation',
     image: '/category-icons/contract.gif',
+    heroImage: '/category-icons/contract.gif',
+    heroImageFit: 'contain',
     accentColor: '#18a59b',
     iconSurface: 'linear-gradient(180deg, #e6f8f5 0%, #d5f0ea 100%)',
   },
@@ -196,6 +211,7 @@ const allCategoriesCards = [
     servicesLabel: '92+ Services',
     description: 'Private Limited, LLP, OPC & Sole Proprietorship',
     image: '/category-icons/mission.gif',
+    heroImage: '/service-provider-heroes/business-consulting-hero.png',
     accentColor: '#8c56ea',
     iconSurface: 'linear-gradient(180deg, #f1e8ff 0%, #e5dbff 100%)',
   },
@@ -204,6 +220,7 @@ const allCategoriesCards = [
     servicesLabel: '123+ Services',
     description: 'Content, Management, Paid Ads & Growth',
     image: '/category-icons/web-data.gif',
+    heroImage: '/service-provider-heroes/automation-hero.png',
     accentColor: '#ff5c73',
     iconSurface: 'linear-gradient(180deg, #fff0f2 0%, #ffe1e8 100%)',
   },
@@ -212,6 +229,8 @@ const allCategoriesCards = [
     servicesLabel: '168+ Services',
     description: 'On-Page, Off-Page, Technical SEO & Local SEO',
     image: '/category-seo.gif',
+    heroImage: '/category-seo.gif',
+    heroImageFit: 'contain',
     accentColor: '#457fff',
     iconSurface: 'linear-gradient(180deg, #edf3ff 0%, #dfe8ff 100%)',
   },
@@ -220,6 +239,8 @@ const allCategoriesCards = [
     servicesLabel: '97+ Services',
     description: 'Website Content, Blogs, Articles & More',
     image: '/category-comments.gif',
+    heroImage: '/category-comments.gif',
+    heroImageFit: 'contain',
     accentColor: '#ff8c14',
     iconSurface: 'linear-gradient(180deg, #fff3e6 0%, #ffe6cf 100%)',
   },
@@ -228,6 +249,8 @@ const allCategoriesCards = [
     servicesLabel: '84+ Services',
     description: 'Events, Products, Portraits & Brand Shoots',
     image: '/category-photo.gif',
+    heroImage: '/category-photo.gif',
+    heroImageFit: 'contain',
     accentColor: '#4a80ff',
     iconSurface: 'linear-gradient(180deg, #eef3ff 0%, #e0e8ff 100%)',
   },
@@ -236,6 +259,7 @@ const allCategoriesCards = [
     servicesLabel: '73+ Services',
     description: 'Home, Office, Space Planning & Decor',
     image: '/category-icons/vector.gif',
+    heroImage: '/market-sections/guide-branding-hover.png',
     accentColor: '#17a296',
     iconSurface: 'linear-gradient(180deg, #e8f8f5 0%, #d6efe9 100%)',
   },
@@ -244,6 +268,8 @@ const allCategoriesCards = [
     servicesLabel: '144+ Services',
     description: 'Cleaning, Repairs, Maintenance & Setup',
     image: '/category-icons/cleaning-service.gif',
+    heroImage: '/category-icons/cleaning-service.gif',
+    heroImageFit: 'contain',
     accentColor: '#5ab948',
     iconSurface: 'linear-gradient(180deg, #eef8e8 0%, #ddf0d4 100%)',
   },
@@ -252,6 +278,7 @@ const allCategoriesCards = [
     servicesLabel: '69+ Services',
     description: 'Chatbots, Workflow Tools, CRM Automation & more',
     image: '/category-icons/mission.gif',
+    heroImage: '/service-provider-heroes/automation-hero.png',
     accentColor: '#5468ff',
     iconSurface: 'linear-gradient(180deg, #edf0ff 0%, #e0e4ff 100%)',
   },
@@ -444,6 +471,13 @@ const footerSocials = [
   { label: 'Facebook', icon: 'facebook' },
   { label: 'Instagram', icon: 'instagram' },
   { label: 'YouTube', icon: 'youtube' },
+]
+
+const serviceProviderPriceBuckets = [
+  { key: 'under-2000', label: 'Under ₹2,000', min: 0, max: 1999 },
+  { key: '2000-5000', label: '₹2,000 - ₹5,000', min: 2000, max: 5000 },
+  { key: '5000-10000', label: '₹5,000 - ₹10,000', min: 5001, max: 10000 },
+  { key: 'above-10000', label: 'Above ₹10,000', min: 10001, max: Infinity },
 ]
 
 const initialAiAssistConversations = [
@@ -887,12 +921,182 @@ function normalizeHash(hash) {
   return hash
 }
 
+function getServiceProvidersHash(categoryTitle) {
+  return `${serviceProvidersHashPrefix}${encodeURIComponent(categoryTitle)}`
+}
+
+function getCategoryFromServiceProvidersHash(hash) {
+  if (!hash || !hash.startsWith(serviceProvidersHashPrefix)) {
+    return null
+  }
+
+  const categoryTitle = decodeURIComponent(hash.slice(serviceProvidersHashPrefix.length))
+
+  return (
+    allCategoriesCards.find((category) => category.title === categoryTitle) ??
+    allCategoriesCards.find(
+      (category) => normalizeAiText(category.title) === normalizeAiText(categoryTitle)
+    ) ??
+    null
+  )
+}
+
+function getServicePageTitle(category) {
+  if (!category) {
+    return 'Service Providers'
+  }
+
+  return /services$/i.test(category.title) ? category.title : `${category.title} Services`
+}
+
+function getCategoryServiceTypes(category) {
+  if (!category) {
+    return []
+  }
+
+  const cleanedDescription = category.description
+    .replace(/\s*&\s*more/gi, '')
+    .replace(/\s*and more/gi, '')
+
+  const derivedTypes = cleanedDescription
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+
+  if (derivedTypes.length >= 4) {
+    return derivedTypes
+  }
+
+  return [...derivedTypes, 'Consultation', 'Compliance', 'Support'].filter(
+    (value, index, items) => items.indexOf(value) === index
+  )
+}
+
+function getProviderInitials(name) {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+}
+
+function formatProviderPrice(amount) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+function buildServiceProvidersForCategory(category) {
+  if (!category) {
+    return []
+  }
+
+  const serviceTypes = getCategoryServiceTypes(category)
+  const serviceBase = category.title
+  const presetProviders =
+    category.title === 'Accounting'
+      ? [
+          { name: 'RK Accounting Solutions', location: 'Delhi, India', rating: 4.8, reviews: 124, years: 5, price: 2499 },
+          { name: 'FinEdge Financials', location: 'Mumbai, India', rating: 4.7, reviews: 98, years: 7, price: 3499 },
+          { name: 'Accounts Care India', location: 'Bangalore, India', rating: 4.6, reviews: 86, years: 10, price: 2999 },
+          { name: 'TaxPro Advisors', location: 'Pune, India', rating: 4.5, reviews: 72, years: 6, price: 2000 },
+          { name: 'SmartBooks Accounting', location: 'Hyderabad, India', rating: 4.4, reviews: 61, years: 4, price: 1999 },
+          { name: 'LedgerLine Experts', location: 'Chennai, India', rating: 4.8, reviews: 118, years: 9, price: 3200 },
+          { name: 'BluePeak Accountants', location: 'Kolkata, India', rating: 4.6, reviews: 77, years: 8, price: 2800 },
+          { name: 'Numeric Nest Advisors', location: 'Purnia, Bihar', rating: 4.7, reviews: 69, years: 5, price: 2200 },
+          { name: 'Prime Ledger Associates', location: 'Patna, Bihar', rating: 4.5, reviews: 58, years: 4, price: 1800 },
+          { name: 'AuditBridge Partners', location: 'Noida, India', rating: 4.8, reviews: 132, years: 11, price: 4200 },
+          { name: 'BalancePro Consultants', location: 'Gurgaon, India', rating: 4.6, reviews: 81, years: 6, price: 2750 },
+          { name: 'Accura Tax & Books', location: 'Ahmedabad, India', rating: 4.7, reviews: 88, years: 7, price: 3100 },
+          { name: 'ProfitLine Financials', location: 'Jaipur, India', rating: 4.5, reviews: 64, years: 5, price: 2400 },
+        ]
+      : null
+
+  const genericNames = [
+    `${serviceBase} Experts`,
+    `Prime ${serviceBase}`,
+    `${serviceBase} Hub`,
+    `${serviceBase} Studio`,
+    `${serviceBase} Partners`,
+    `Smart ${serviceBase}`,
+    `${serviceBase} Advisors`,
+    `${serviceBase} Solutions`,
+    `${serviceBase} Works`,
+    `Trusted ${serviceBase}`,
+    `${serviceBase} Edge`,
+    `${serviceBase} Circle`,
+    `${serviceBase} Connect`,
+  ]
+  const genericLocations = [
+    'Purnia, Bihar',
+    'Patna, Bihar',
+    'Delhi, India',
+    'Mumbai, India',
+    'Bangalore, India',
+    'Pune, India',
+    'Hyderabad, India',
+    'Noida, India',
+    'Kolkata, India',
+    'Ahmedabad, India',
+    'Chennai, India',
+    'Jaipur, India',
+    'Gurgaon, India',
+  ]
+  const genericRatings = [4.8, 4.7, 4.6, 4.5, 4.4, 4.9, 4.7, 4.6, 4.5, 4.8, 4.6, 4.7, 4.5]
+  const genericReviews = [126, 91, 83, 74, 62, 138, 95, 79, 68, 121, 84, 97, 73]
+  const genericYears = [6, 8, 5, 4, 3, 9, 7, 5, 4, 10, 6, 7, 5]
+  const genericPrices = [2499, 3499, 2999, 2200, 1999, 4200, 3150, 2600, 1800, 5100, 2750, 3300, 2300]
+  const genericAccents = [
+    'linear-gradient(135deg, #112e66 0%, #254f9b 100%)',
+    'linear-gradient(135deg, #10141f 0%, #28354d 100%)',
+    'linear-gradient(135deg, #3f165e 0%, #7750c9 100%)',
+    'linear-gradient(135deg, #0b3f39 0%, #0f7e72 100%)',
+    'linear-gradient(135deg, #4d3209 0%, #da9a19 100%)',
+  ]
+
+  const sourceProviders = presetProviders ?? genericNames.map((name, index) => ({
+    name,
+    location: genericLocations[index % genericLocations.length],
+    rating: genericRatings[index % genericRatings.length],
+    reviews: genericReviews[index % genericReviews.length],
+    years: genericYears[index % genericYears.length],
+    price: genericPrices[index % genericPrices.length],
+  }))
+
+  return sourceProviders.map((provider, index) => ({
+    id: `${normalizeAiText(category.title).replace(/\s+/g, '-')}-${index + 1}`,
+    name: provider.name,
+    initials: getProviderInitials(provider.name),
+    verified: true,
+    location: provider.location,
+    rating: provider.rating,
+    reviews: provider.reviews,
+    years: provider.years,
+    price: provider.price,
+    accent: genericAccents[index % genericAccents.length],
+    serviceTags: [
+      serviceTypes[index % serviceTypes.length],
+      serviceTypes[(index + 1) % serviceTypes.length],
+      serviceTypes[(index + 2) % serviceTypes.length],
+    ].filter((value, tagIndex, items) => items.indexOf(value) === tagIndex),
+  }))
+}
+
 function getActivePrimaryNavKey(currentScreen, activeHash) {
   if (currentScreen === 'ai-assist' || activeHash === aiAssistHash) {
     return 'ai-assist'
   }
 
-  if (currentScreen === 'categories' || activeHash === categoriesHash || activeHash === '#categories') {
+  if (
+    currentScreen === 'categories' ||
+    currentScreen === 'service-providers' ||
+    activeHash === categoriesHash ||
+    activeHash === '#categories' ||
+    activeHash.startsWith(serviceProvidersHashPrefix)
+  ) {
     return 'categories'
   }
 
@@ -1224,6 +1428,14 @@ function PublicHomePage({
   const [aiMessageFeedback, setAiMessageFeedback] = useState({})
   const [copiedAiMessageId, setCopiedAiMessageId] = useState(null)
   const [partnerLoginOpen, setPartnerLoginOpen] = useState(false)
+  const [providerSortOption, setProviderSortOption] = useState('popularity')
+  const [providerLocationSearch, setProviderLocationSearch] = useState('')
+  const [providerMinPrice, setProviderMinPrice] = useState('')
+  const [providerMaxPrice, setProviderMaxPrice] = useState('')
+  const [selectedProviderServiceTypes, setSelectedProviderServiceTypes] = useState([])
+  const [selectedProviderPriceBuckets, setSelectedProviderPriceBuckets] = useState([])
+  const [providerResultsPage, setProviderResultsPage] = useState(1)
+  const [selectedProviderProfile, setSelectedProviderProfile] = useState(null)
   const [activeHash, setActiveHash] = useState(() =>
     typeof window === 'undefined' ? homeHash : normalizeHash(window.location.hash)
   )
@@ -1237,6 +1449,7 @@ function PublicHomePage({
   const aiReplyTimeoutsRef = useRef([])
   const aiCopyResetTimeoutRef = useRef(null)
   const isCategoriesScreen = currentScreen === 'categories'
+  const isServiceProvidersScreen = currentScreen === 'service-providers'
   const isAiAssistScreen = currentScreen === 'ai-assist'
   const activePrimaryNavKey = getActivePrimaryNavKey(currentScreen, activeHash)
   const selectedCategory =
@@ -1249,6 +1462,9 @@ function PublicHomePage({
   const displayedCategories = selectedCategory
     ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
     : allCategoriesCards
+  const selectedServiceCategory = getCategoryFromServiceProvidersHash(activeHash) ?? allCategoriesCards[0]
+  const serviceProviderTypes = getCategoryServiceTypes(selectedServiceCategory)
+  const serviceProviderEntries = buildServiceProvidersForCategory(selectedServiceCategory)
   const selectedAiConversation =
     aiConversations.find((conversation) => conversation.id === selectedAiConversationId) ??
     aiConversations[0]
@@ -1256,6 +1472,75 @@ function PublicHomePage({
   const categoriesPageCountLabel = `Explore ${visibleCategoryCount} trusted ${
     visibleCategoryCount === 1 ? 'service' : 'services'
   } to grow your business`
+  const filteredServiceProviders = serviceProviderEntries
+    .filter((provider) => {
+      if (
+        selectedProviderServiceTypes.length > 0 &&
+        !selectedProviderServiceTypes.some((serviceType) => provider.serviceTags.includes(serviceType))
+      ) {
+        return false
+      }
+
+      if (
+        providerLocationSearch.trim() &&
+        !provider.location.toLowerCase().includes(providerLocationSearch.trim().toLowerCase())
+      ) {
+        return false
+      }
+
+      if (selectedProviderPriceBuckets.length > 0) {
+        const matchesBucket = selectedProviderPriceBuckets.some((bucketKey) => {
+          const bucket = serviceProviderPriceBuckets.find((item) => item.key === bucketKey)
+          return bucket ? provider.price >= bucket.min && provider.price <= bucket.max : false
+        })
+
+        if (!matchesBucket) {
+          return false
+        }
+      }
+
+      if (providerMinPrice && provider.price < Number(providerMinPrice)) {
+        return false
+      }
+
+      if (providerMaxPrice && provider.price > Number(providerMaxPrice)) {
+        return false
+      }
+
+      return true
+    })
+    .sort((leftProvider, rightProvider) => {
+      switch (providerSortOption) {
+        case 'rating':
+          return rightProvider.rating - leftProvider.rating
+        case 'price-low':
+          return leftProvider.price - rightProvider.price
+        case 'price-high':
+          return rightProvider.price - leftProvider.price
+        case 'experience':
+          return rightProvider.years - leftProvider.years
+        case 'popularity':
+        default:
+          return rightProvider.reviews - leftProvider.reviews
+      }
+    })
+  const totalProviderPages = Math.max(1, Math.ceil(filteredServiceProviders.length / 5))
+  const safeProviderResultsPage = Math.min(providerResultsPage, totalProviderPages)
+  const paginatedServiceProviders = filteredServiceProviders.slice(
+    (safeProviderResultsPage - 1) * 5,
+    safeProviderResultsPage * 5
+  )
+  const visibleProviderPageNumbers = Array.from({ length: totalProviderPages }, (_, index) => index + 1).slice(
+    0,
+    5
+  )
+  const showingProvidersFrom = filteredServiceProviders.length === 0 ? 0 : (safeProviderResultsPage - 1) * 5 + 1
+  const showingProvidersTo = Math.min(safeProviderResultsPage * 5, filteredServiceProviders.length)
+  const serviceProviderAvailabilityLabel = selectedServiceCategory.servicesLabel.replace(
+    /\bServices\b/i,
+    'Service Providers Available'
+  )
+  const serviceProviderTotalLabel = selectedServiceCategory.servicesLabel.replace(/\bServices\b/i, 'Providers')
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -1291,6 +1576,39 @@ function PublicHomePage({
       setCategoriesPageSearchTerm('')
     }
   }, [isCategoriesScreen])
+
+  useEffect(() => {
+    setProviderLocationSearch('')
+    setProviderMinPrice('')
+    setProviderMaxPrice('')
+    setSelectedProviderServiceTypes([])
+    setSelectedProviderPriceBuckets([])
+    setProviderSortOption('popularity')
+    setProviderResultsPage(1)
+    setSelectedProviderProfile(null)
+  }, [selectedServiceCategory.title])
+
+  useEffect(() => {
+    if (providerResultsPage > totalProviderPages) {
+      setProviderResultsPage(totalProviderPages)
+    }
+  }, [providerResultsPage, totalProviderPages])
+
+  useEffect(() => {
+    if (!selectedProviderProfile || typeof window === 'undefined') {
+      return undefined
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setSelectedProviderProfile(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape)
+
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [selectedProviderProfile])
 
   useEffect(() => {
     if (!partnerLoginOpen) {
@@ -1503,6 +1821,49 @@ function PublicHomePage({
     setSelectedCategoryTitle(categoryTitle)
     setCategoriesPageFilterOpen(false)
     setCategoriesPageSearchTerm('')
+  }
+
+  const openServiceProvidersPage = (categoryTitle) => {
+    const nextHash = getServiceProvidersHash(categoryTitle)
+    handlePrimaryNavSelect()
+
+    if (typeof window !== 'undefined') {
+      window.location.hash = nextHash
+    }
+  }
+
+  const handleBackToCategories = () => {
+    handlePrimaryNavSelect()
+
+    if (typeof window !== 'undefined') {
+      window.location.hash = categoriesHash
+    }
+  }
+
+  const toggleProviderServiceType = (serviceType) => {
+    setSelectedProviderServiceTypes((currentServiceTypes) =>
+      currentServiceTypes.includes(serviceType)
+        ? currentServiceTypes.filter((item) => item !== serviceType)
+        : [...currentServiceTypes, serviceType]
+    )
+    setProviderResultsPage(1)
+  }
+
+  const toggleProviderPriceBucket = (bucketKey) => {
+    setSelectedProviderPriceBuckets((currentBuckets) =>
+      currentBuckets.includes(bucketKey)
+        ? currentBuckets.filter((item) => item !== bucketKey)
+        : [...currentBuckets, bucketKey]
+    )
+    setProviderResultsPage(1)
+  }
+
+  const openProviderProfile = (provider) => {
+    setSelectedProviderProfile(provider)
+  }
+
+  const closeProviderProfile = () => {
+    setSelectedProviderProfile(null)
   }
 
   const handleCreateAiChat = () => {
@@ -1754,6 +2115,8 @@ function PublicHomePage({
   return (
     <div
       className={`vn-home-shell${isCategoriesScreen ? ' is-categories-screen' : ''}${
+        isServiceProvidersScreen ? ' is-service-providers-screen' : ''
+      }${
         isAiAssistScreen ? ' is-ai-assist-screen' : ''
       }`}
       id="top"
@@ -1893,54 +2256,56 @@ function PublicHomePage({
                         <Icon type="close" className="vn-home-partner-close-icon" />
                       </button>
 
-                      <div className="vn-home-partner-menu-head">
-                        <span className="vn-home-partner-menu-icon">
-                          <Icon type="users" className="vn-home-partner-menu-icon-svg" />
-                        </span>
-                        <div>
-                          <h3>
-                            Partner With <span>VyaparNest</span>
-                          </h3>
-                          <p>
-                            Grow your business, reach new customers, and discover better opportunities
-                            with VyaparNest.
-                          </p>
+                      <div className="vn-home-partner-menu-scroll">
+                        <div className="vn-home-partner-menu-head">
+                          <span className="vn-home-partner-menu-icon">
+                            <Icon type="users" className="vn-home-partner-menu-icon-svg" />
+                          </span>
+                          <div>
+                            <h3>
+                              Partner With <span>VyaparNest</span>
+                            </h3>
+                            <p>
+                              Grow your business, reach new customers, and discover better opportunities
+                              with VyaparNest.
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="vn-home-partner-menu-list">
-                        {partnerBenefits.map((benefit) => (
-                          <article key={benefit.title} className="vn-home-partner-benefit">
-                            <span className="vn-home-partner-benefit-icon">
-                              <Icon type={benefit.icon} className="vn-home-partner-benefit-icon-svg" />
-                            </span>
-                            <div>
-                              <strong>{benefit.title}</strong>
-                              <p>{benefit.description}</p>
-                            </div>
-                          </article>
-                        ))}
-                      </div>
+                        <div className="vn-home-partner-menu-list">
+                          {partnerBenefits.map((benefit) => (
+                            <article key={benefit.title} className="vn-home-partner-benefit">
+                              <span className="vn-home-partner-benefit-icon">
+                                <Icon type={benefit.icon} className="vn-home-partner-benefit-icon-svg" />
+                              </span>
+                              <div>
+                                <strong>{benefit.title}</strong>
+                                <p>{benefit.description}</p>
+                              </div>
+                            </article>
+                          ))}
+                        </div>
 
-                      <div className="vn-home-partner-menu-actions">
-                        <button
-                          type="button"
-                          className="vn-home-partner-menu-primary"
-                          onClick={handleOpenPartnerRegistration}
-                        >
-                          Become a Partner
-                          <ArrowButtonGif className="vn-home-partner-menu-primary-icon" />
-                        </button>
-                        <a
-                          className="vn-home-partner-menu-secondary"
-                          href="#for-business"
-                          onClick={() => {
-                            setMobileNavOpen(false)
-                            setPartnerMenuOpen(false)
-                          }}
-                        >
-                          Learn More
-                        </a>
+                        <div className="vn-home-partner-menu-actions">
+                          <button
+                            type="button"
+                            className="vn-home-partner-menu-primary"
+                            onClick={handleOpenPartnerRegistration}
+                          >
+                            Become a Partner
+                            <ArrowButtonGif className="vn-home-partner-menu-primary-icon" />
+                          </button>
+                          <a
+                            className="vn-home-partner-menu-secondary"
+                            href="#for-business"
+                            onClick={() => {
+                              setMobileNavOpen(false)
+                              setPartnerMenuOpen(false)
+                            }}
+                          >
+                            Learn More
+                          </a>
+                        </div>
                       </div>
                     </aside>
                   </div>
@@ -1957,10 +2322,12 @@ function PublicHomePage({
 
       <main
         className={`vn-home-main${isCategoriesScreen ? ' is-categories-screen' : ''}${
+          isServiceProvidersScreen ? ' is-service-providers-screen' : ''
+        }${
           isAiAssistScreen ? ' is-ai-assist-screen' : ''
         }`}
       >
-        {!isCategoriesScreen && !isAiAssistScreen ? (
+        {!isCategoriesScreen && !isServiceProvidersScreen && !isAiAssistScreen ? (
           <section className="vn-home-hero">
             <div className="vn-home-shell-inner is-fluid">
               <div className="vn-home-hero-banner">
@@ -1981,6 +2348,8 @@ function PublicHomePage({
 
         <div
           className={`vn-home-content${isCategoriesScreen ? ' is-categories-page' : ''}${
+            isServiceProvidersScreen ? ' is-service-providers-page' : ''
+          }${
             isAiAssistScreen ? ' is-ai-assist-page' : ''
           }`}
         >
@@ -2128,11 +2497,11 @@ function PublicHomePage({
                       }}
                       role="button"
                       tabIndex={0}
-                      onClick={() => selectCategoryFilter(category.title)}
+                      onClick={() => openServiceProvidersPage(category.title)}
                       onKeyDown={(event) => {
                         if (event.key === 'Enter' || event.key === ' ') {
                           event.preventDefault()
-                          selectCategoryFilter(category.title)
+                          openServiceProvidersPage(category.title)
                         }
                       }}
                     >
@@ -2160,6 +2529,341 @@ function PublicHomePage({
                     </article>
                   ))}
                 </div>
+              </div>
+            </section>
+          ) : isServiceProvidersScreen ? (
+            <section className="vn-home-section vn-home-service-providers-page" id="service-providers">
+              <div className="vn-home-shell-inner">
+                <div className="vn-home-service-providers-hero">
+                  <div className="vn-home-service-providers-hero-copy">
+                    <span className="vn-home-service-providers-hero-icon">
+                      {renderCategoryVisual(
+                        selectedServiceCategory,
+                        'vn-home-service-providers-hero-icon-image',
+                        'vn-home-service-providers-hero-icon-svg'
+                      )}
+                    </span>
+                    <div className="vn-home-service-providers-hero-copy-body">
+                      <button
+                        type="button"
+                        className="vn-home-service-providers-back"
+                        onClick={handleBackToCategories}
+                      >
+                        <Icon type="arrow-right" className="vn-home-service-providers-back-icon" />
+                        <span>Back to Categories</span>
+                      </button>
+                      <h1>{getServicePageTitle(selectedServiceCategory)}</h1>
+                      <p>{selectedServiceCategory.description}</p>
+                      <strong>{serviceProviderAvailabilityLabel}</strong>
+                    </div>
+                  </div>
+
+                  <div className="vn-home-service-providers-hero-visual" aria-hidden="true">
+                    <div className="vn-home-service-providers-hero-visual-frame">
+                      {selectedServiceCategory.heroImage || selectedServiceCategory.image ? (
+                        <img
+                          src={selectedServiceCategory.heroImage ?? selectedServiceCategory.image}
+                          alt=""
+                          className={`vn-home-service-providers-hero-visual-image${
+                            selectedServiceCategory.heroImageFit === 'contain' ? ' is-contained' : ''
+                          }`}
+                        />
+                      ) : (
+                        <Icon type="briefcase" className="vn-home-service-providers-hero-visual-svg" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="vn-home-service-providers-layout">
+                  <aside className="vn-home-service-providers-filters">
+                    <div className="vn-home-service-providers-filters-head">
+                      <h2>Filter Providers</h2>
+                      <Icon type="compare" className="vn-home-service-providers-filters-head-icon" />
+                    </div>
+
+                    <div className="vn-home-service-providers-filter-group">
+                      <h3>Service Type</h3>
+                      <div className="vn-home-service-providers-filter-list">
+                        {serviceProviderTypes.map((serviceType) => (
+                          <label key={serviceType} className="vn-home-service-providers-filter-check">
+                            <input
+                              type="checkbox"
+                              checked={selectedProviderServiceTypes.includes(serviceType)}
+                              onChange={() => toggleProviderServiceType(serviceType)}
+                            />
+                            <span>{serviceType}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="vn-home-service-providers-filter-group">
+                      <h3>Provider Location</h3>
+                      <div className="vn-home-service-providers-location-search">
+                        <input
+                          type="search"
+                          value={providerLocationSearch}
+                          onChange={(event) => {
+                            setProviderLocationSearch(event.target.value)
+                            setProviderResultsPage(1)
+                          }}
+                          placeholder="Search location..."
+                          aria-label="Search provider location"
+                        />
+                        <Icon type="search" className="vn-home-service-providers-location-search-icon" />
+                      </div>
+                    </div>
+
+                    <div className="vn-home-service-providers-filter-group">
+                      <h3>Price Range</h3>
+                      <div className="vn-home-service-providers-filter-list">
+                        {serviceProviderPriceBuckets.map((bucket) => (
+                          <label key={bucket.key} className="vn-home-service-providers-filter-check">
+                            <input
+                              type="checkbox"
+                              checked={selectedProviderPriceBuckets.includes(bucket.key)}
+                              onChange={() => toggleProviderPriceBucket(bucket.key)}
+                            />
+                            <span>{bucket.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="vn-home-service-providers-price-inputs">
+                      <input
+                        type="number"
+                        value={providerMinPrice}
+                        onChange={(event) => {
+                          setProviderMinPrice(event.target.value)
+                          setProviderResultsPage(1)
+                        }}
+                        placeholder="Min"
+                        aria-label="Minimum price"
+                      />
+                      <span>to</span>
+                      <input
+                        type="number"
+                        value={providerMaxPrice}
+                        onChange={(event) => {
+                          setProviderMaxPrice(event.target.value)
+                          setProviderResultsPage(1)
+                        }}
+                        placeholder="Max"
+                        aria-label="Maximum price"
+                      />
+                    </div>
+
+                    <button
+                      type="button"
+                      className="vn-home-service-providers-apply"
+                      onClick={() => setProviderResultsPage(1)}
+                    >
+                      Apply Filters
+                    </button>
+                  </aside>
+
+                  <div className="vn-home-service-providers-results">
+                    <div className="vn-home-service-providers-toolbar">
+                      <p>
+                        Showing {showingProvidersFrom} - {showingProvidersTo} of {serviceProviderTotalLabel}
+                      </p>
+
+                      <label className="vn-home-service-providers-sort">
+                        <span>Sort by:</span>
+                        <select
+                          value={providerSortOption}
+                          onChange={(event) => {
+                            setProviderSortOption(event.target.value)
+                            setProviderResultsPage(1)
+                          }}
+                        >
+                          <option value="popularity">Popularity</option>
+                          <option value="rating">Top Rated</option>
+                          <option value="price-low">Price: Low to High</option>
+                          <option value="price-high">Price: High to Low</option>
+                          <option value="experience">Experience</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="vn-home-service-providers-results-list">
+                      {paginatedServiceProviders.map((provider) => (
+                        <article key={provider.id} className="vn-home-service-provider-card">
+                          <div className="vn-home-service-provider-card-main">
+                            <span
+                              className="vn-home-service-provider-card-avatar"
+                              style={{ background: provider.accent }}
+                            >
+                              {provider.initials}
+                            </span>
+
+                            <div className="vn-home-service-provider-card-copy">
+                              <div className="vn-home-service-provider-card-title">
+                                <h3>{provider.name}</h3>
+                                {provider.verified ? <span>Verified</span> : null}
+                              </div>
+                              <p>{provider.serviceTags.join(' • ')}</p>
+                              <small>
+                                <span>{provider.location}</span>
+                                <span>•</span>
+                                <span>{provider.years}+ Years Experience</span>
+                              </small>
+                            </div>
+                          </div>
+
+                          <div className="vn-home-service-provider-card-side">
+                            <div className="vn-home-service-provider-card-rating">
+                              <span>{provider.rating.toFixed(1)}</span>
+                              <small>({provider.reviews})</small>
+                            </div>
+                            <p>Starting from</p>
+                            <strong>{formatProviderPrice(provider.price)}</strong>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="vn-home-service-provider-card-button"
+                            onClick={() => openProviderProfile(provider)}
+                          >
+                            View Profile
+                          </button>
+                        </article>
+                      ))}
+
+                      {paginatedServiceProviders.length === 0 ? (
+                        <div className="vn-home-service-providers-empty">
+                          No providers found. Try changing filters or choose another category.
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div className="vn-home-service-providers-pagination">
+                      <button
+                        type="button"
+                        onClick={() => setProviderResultsPage((page) => Math.max(1, page - 1))}
+                        disabled={safeProviderResultsPage === 1}
+                      >
+                        Previous
+                      </button>
+
+                      <div className="vn-home-service-providers-pagination-pages">
+                        {visibleProviderPageNumbers.map((pageNumber) => (
+                          <button
+                            type="button"
+                            key={pageNumber}
+                            className={safeProviderResultsPage === pageNumber ? 'is-active' : ''}
+                            onClick={() => setProviderResultsPage(pageNumber)}
+                          >
+                            {pageNumber}
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setProviderResultsPage((page) => Math.min(totalProviderPages, page + 1))
+                        }
+                        disabled={safeProviderResultsPage === totalProviderPages}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedProviderProfile ? (
+                  <div
+                    className="vn-home-provider-profile-modal-backdrop"
+                    role="presentation"
+                    onClick={closeProviderProfile}
+                  >
+                    <div
+                      className="vn-home-provider-profile-modal"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="provider-profile-title"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="vn-home-provider-profile-close"
+                        aria-label="Close provider profile"
+                        onClick={closeProviderProfile}
+                      >
+                        <Icon type="close" className="vn-home-provider-profile-close-icon" />
+                      </button>
+
+                      <div className="vn-home-provider-profile-header">
+                        <span
+                          className="vn-home-provider-profile-avatar"
+                          style={{ background: selectedProviderProfile.accent }}
+                        >
+                          {selectedProviderProfile.initials}
+                        </span>
+
+                        <div className="vn-home-provider-profile-copy">
+                          <p>Verified Service Provider</p>
+                          <div className="vn-home-provider-profile-title">
+                            <h2 id="provider-profile-title">{selectedProviderProfile.name}</h2>
+                            {selectedProviderProfile.verified ? <span>Verified</span> : null}
+                          </div>
+                          <small>{selectedProviderProfile.serviceTags.join(' • ')}</small>
+                        </div>
+
+                        <div className="vn-home-provider-profile-price">
+                          <span>Starting from</span>
+                          <strong>{formatProviderPrice(selectedProviderProfile.price)}</strong>
+                        </div>
+                      </div>
+
+                      <div className="vn-home-provider-profile-metrics">
+                        <article>
+                          <strong>{selectedProviderProfile.rating.toFixed(1)}</strong>
+                          <span>{selectedProviderProfile.reviews} reviews</span>
+                        </article>
+                        <article>
+                          <strong>{selectedProviderProfile.years}+ Years</strong>
+                          <span>Industry experience</span>
+                        </article>
+                        <article>
+                          <strong>{selectedProviderProfile.location}</strong>
+                          <span>Service location</span>
+                        </article>
+                      </div>
+
+                      <div className="vn-home-provider-profile-section">
+                        <h3>About This Provider</h3>
+                        <p>
+                          {selectedProviderProfile.name} helps businesses with{' '}
+                          {selectedProviderProfile.serviceTags.join(', ').toLowerCase()} under the{' '}
+                          {selectedServiceCategory.title} category. The team focuses on responsive
+                          support, transparent pricing, and practical guidance for growing businesses.
+                        </p>
+                      </div>
+
+                      <div className="vn-home-provider-profile-section">
+                        <h3>Specializations</h3>
+                        <div className="vn-home-provider-profile-tags">
+                          {selectedProviderProfile.serviceTags.map((serviceTag) => (
+                            <span key={serviceTag}>{serviceTag}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="vn-home-provider-profile-actions">
+                        <button type="button" className="vn-home-provider-profile-primary">
+                          Send Request
+                        </button>
+                        <button type="button" className="vn-home-provider-profile-secondary">
+                          Contact Provider
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </section>
           ) : isAiAssistScreen ? (
@@ -2251,7 +2955,19 @@ function PublicHomePage({
 
                   <div className="vn-home-category-grid">
                     {categoryCards.map((category) => (
-                      <article key={category.title} className="vn-home-category-card">
+                      <article
+                        key={category.title}
+                        className="vn-home-category-card"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => openServiceProvidersPage(category.title)}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            openServiceProvidersPage(category.title)
+                          }
+                        }}
+                      >
                         <span className="vn-home-category-icon">
                           {category.image ? (
                             <img
