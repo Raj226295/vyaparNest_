@@ -243,6 +243,20 @@ function Icon({ name, className = '' }) {
           <path d="m5 12 4.2 4.2L19 6.6" />
         </svg>
       )
+    case 'badge-check':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="m8.3 12.1 2.4 2.4 5-5.2" />
+        </svg>
+      )
+    case 'send':
+      return (
+        <svg {...sharedProps}>
+          <path d="m20 4-7.1 16-2.5-6.4L4 11.1 20 4Z" />
+          <path d="m10.4 13.6 3.8-3.8" />
+        </svg>
+      )
     case 'clock':
       return (
         <svg {...sharedProps}>
@@ -602,7 +616,7 @@ function StepIllustration({ step, paymentSuccessful }) {
   )
 }
 
-function PartnerRegistrationPage({ isOverlay = false }) {
+function PartnerRegistrationPage({ isOverlay = false, forceVerification = false }) {
   const [signupStage, setSignupStage] = useState(() => getSavedRegistrationFlow().signupStage || 'role')
   const [selectedSignupRole, setSelectedSignupRole] = useState(() => getSavedRegistrationFlow().selectedSignupRole || null)
   const [accountForm, setAccountForm] = useState({ fullName: '', email: '', phone: '', password: '', acceptedTerms: false })
@@ -616,7 +630,9 @@ function PartnerRegistrationPage({ isOverlay = false }) {
   const [documentUploads, setDocumentUploads] = useState(initialDocumentState)
   const [selectedPlan, setSelectedPlan] = useState('professional')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('upi')
-  const [paymentSuccessful, setPaymentSuccessful] = useState(() => Boolean(getSavedRegistrationFlow().paymentSuccessful))
+  const [paymentSuccessful, setPaymentSuccessful] = useState(() =>
+    forceVerification || Boolean(getSavedRegistrationFlow().paymentSuccessful)
+  )
   const uploadTimersRef = useRef({})
 
   const currentStepDefinition = stepDefinitions[currentStep]
@@ -668,6 +684,12 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       JSON.stringify({ signupStage, selectedSignupRole, currentStep, paymentSuccessful }),
     )
   }, [currentStep, paymentSuccessful, selectedSignupRole, signupStage])
+
+  useEffect(() => {
+    if (forceVerification) {
+      setPaymentSuccessful(true)
+    }
+  }, [forceVerification])
 
   useEffect(() => {
     const uploadTimers = uploadTimersRef.current
@@ -812,7 +834,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       return
     }
 
-    if (hash !== '#partner-register') {
+    if (hash !== '#partner-register' && hash !== '#provider-verification') {
       window.sessionStorage.removeItem(registrationFlowStorageKey)
     }
 
@@ -936,12 +958,9 @@ function PartnerRegistrationPage({ isOverlay = false }) {
   }
 
   const handleProceedPayment = () => {
-    if (!validateCurrentStep(4)) {
-      return
-    }
-
     setCompletedSteps(stepDefinitions.map((_, index) => index))
     setPaymentSuccessful(true)
+    navigateToHome('#provider-verification')
   }
 
   const handleDocumentUpload = (fieldKey, event) => {
@@ -1658,7 +1677,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       ? 'Your submitted profile is awaiting admin approval for activation.'
       : currentStepDefinition.subtitle
 
-  if (signupStage === 'account') {
+  if (signupStage === 'account' && !paymentSuccessful) {
     return (
       <main className={`partner-account-page${isOverlay ? ' is-overlay' : ''}`}>
         <section className="partner-account-shell" aria-labelledby="partner-account-title">
@@ -1709,7 +1728,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
     )
   }
 
-  if (signupStage === 'role') {
+  if (signupStage === 'role' && !paymentSuccessful) {
     return (
       <main className={`partner-role-page${isOverlay ? ' is-overlay' : ''}`}>
         <section className="partner-role-shell" aria-labelledby="partner-role-title">
@@ -1798,8 +1817,8 @@ function PartnerRegistrationPage({ isOverlay = false }) {
             <Icon name="arrow-left" /> Back to Home
           </button>
           <header className="provider-verification-heading">
-            <span className="provider-verification-heading-icon"><Icon name="shield" /></span>
-            <div><h1>Provider Verification Pending</h1><p>Your submitted profile is being reviewed by our verification team.</p></div>
+            <span className="provider-verification-heading-icon"><Icon name="badge-check" /></span>
+            <div><span className="provider-verification-eyebrow">Provider onboarding complete</span><h1>Registration successfully submitted</h1><p>Your provider profile is secure and is now awaiting the final admin verification.</p></div>
           </header>
 
           <section className="provider-verification-hero">
@@ -1811,7 +1830,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
               <span className="provider-verification-kicker"><Icon name="clock" /> Verification Pending</span>
               <h2>{partnerFirstName}, your registration<br />has been <em>submitted</em></h2>
               <p>Your profile will activate after admin approval. We are reviewing your submitted details and KYC documents.</p>
-              <div className="provider-verification-chips"><span>✓ Profile Submitted</span><span>⌘ Admin Review Required</span><span># Reference ID: {activationReference}</span></div>
+              <div className="provider-verification-chips"><span><Icon name="check" /> Profile Submitted</span><span><Icon name="clock" /> Admin Review Required</span><span><Icon name="note" /> Reference ID: {activationReference}</span></div>
               <div className="provider-verification-actions">
                 <button type="button" className="provider-verification-primary" onClick={() => navigateToHome('#provider-dashboard')}>View Provider Dashboard <Icon name="arrow-right" /></button>
                 <button type="button" className="provider-verification-secondary" onClick={() => navigateToHome('#top')}>Back to Home <Icon name="arrow-right" /></button>
@@ -1838,7 +1857,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
           <section className="provider-verification-next">
             <div><span className="provider-verification-next-icon"><Icon name="services" /></span><h3>What Happens Next</h3><p>We will activate your provider profile once the review is complete.</p></div>
             <ol><li>Our admin team will review your submitted business details and KYC documents.</li><li>Your profile will activate after approval and appear in relevant marketplace results.</li><li>We will notify you as soon as your verification status is updated.</li></ol>
-            <span className="provider-verification-rocket" aria-hidden="true"><Icon name="arrow-right" /></span>
+            <span className="provider-verification-rocket" aria-hidden="true"><Icon name="send" /></span>
           </section>
           <footer className="provider-verification-security"><span><Icon name="shield" /></span><p><strong>Your data is safe and secure with us.</strong><small>We use industry-standard security measures to protect your information.</small></p><b><Icon name="lock" /> Secure & Encrypted</b></footer>
         </div>

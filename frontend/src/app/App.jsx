@@ -10,6 +10,7 @@ const categoriesHash = '#all-categories'
 const aiAssistHash = '#ai-assist'
 const userDashboardHash = '#user-dashboard'
 const providerDashboardHash = '#provider-dashboard'
+const providerVerificationHash = '#provider-verification'
 const serviceProvidersHashPrefix = '#service-providers/'
 
 function getCurrentScreen() {
@@ -39,6 +40,10 @@ function getCurrentScreen() {
 
   if (window.location.hash === providerDashboardHash) {
     return 'provider-dashboard'
+  }
+
+  if (window.location.hash === providerVerificationHash) {
+    return 'provider-verification'
   }
 
   return 'home'
@@ -107,6 +112,13 @@ function App() {
     }
   }
 
+  // The provider-verification screen is a destination of the onboarding flow,
+  // not an overlay on the public/user experience. Rendering it exclusively
+  // prevents any user panel state from appearing beneath or above it.
+  if (currentScreen === 'provider-verification') {
+    return <PartnerRegistrationPage onOpenPartnerLogin={openPartnerLogin} forceVerification />
+  }
+
   return (
     <>
       {currentScreen === 'user-dashboard' ? (
@@ -123,7 +135,10 @@ function App() {
       )}
 
       {currentScreen === 'partner-register' ? (
-        <PartnerRegistrationPage onOpenPartnerLogin={openPartnerLogin} isOverlay />
+        <PartnerRegistrationPage
+          onOpenPartnerLogin={openPartnerLogin}
+          isOverlay
+        />
       ) : null}
     </>
   )
