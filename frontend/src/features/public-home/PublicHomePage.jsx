@@ -7,14 +7,17 @@ const homeHash = '#top'
 const categoriesHash = '#all-categories'
 const aiAssistHash = '#ai-assist'
 const workflowHash = '#how-it-works'
-const providersHash = '#providers'
 const serviceProvidersHashPrefix = '#service-providers/'
+const providerProfileHashPrefix = '#provider-profile/'
+const defaultProviderProfileCategoryTitle = 'Website Development'
+const defaultProviderProfileId = 'website-development-2'
+const defaultProviderProfileHash = `${providerProfileHashPrefix}Website%20Development/${defaultProviderProfileId}`
 
 const primaryNavLinks = [
   { key: 'home', label: 'Home', href: homeHash },
   { key: 'categories', label: 'Categories', href: categoriesHash, hasChevron: true },
   { key: 'ai-assist', label: 'AI Assist', href: aiAssistHash },
-  { key: 'dashboard', label: 'About Us', href: providersHash },
+  { key: 'dashboard', label: 'About Us', href: defaultProviderProfileHash },
 ]
 
 const popularSearches = [
@@ -327,6 +330,8 @@ const featuredProviders = [
     years: '5 Years',
     projects: '220+ Projects',
     accent: 'linear-gradient(135deg, #111214 0%, #2f3238 100%)',
+    profileCategory: 'Website Development',
+    profileId: 'website-development-1',
   },
   {
     initials: 'TI',
@@ -338,6 +343,8 @@ const featuredProviders = [
     years: '7 Years',
     projects: '200+ Projects',
     accent: 'linear-gradient(135deg, #0c0c0f 0%, #262934 100%)',
+    profileCategory: 'GST & Tax Services',
+    profileId: 'gst-tax-services-1',
   },
   {
     initials: 'DG',
@@ -349,6 +356,8 @@ const featuredProviders = [
     years: '4 Years',
     projects: '150+ Projects',
     accent: 'linear-gradient(135deg, #3a1476 0%, #472f9c 100%)',
+    profileCategory: 'Digital Marketing',
+    profileId: 'digital-marketing-1',
   },
   {
     initials: 'HE',
@@ -360,6 +369,8 @@ const featuredProviders = [
     years: '6 Years',
     projects: '300+ Projects',
     accent: 'linear-gradient(135deg, #f6b613 0%, #f6ca42 100%)',
+    profileCategory: 'Home Services',
+    profileId: 'home-services-1',
   },
 ]
 
@@ -412,6 +423,8 @@ const testimonials = [
     avatar: '/testimonial-avatars/amit-verma.svg',
   },
 ]
+
+const categoriesPageSize = 15
 
 const guides = [
   {
@@ -472,6 +485,13 @@ const footerSocials = [
   { label: 'Instagram', icon: 'instagram' },
   { label: 'YouTube', icon: 'youtube' },
 ]
+
+const providerProfileStatIcons = {
+  projects: '/provider-profile-icons/star.gif',
+  expertise: '/provider-profile-icons/expertise.gif',
+  delivery: '/provider-profile-icons/fast-delivery.gif',
+  satisfaction: '/provider-profile-icons/customer-experience.gif',
+}
 
 const serviceProviderPriceBuckets = [
   { key: 'under-2000', label: 'Under ₹2,000', min: 0, max: 1999 },
@@ -981,6 +1001,11 @@ function getProviderInitials(name) {
     .toUpperCase()
 }
 
+function getProviderBrandMark(name) {
+  const firstWord = name.trim().split(/\s+/)[0] ?? 'V'
+  return firstWord.slice(0, 1).toUpperCase()
+}
+
 function formatProviderPrice(amount) {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -996,24 +1021,103 @@ function buildServiceProvidersForCategory(category) {
 
   const serviceTypes = getCategoryServiceTypes(category)
   const serviceBase = category.title
-  const presetProviders =
-    category.title === 'Accounting'
-      ? [
-          { name: 'RK Accounting Solutions', location: 'Delhi, India', rating: 4.8, reviews: 124, years: 5, price: 2499 },
-          { name: 'FinEdge Financials', location: 'Mumbai, India', rating: 4.7, reviews: 98, years: 7, price: 3499 },
-          { name: 'Accounts Care India', location: 'Bangalore, India', rating: 4.6, reviews: 86, years: 10, price: 2999 },
-          { name: 'TaxPro Advisors', location: 'Pune, India', rating: 4.5, reviews: 72, years: 6, price: 2000 },
-          { name: 'SmartBooks Accounting', location: 'Hyderabad, India', rating: 4.4, reviews: 61, years: 4, price: 1999 },
-          { name: 'LedgerLine Experts', location: 'Chennai, India', rating: 4.8, reviews: 118, years: 9, price: 3200 },
-          { name: 'BluePeak Accountants', location: 'Kolkata, India', rating: 4.6, reviews: 77, years: 8, price: 2800 },
-          { name: 'Numeric Nest Advisors', location: 'Purnia, Bihar', rating: 4.7, reviews: 69, years: 5, price: 2200 },
-          { name: 'Prime Ledger Associates', location: 'Patna, Bihar', rating: 4.5, reviews: 58, years: 4, price: 1800 },
-          { name: 'AuditBridge Partners', location: 'Noida, India', rating: 4.8, reviews: 132, years: 11, price: 4200 },
-          { name: 'BalancePro Consultants', location: 'Gurgaon, India', rating: 4.6, reviews: 81, years: 6, price: 2750 },
-          { name: 'Accura Tax & Books', location: 'Ahmedabad, India', rating: 4.7, reviews: 88, years: 7, price: 3100 },
-          { name: 'ProfitLine Financials', location: 'Jaipur, India', rating: 4.5, reviews: 64, years: 5, price: 2400 },
-        ]
-      : null
+  const presetProvidersByCategory = {
+    Accounting: [
+      { name: 'RK Accounting Solutions', location: 'Delhi, India', rating: 4.8, reviews: 124, years: 5, price: 2499 },
+      { name: 'FinEdge Financials', location: 'Mumbai, India', rating: 4.7, reviews: 98, years: 7, price: 3499 },
+      { name: 'Accounts Care India', location: 'Bangalore, India', rating: 4.6, reviews: 86, years: 10, price: 2999 },
+      { name: 'TaxPro Advisors', location: 'Pune, India', rating: 4.5, reviews: 72, years: 6, price: 2000 },
+      { name: 'SmartBooks Accounting', location: 'Hyderabad, India', rating: 4.4, reviews: 61, years: 4, price: 1999 },
+      { name: 'LedgerLine Experts', location: 'Chennai, India', rating: 4.8, reviews: 118, years: 9, price: 3200 },
+      { name: 'BluePeak Accountants', location: 'Kolkata, India', rating: 4.6, reviews: 77, years: 8, price: 2800 },
+      { name: 'Numeric Nest Advisors', location: 'Purnia, Bihar', rating: 4.7, reviews: 69, years: 5, price: 2200 },
+      { name: 'Prime Ledger Associates', location: 'Patna, Bihar', rating: 4.5, reviews: 58, years: 4, price: 1800 },
+      {
+        name: 'AuditBridge Partners',
+        location: 'Noida, India',
+        rating: 4.8,
+        reviews: 104,
+        years: 10,
+        price: 4200,
+        brandMark: 'A',
+        serviceTags: ['Consultation', 'Compliance', 'Support'],
+        responseRate: 95,
+        completedProjects: 250,
+        responseTime: 'Within 1 hour',
+        serviceMode: 'Online',
+        onTimeDelivery: 97,
+        clientSatisfaction: 98,
+        languages: ['English', 'Hindi'],
+        description:
+          'AuditBridge Partners delivers accounting and audit services, taxation advisory, and compliance solutions to help businesses stay accurate and compliant.',
+        trustNote: 'Trusted partner for accurate accounting and compliance support.',
+        aboutDescription:
+          'AuditBridge Partners focuses on providing reliable and transparent accounting, audit, tax, and compliance services. Our team ensures accuracy, timely delivery, and complete confidentiality.',
+        reviewDistributionCounts: [72, 24, 6, 1, 1],
+        reviewTestimonials: [
+          {
+            name: 'Rahul Sharma',
+            role: 'Verified Client',
+            avatar: '/testimonial-avatars/rahul-verma.svg',
+            rating: 5,
+            text: 'Excellent service and timely delivery. Highly professional team and great support throughout the process.',
+          },
+          {
+            name: 'Priya Malhotra',
+            role: 'Verified Client',
+            avatar: '/testimonial-avatars/priya-singh.svg',
+            rating: 5,
+            text: 'Very smooth accounting support with clear communication and accurate compliance handling from start to finish.',
+          },
+          {
+            name: 'Arjun Mehta',
+            role: 'Verified Client',
+            avatar: '/testimonial-avatars/amit-verma.svg',
+            rating: 4,
+            text: 'Dependable team, good turnaround time, and strong guidance for filings and reporting.',
+          },
+        ],
+      },
+      { name: 'BalancePro Consultants', location: 'Gurgaon, India', rating: 4.6, reviews: 81, years: 6, price: 2750 },
+      { name: 'Accura Tax & Books', location: 'Ahmedabad, India', rating: 4.7, reviews: 88, years: 7, price: 3100 },
+      { name: 'ProfitLine Financials', location: 'Jaipur, India', rating: 4.5, reviews: 64, years: 5, price: 2400 },
+    ],
+    'Website Development': [
+      { name: 'PixelCraft Studio', location: 'Purnia, Bihar', rating: 4.8, reviews: 120, years: 5, price: 2200 },
+      { name: 'Smart Website Development', location: 'Pune, India', rating: 4.9, reviews: 146, years: 9, price: 4200 },
+      { name: 'WebCraft Solutions', location: 'Patna, Bihar', rating: 4.8, reviews: 112, years: 7, price: 2800 },
+      { name: 'LaunchGrid Labs', location: 'Delhi, India', rating: 4.7, reviews: 94, years: 6, price: 3200 },
+      { name: 'NextFrame Digital', location: 'Bangalore, India', rating: 4.6, reviews: 73, years: 4, price: 2500 },
+      { name: 'SiteForge Experts', location: 'Noida, India', rating: 4.8, reviews: 101, years: 8, price: 3600 },
+      { name: 'BrandNest Web', location: 'Hyderabad, India', rating: 4.7, reviews: 88, years: 6, price: 2950 },
+      { name: 'ElevatePixel Studio', location: 'Jaipur, India', rating: 4.6, reviews: 69, years: 5, price: 2400 },
+    ],
+    'GST & Tax Services': [
+      { name: 'TaxExpert India', location: 'Purnia, Bihar', rating: 4.9, reviews: 85, years: 7, price: 3100 },
+      { name: 'GST Shield Advisors', location: 'Delhi, India', rating: 4.8, reviews: 118, years: 9, price: 4200 },
+      { name: 'ReturnRight CA Hub', location: 'Patna, Bihar', rating: 4.7, reviews: 76, years: 6, price: 2600 },
+      { name: 'ComplyEase Financials', location: 'Mumbai, India', rating: 4.6, reviews: 71, years: 5, price: 2450 },
+      { name: 'LedgerTax Partners', location: 'Noida, India', rating: 4.8, reviews: 102, years: 8, price: 3550 },
+      { name: 'Accura GST Support', location: 'Ahmedabad, India', rating: 4.7, reviews: 80, years: 6, price: 2850 },
+    ],
+    'Digital Marketing': [
+      { name: 'DigitalGrow Agency', location: 'Purnia, Bihar', rating: 4.9, reviews: 95, years: 4, price: 2900 },
+      { name: 'RankSprint Media', location: 'Delhi, India', rating: 4.8, reviews: 122, years: 8, price: 4100 },
+      { name: 'GrowthLab Campaigns', location: 'Bangalore, India', rating: 4.7, reviews: 89, years: 6, price: 3400 },
+      { name: 'BlueOrbit Performance', location: 'Mumbai, India', rating: 4.6, reviews: 74, years: 5, price: 2750 },
+      { name: 'LeadFrame Digital', location: 'Hyderabad, India', rating: 4.8, reviews: 107, years: 7, price: 3650 },
+      { name: 'SocialDrive Studio', location: 'Pune, India', rating: 4.7, reviews: 83, years: 6, price: 3250 },
+    ],
+    'Home Services': [
+      { name: 'HomeFix Experts', location: 'Purnia, Bihar', rating: 4.8, reviews: 80, years: 6, price: 2200 },
+      { name: 'CleanCare Home Pros', location: 'Patna, Bihar', rating: 4.7, reviews: 67, years: 5, price: 1800 },
+      { name: 'SparkNest Services', location: 'Delhi, India', rating: 4.6, reviews: 72, years: 4, price: 2100 },
+      { name: 'UrbanRepair Team', location: 'Noida, India', rating: 4.8, reviews: 98, years: 8, price: 2600 },
+      { name: 'QuickHelp Homes', location: 'Bangalore, India', rating: 4.7, reviews: 79, years: 5, price: 2350 },
+      { name: 'SafeHands Home Support', location: 'Hyderabad, India', rating: 4.8, reviews: 104, years: 7, price: 2950 },
+    ],
+  }
+  const presetProviders = presetProvidersByCategory[category.title] ?? null
 
   const genericNames = [
     `${serviceBase} Experts`,
@@ -1056,6 +1160,24 @@ function buildServiceProvidersForCategory(category) {
     'linear-gradient(135deg, #0b3f39 0%, #0f7e72 100%)',
     'linear-gradient(135deg, #4d3209 0%, #da9a19 100%)',
   ]
+  const genericResponseRates = [95, 94, 97, 93, 96, 98, 95, 92, 94, 97, 95, 96, 93]
+  const genericCompletedProjects = [250, 194, 178, 161, 149, 308, 226, 172, 143, 336, 208, 231, 166]
+  const genericResponseTimes = [
+    'Within 1 hour',
+    'Within 2 hours',
+    'Same day',
+    'Within 3 hours',
+    'Within 4 hours',
+  ]
+  const genericServiceModes = ['Online', 'Online / On-site', 'Remote-first', 'On-site Available']
+  const genericDeliveryRates = [98, 97, 96, 95, 99, 98, 97, 96]
+  const genericSatisfactionRates = [99, 98, 97, 96, 99, 98, 97, 98]
+  const genericLanguageSets = [
+    ['English', 'Hindi'],
+    ['English', 'Hindi', 'Bengali'],
+    ['English', 'Hindi', 'Marathi'],
+    ['English', 'Hindi', 'Urdu'],
+  ]
 
   const sourceProviders = presetProviders ?? genericNames.map((name, index) => ({
     name,
@@ -1070,6 +1192,7 @@ function buildServiceProvidersForCategory(category) {
     id: `${normalizeAiText(category.title).replace(/\s+/g, '-')}-${index + 1}`,
     name: provider.name,
     initials: getProviderInitials(provider.name),
+    brandMark: provider.brandMark ?? getProviderBrandMark(provider.name),
     verified: true,
     location: provider.location,
     rating: provider.rating,
@@ -1077,17 +1200,557 @@ function buildServiceProvidersForCategory(category) {
     years: provider.years,
     price: provider.price,
     accent: genericAccents[index % genericAccents.length],
-    serviceTags: [
-      serviceTypes[index % serviceTypes.length],
-      serviceTypes[(index + 1) % serviceTypes.length],
-      serviceTypes[(index + 2) % serviceTypes.length],
-    ].filter((value, tagIndex, items) => items.indexOf(value) === tagIndex),
+    serviceTags:
+      provider.serviceTags ??
+      [
+        serviceTypes[index % serviceTypes.length],
+        serviceTypes[(index + 1) % serviceTypes.length],
+        serviceTypes[(index + 2) % serviceTypes.length],
+      ].filter((value, tagIndex, items) => items.indexOf(value) === tagIndex),
+    responseRate: provider.responseRate ?? genericResponseRates[index % genericResponseRates.length],
+    completedProjects:
+      provider.completedProjects ?? genericCompletedProjects[index % genericCompletedProjects.length],
+    responseTime: provider.responseTime ?? genericResponseTimes[index % genericResponseTimes.length],
+    serviceMode: provider.serviceMode ?? genericServiceModes[index % genericServiceModes.length],
+    onTimeDelivery:
+      provider.onTimeDelivery ?? genericDeliveryRates[index % genericDeliveryRates.length],
+    clientSatisfaction:
+      provider.clientSatisfaction ?? genericSatisfactionRates[index % genericSatisfactionRates.length],
+    languages: provider.languages ?? genericLanguageSets[index % genericLanguageSets.length],
+    description:
+      provider.description ??
+      `${provider.name} delivers ${category.title.toLowerCase()} solutions for startups, local businesses, and scaling brands with transparent communication and dependable execution.`,
+    trustNote:
+      provider.trustNote ??
+      `Trusted ${category.title.toLowerCase()} partner focused on consistent quality, transparent execution, and reliable delivery.`,
+    aboutDescription:
+      provider.aboutDescription ??
+      `${provider.name} focuses on providing reliable and transparent ${category.title.toLowerCase()} services with premium communication, timely delivery, and dependable support.`,
+    reviewDistributionCounts: provider.reviewDistributionCounts ?? null,
+    reviewTestimonials: provider.reviewTestimonials ?? null,
   }))
+}
+
+function getProviderProfileHash(categoryTitle, providerId = '') {
+  const encodedCategory = encodeURIComponent(categoryTitle)
+  const encodedProviderId = encodeURIComponent(providerId)
+  return `${providerProfileHashPrefix}${encodedCategory}${encodedProviderId ? `/${encodedProviderId}` : ''}`
+}
+
+function getProviderProfileRoute(hash) {
+  if (!hash || !hash.startsWith(providerProfileHashPrefix)) {
+    return null
+  }
+
+  const [categorySegment = '', providerSegment = ''] = hash
+    .slice(providerProfileHashPrefix.length)
+    .split('/')
+
+  return {
+    categoryTitle: categorySegment
+      ? decodeURIComponent(categorySegment)
+      : defaultProviderProfileCategoryTitle,
+    providerId: providerSegment ? decodeURIComponent(providerSegment) : defaultProviderProfileId,
+  }
+}
+
+function getCategoryByTitle(categoryTitle) {
+  return (
+    allCategoriesCards.find((category) => category.title === categoryTitle) ??
+    allCategoriesCards.find(
+      (category) => normalizeAiText(category.title) === normalizeAiText(categoryTitle)
+    ) ??
+    allCategoriesCards.find((category) => category.title === defaultProviderProfileCategoryTitle) ??
+    allCategoriesCards[0]
+  )
+}
+
+function buildProviderServices(provider, category) {
+  const serviceTemplatesByCategory = {
+    Accounting: [
+      {
+        name: 'Bookkeeping',
+        offset: 0,
+        deliveryTime: '5 - 7 Days',
+        shortDescription: 'Daily and monthly bookkeeping to keep your records accurate and organized.',
+      },
+      {
+        name: 'Audit',
+        offset: 2300,
+        deliveryTime: '7 - 10 Days',
+        shortDescription: 'Statutory audit, internal audit, and compliance audit for businesses.',
+      },
+      {
+        name: 'Income Tax Reporting',
+        offset: -700,
+        deliveryTime: '3 - 5 Days',
+        shortDescription: 'ITR filing for individuals and businesses with expert support.',
+      },
+      {
+        name: 'GST Compliance',
+        offset: 1300,
+        deliveryTime: '5 - 7 Days',
+        shortDescription: 'GST registration, return filing, and compliance management.',
+      },
+    ],
+    'Website Development': [
+      {
+        name: 'Business Website',
+        offset: 0,
+        deliveryTime: '7 - 10 Days',
+        shortDescription: 'Premium website design and development for trust, leads, and performance.',
+      },
+      {
+        name: 'E-commerce Website',
+        offset: 2400,
+        deliveryTime: '10 - 15 Days',
+        shortDescription: 'Storefront setup with product flows, catalog pages, and checkout journey support.',
+      },
+      {
+        name: 'Website Maintenance',
+        offset: -300,
+        deliveryTime: 'Ongoing Support',
+        shortDescription: 'Reliable updates, fixes, and ongoing improvements for active business websites.',
+      },
+      {
+        name: 'Landing Page',
+        offset: -1000,
+        deliveryTime: '3 - 5 Days',
+        shortDescription: 'Campaign-ready landing pages focused on speed, clarity, and conversions.',
+      },
+    ],
+    'Digital Marketing': [
+      {
+        name: 'SEO Strategy',
+        offset: 0,
+        deliveryTime: '5 - 7 Days',
+        shortDescription: 'Search-focused planning to improve visibility, rankings, and inbound lead quality.',
+      },
+      {
+        name: 'Performance Ads',
+        offset: 1600,
+        deliveryTime: '7 - 10 Days',
+        shortDescription: 'Campaign setup and optimization for paid traffic, leads, and measurable growth.',
+      },
+      {
+        name: 'Social Media Management',
+        offset: 900,
+        deliveryTime: 'Ongoing Support',
+        shortDescription: 'Content calendars, posting support, and brand-led social growth management.',
+      },
+      {
+        name: 'Email Campaigns',
+        offset: -350,
+        deliveryTime: '3 - 5 Days',
+        shortDescription: 'Targeted email campaign planning, creative structure, and audience engagement.',
+      },
+    ],
+  }
+  const defaultTemplates = getCategoryServiceTypes(category)
+    .slice(0, 4)
+    .map((serviceName, index) => ({
+      name: serviceName,
+      offset: index * 650,
+      deliveryTime: ['5 - 7 Days', '7 - 10 Days', '10 - 14 Days', '3 - 5 Days'][index % 4],
+      shortDescription: `Dedicated ${serviceName.toLowerCase()} support tailored for ${category.title.toLowerCase()} clients who want clear delivery, premium execution, and fast communication.`,
+    }))
+  const templates = serviceTemplatesByCategory[category.title] ?? defaultTemplates
+
+  return templates.map((service, index) => ({
+    id: `${provider.id}-service-${index + 1}`,
+    name: service.name,
+    startingPrice: Math.max(1200, provider.price + service.offset),
+    deliveryTime: service.deliveryTime,
+    shortDescription: service.shortDescription,
+  }))
+}
+
+function buildProviderProjects(provider, category) {
+  const projectTemplatesByCategory = {
+    Accounting: [
+      {
+        title: 'Annual Audit Report',
+        category: 'Audit',
+        short_description: 'Detailed audit reporting and compliance-ready financial review support.',
+        full_description:
+          'Delivered an annual audit review package with reporting summaries, compliance observations, and financial documentation support for accurate business reporting.',
+        thumbnail: '/service-provider-heroes/accounting-services-hero-user.png',
+        gallery_images: [
+          '/service-provider-heroes/accounting-services-hero-user.png',
+          '/market-sections/guide-growth.png',
+          '/market-sections/guide-website.png',
+        ],
+        technologies: ['Audit Review', 'Compliance Checks', 'Financial Reporting'],
+        services_provided: ['Annual Audit', 'Report Structuring', 'Compliance Guidance'],
+      },
+      {
+        title: 'Tax Planning for Business',
+        category: 'Taxation',
+        short_description: 'Business tax planning workflow with structured filing preparation.',
+        full_description:
+          'Prepared a business-focused tax planning structure covering timelines, filing support, deduction review, and documentation alignment for smoother compliance.',
+        thumbnail: '/market-sections/guide-growth-hover.png',
+        gallery_images: [
+          '/market-sections/guide-growth-hover.png',
+          '/service-provider-heroes/accounting-services-hero-user.png',
+          '/market-sections/guide-growth.png',
+        ],
+        technologies: ['Tax Planning', 'Filing Support', 'Documentation'],
+        services_provided: ['Tax Planning', 'Return Preparation', 'Business Advisory'],
+      },
+      {
+        title: 'GST Compliance Support',
+        category: 'Compliance',
+        short_description: 'GST registration, filing, and monthly compliance assistance for businesses.',
+        full_description:
+          'Handled GST compliance planning and routine filing support with documentation checks, advisory touchpoints, and structured monthly updates.',
+        thumbnail: '/market-sections/guide-branding-hover.png',
+        gallery_images: [
+          '/market-sections/guide-branding-hover.png',
+          '/service-provider-heroes/accounting-services-hero-user.png',
+          '/market-sections/guide-branding.png',
+        ],
+        technologies: ['GST Filing', 'Compliance Review', 'Advisory'],
+        services_provided: ['GST Registration', 'Return Filing', 'Compliance Tracking'],
+      },
+      {
+        title: 'Bookkeeping Management',
+        category: 'Accounting',
+        short_description: 'Clean bookkeeping operations with reconciled records and monthly summaries.',
+        full_description:
+          'Managed bookkeeping workflows with recurring entries, reconciliations, summary reporting, and record organization to keep the business finance-ready.',
+        thumbnail: '/market-sections/guide-website-hover.png',
+        gallery_images: [
+          '/market-sections/guide-website-hover.png',
+          '/service-provider-heroes/accounting-services-hero-user.png',
+          '/market-sections/guide-website.png',
+        ],
+        technologies: ['Bookkeeping', 'Reconciliation', 'Monthly Summaries'],
+        services_provided: ['Daily Bookkeeping', 'Monthly Closures', 'Ledger Support'],
+      },
+    ],
+    'Website Development': [
+      {
+        title: 'Smart Business Website',
+        category: 'Business Website',
+        short_description: 'Premium multi-page website focused on trust, conversions, and mobile performance.',
+        full_description:
+          'Designed and developed a premium business website with fast loading performance, lead capture flows, FAQ sections, and SEO-ready service pages for a growing company.',
+        thumbnail: '/market-sections/guide-website-hover.png',
+        gallery_images: [
+          '/market-sections/guide-website-hover.png',
+          '/market-sections/guide-website.png',
+          '/vyaparnest-website-banner.png',
+        ],
+        technologies: ['React', 'Responsive UI', 'SEO Setup'],
+        services_provided: ['UI Design', 'Frontend Development', 'Website Launch'],
+      },
+      {
+        title: 'Conversion Landing Page',
+        category: 'Landing Page',
+        short_description: 'High-converting landing page for paid campaigns and lead generation.',
+        full_description:
+          'Built a focused landing page with offer sections, sticky calls-to-action, testimonial blocks, and analytics event tracking for performance campaigns.',
+        thumbnail: '/market-sections/guide-growth-hover.png',
+        gallery_images: [
+          '/market-sections/guide-growth-hover.png',
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_31 PM.png',
+          '/market-sections/guide-growth.png',
+        ],
+        technologies: ['Landing Page UX', 'Analytics', 'Lead Forms'],
+        services_provided: ['Landing Page Design', 'Copy Layout', 'Conversion Tracking'],
+      },
+      {
+        title: 'E-commerce Storefront',
+        category: 'E-commerce',
+        short_description: 'Clean storefront for product discovery, checkout, and trust-building.',
+        full_description:
+          'Delivered a responsive e-commerce storefront with polished product sections, offer banners, checkout flows, and support for catalog-driven navigation.',
+        thumbnail: '/market-sections/guide-branding-hover.png',
+        gallery_images: [
+          '/market-sections/guide-branding-hover.png',
+          '/market-sections/guide-branding.png',
+          '/web-developer.gif',
+        ],
+        technologies: ['Storefront UI', 'Product UX', 'Checkout Journey'],
+        services_provided: ['Design System', 'Store Layout', 'Responsive Build'],
+      },
+      {
+        title: 'Portfolio Experience',
+        category: 'Portfolio',
+        short_description: 'Minimal portfolio for personal branding and premium presentation.',
+        full_description:
+          'Created a portfolio website with animated sections, image galleries, trust indicators, and inquiry actions for a creative professional.',
+        thumbnail: '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_04 PM.png',
+        gallery_images: [
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_04 PM.png',
+          '/market-sections/guide-branding.png',
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_25_44 PM.png',
+        ],
+        technologies: ['Portfolio UX', 'Motion', 'Responsive Layout'],
+        services_provided: ['Creative Direction', 'Portfolio Build', 'Performance Tuning'],
+      },
+      {
+        title: 'Knowledge Blog Platform',
+        category: 'Blog',
+        short_description: 'Editorial blog layout with article templates and search-friendly structure.',
+        full_description:
+          'Set up a scalable content section with topic pages, article cards, author blocks, and call-to-action components for inbound discovery.',
+        thumbnail: '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_25_44 PM.png',
+        gallery_images: [
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_25_44 PM.png',
+          '/market-sections/guide-website.png',
+          '/market-sections/guide-growth.png',
+        ],
+        technologies: ['Content Architecture', 'Editorial UI', 'SEO Content'],
+        services_provided: ['Blog Design', 'Content Layouts', 'Internal Linking'],
+      },
+    ],
+    'Digital Marketing': [
+      {
+        title: 'Performance Campaign Dashboard',
+        category: 'Marketing Dashboard',
+        short_description: 'Multi-channel growth dashboard for campaign visibility and ROI tracking.',
+        full_description:
+          'Structured a campaign performance dashboard with SEO, email, paid ads, and audience metrics to guide faster growth decisions.',
+        thumbnail: '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_19 PM.png',
+        gallery_images: [
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_19 PM.png',
+          '/market-sections/guide-marketing-hover.png',
+          '/market-sections/guide-marketing.png',
+        ],
+        technologies: ['SEO', 'Paid Media', 'Analytics'],
+        services_provided: ['Campaign Planning', 'Dashboard Reporting', 'Conversion Review'],
+      },
+      {
+        title: 'Brand Strategy Sprint',
+        category: 'Graphic Design',
+        short_description: 'Brand-led campaign direction for premium positioning.',
+        full_description:
+          'Defined messaging direction, creative system, campaign visuals, and reporting touchpoints for a business growth sprint.',
+        thumbnail: '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_04 PM.png',
+        gallery_images: [
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_04 PM.png',
+          '/market-sections/guide-branding-hover.png',
+          '/market-sections/guide-branding.png',
+        ],
+        technologies: ['Brand Strategy', 'Creative Planning', 'Campaign Assets'],
+        services_provided: ['Strategy', 'Creative Direction', 'Campaign Rollout'],
+      },
+      {
+        title: 'Lead Funnel Landing Experience',
+        category: 'Landing Page',
+        short_description: 'Optimized funnel page for qualified lead generation.',
+        full_description:
+          'Created a premium lead funnel experience with segmented copy, conversion blocks, and follow-up journey touchpoints.',
+        thumbnail: '/market-sections/guide-growth-hover.png',
+        gallery_images: [
+          '/market-sections/guide-growth-hover.png',
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_31 PM.png',
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_25_44 PM.png',
+        ],
+        technologies: ['Funnel UX', 'Paid Ads', 'Remarketing'],
+        services_provided: ['Landing Page Strategy', 'Copy Structure', 'Tracking Setup'],
+      },
+    ],
+    default: [
+      {
+        title: 'Premium Service Experience',
+        category: 'Business Website',
+        short_description: 'Responsive service showcase with premium visual presentation.',
+        full_description:
+          'Crafted a polished service experience that highlights offerings, builds trust, and supports smooth inquiry generation across desktop and mobile.',
+        thumbnail: category.heroImage ?? category.image ?? '/market-sections/guide-website.png',
+        gallery_images: [
+          category.heroImage ?? category.image ?? '/market-sections/guide-website.png',
+          '/market-sections/guide-growth.png',
+          '/market-sections/guide-branding.png',
+        ],
+        technologies: ['Responsive Design', 'Content Strategy', 'Lead Experience'],
+        services_provided: ['Consultation', 'Design', 'Launch Support'],
+      },
+      {
+        title: 'Client Conversion Microsite',
+        category: 'Landing Page',
+        short_description: 'Compact microsite built for focused campaign responses.',
+        full_description:
+          'Developed a lightweight conversion experience with clear messaging, trust-building content, and prominent request actions.',
+        thumbnail: '/market-sections/guide-growth-hover.png',
+        gallery_images: [
+          '/market-sections/guide-growth-hover.png',
+          '/market-sections/guide-growth.png',
+          category.heroImage ?? category.image ?? '/market-sections/guide-branding.png',
+        ],
+        technologies: ['UX Writing', 'Conversion Layouts', 'Responsive Delivery'],
+        services_provided: ['Microsite Design', 'CTA Planning', 'Responsive QA'],
+      },
+      {
+        title: 'Premium Visual Refresh',
+        category: 'Graphic Design',
+        short_description: 'Visual redesign package for stronger first impressions.',
+        full_description:
+          'Refreshed the presentation style, messaging hierarchy, and supporting visuals to make the service offering easier to trust and faster to understand.',
+        thumbnail: '/market-sections/guide-branding-hover.png',
+        gallery_images: [
+          '/market-sections/guide-branding-hover.png',
+          '/market-sections/guide-branding.png',
+          '/guide-hover-images/ChatGPT Image Jul 22, 2026, 11_26_04 PM.png',
+        ],
+        technologies: ['Visual Direction', 'Design Polish', 'Presentation Assets'],
+        services_provided: ['Creative Review', 'Interface Polish', 'Brand Alignment'],
+      },
+    ],
+  }
+
+  const templates = projectTemplatesByCategory[category.title] ?? projectTemplatesByCategory.default
+
+  return templates.map((project, index) => ({
+    id: `${provider.id}-project-${index + 1}`,
+    provider_id: provider.id,
+    title: project.title,
+    category: project.category,
+    short_description: project.short_description,
+    full_description: project.full_description,
+    thumbnail: project.thumbnail,
+    gallery_images: project.gallery_images,
+    technologies: project.technologies,
+    services_provided: project.services_provided,
+    project_url: '',
+    completion_date: ['June 2026', 'May 2026', 'April 2026', 'March 2026', 'February 2026'][index % 5],
+    status: index < Math.min(4, templates.length) ? 'active' : 'draft',
+    created_at: ['2026-06-18', '2026-05-24', '2026-04-12', '2026-03-20', '2026-02-16'][index % 5],
+  }))
+}
+
+function buildProviderReviewDistribution(provider) {
+  if (Array.isArray(provider.reviewDistributionCounts) && provider.reviewDistributionCounts.length === 5) {
+    const total = provider.reviewDistributionCounts.reduce((sum, count) => sum + count, 0)
+    const labels = ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star']
+
+    return labels.map((label, index) => ({
+      label,
+      count: provider.reviewDistributionCounts[index],
+      percentage:
+        total > 0 ? Math.max(2, Math.round((provider.reviewDistributionCounts[index] / total) * 100)) : 0,
+    }))
+  }
+
+  const total = provider.reviews
+  const weights = provider.rating >= 4.8 ? [0.7, 0.19, 0.07, 0.03, 0.01] : [0.62, 0.23, 0.09, 0.04, 0.02]
+  const labels = ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star']
+  const counts = weights.map((weight) => Math.max(0, Math.round(total * weight)))
+  const difference = total - counts.reduce((sum, count) => sum + count, 0)
+
+  if (difference !== 0) {
+    counts[0] += difference
+  }
+
+  return labels.map((label, index) => ({
+    label,
+    count: counts[index],
+    percentage: total > 0 ? Math.max(2, Math.round((counts[index] / total) * 100)) : 0,
+  }))
+}
+
+function buildProviderReviews(provider) {
+  if (Array.isArray(provider.reviewTestimonials) && provider.reviewTestimonials.length > 0) {
+    return provider.reviewTestimonials.map((review, index) => ({
+      id: `${provider.id}-review-${index + 1}`,
+      name: review.name,
+      role: review.role,
+      avatar: review.avatar,
+      rating: review.rating,
+      text: review.text,
+    }))
+  }
+
+  const reviewAuthors = [
+    { name: 'Rahul Sharma', role: 'Verified Purchase', avatar: '/testimonial-avatars/rahul-verma.svg' },
+    { name: 'Priya Singh', role: 'Startup Founder', avatar: '/testimonial-avatars/priya-singh.svg' },
+    { name: 'Amit Verma', role: 'Business Owner', avatar: '/testimonial-avatars/amit-verma.svg' },
+  ]
+  const reviewRatings = [5, 5, Math.max(4, Math.round(provider.rating))]
+  const reviewTexts = [
+    `${provider.name} delivered exactly what was promised. The team was responsive, structured, and easy to work with throughout the project.`,
+    `Great communication, premium execution, and smooth delivery. I appreciated the clarity on timelines and the overall quality of the service.`,
+    `Very professional experience from discovery to delivery. The final output felt polished and aligned with our business goals.`,
+  ]
+
+  return reviewAuthors.map((author, index) => ({
+    id: `${provider.id}-review-${index + 1}`,
+    name: author.name,
+    role: author.role,
+    avatar: author.avatar,
+    rating: reviewRatings[index],
+    text: reviewTexts[index],
+  }))
+}
+
+function getProviderServiceIconType(serviceName, categoryTitle) {
+  const normalizedServiceName = normalizeAiText(serviceName)
+
+  if (
+    normalizedServiceName.includes('bookkeeping') ||
+    normalizedServiceName.includes('report') ||
+    normalizedServiceName.includes('content') ||
+    normalizedServiceName.includes('blog')
+  ) {
+    return 'document'
+  }
+
+  if (
+    normalizedServiceName.includes('audit') ||
+    normalizedServiceName.includes('consult') ||
+    normalizedServiceName.includes('strategy')
+  ) {
+    return 'users'
+  }
+
+  if (
+    normalizedServiceName.includes('tax') ||
+    normalizedServiceName.includes('gst') ||
+    normalizedServiceName.includes('compliance')
+  ) {
+    return 'calendar'
+  }
+
+  if (
+    normalizedServiceName.includes('website') ||
+    normalizedServiceName.includes('landing') ||
+    normalizedServiceName.includes('seo')
+  ) {
+    return 'laptop'
+  }
+
+  if (
+    normalizedServiceName.includes('campaign') ||
+    normalizedServiceName.includes('marketing') ||
+    normalizedServiceName.includes('social')
+  ) {
+    return 'compare'
+  }
+
+  if (normalizedServiceName.includes('support') || normalizedServiceName.includes('chat')) {
+    return 'message-circle'
+  }
+
+  if (
+    normalizeAiText(categoryTitle).includes('website') ||
+    normalizeAiText(categoryTitle).includes('marketing')
+  ) {
+    return 'laptop'
+  }
+
+  return 'briefcase'
 }
 
 function getActivePrimaryNavKey(currentScreen, activeHash) {
   if (currentScreen === 'ai-assist' || activeHash === aiAssistHash) {
     return 'ai-assist'
+  }
+
+  if (activeHash.startsWith(providerProfileHashPrefix)) {
+    return 'dashboard'
   }
 
   if (
@@ -1102,10 +1765,6 @@ function getActivePrimaryNavKey(currentScreen, activeHash) {
 
   if (activeHash === workflowHash) {
     return 'ai-assist'
-  }
-
-  if (activeHash === providersHash) {
-    return 'dashboard'
   }
 
   return 'home'
@@ -1348,6 +2007,13 @@ function Icon({ type, className = '' }) {
           <path d="m12 4.6 2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 4.6Z" />
         </svg>
       )
+    case 'quote':
+      return (
+        <svg {...sharedProps}>
+          <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H4C2.75 3 2 3.75 2 5v6c0 1.25.75 2 2 2h1c0 3-1 4-3 5" />
+          <path d="M14 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-4c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2h1c0 3-1 4-3 5" />
+        </svg>
+      )
     case 'play':
       return (
         <svg {...sharedProps}>
@@ -1420,6 +2086,7 @@ function PublicHomePage({
   const [categoriesPageFilterOpen, setCategoriesPageFilterOpen] = useState(false)
   const [categoriesPageSearchTerm, setCategoriesPageSearchTerm] = useState('')
   const [selectedCategoryTitle, setSelectedCategoryTitle] = useState('All Categories')
+  const [visibleCategoriesLimit, setVisibleCategoriesLimit] = useState(categoriesPageSize)
   const [aiConversations, setAiConversations] = useState(initialAiAssistConversations)
   const [selectedAiConversationId, setSelectedAiConversationId] = useState(
     initialAiAssistConversations[0].id
@@ -1435,7 +2102,11 @@ function PublicHomePage({
   const [selectedProviderServiceTypes, setSelectedProviderServiceTypes] = useState([])
   const [selectedProviderPriceBuckets, setSelectedProviderPriceBuckets] = useState([])
   const [providerResultsPage, setProviderResultsPage] = useState(1)
-  const [selectedProviderProfile, setSelectedProviderProfile] = useState(null)
+  const [selectedProfileServiceId, setSelectedProfileServiceId] = useState(null)
+  const [selectedServiceDetailId, setSelectedServiceDetailId] = useState(null)
+  const [selectedPortfolioCategoryFilter, setSelectedPortfolioCategoryFilter] = useState('All')
+  const [selectedPortfolioProject, setSelectedPortfolioProject] = useState(null)
+  const [selectedProviderReviewIndex, setSelectedProviderReviewIndex] = useState(0)
   const [activeHash, setActiveHash] = useState(() =>
     typeof window === 'undefined' ? homeHash : normalizeHash(window.location.hash)
   )
@@ -1448,10 +2119,14 @@ function PublicHomePage({
   const aiThreadRef = useRef(null)
   const aiReplyTimeoutsRef = useRef([])
   const aiCopyResetTimeoutRef = useRef(null)
+  const providerPortfolioSectionRef = useRef(null)
+  const providerContactCardRef = useRef(null)
   const isCategoriesScreen = currentScreen === 'categories'
   const isServiceProvidersScreen = currentScreen === 'service-providers'
+  const isProviderProfileScreen = activeHash.startsWith(providerProfileHashPrefix)
   const isAiAssistScreen = currentScreen === 'ai-assist'
   const activePrimaryNavKey = getActivePrimaryNavKey(currentScreen, activeHash)
+  const providerProfileRoute = getProviderProfileRoute(activeHash)
   const selectedCategory =
     selectedCategoryTitle === 'All Categories'
       ? null
@@ -1462,6 +2137,8 @@ function PublicHomePage({
   const displayedCategories = selectedCategory
     ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
     : allCategoriesCards
+  const visibleCategories = displayedCategories.slice(0, visibleCategoriesLimit)
+  const hasMoreCategories = visibleCategories.length < displayedCategories.length
   const selectedServiceCategory = getCategoryFromServiceProvidersHash(activeHash) ?? allCategoriesCards[0]
   const serviceProviderTypes = getCategoryServiceTypes(selectedServiceCategory)
   const serviceProviderEntries = buildServiceProvidersForCategory(selectedServiceCategory)
@@ -1472,6 +2149,41 @@ function PublicHomePage({
   const categoriesPageCountLabel = `Explore ${visibleCategoryCount} trusted ${
     visibleCategoryCount === 1 ? 'service' : 'services'
   } to grow your business`
+  const providerProfileCategory = getCategoryByTitle(
+    providerProfileRoute?.categoryTitle ?? defaultProviderProfileCategoryTitle
+  )
+  const providerProfileEntries = buildServiceProvidersForCategory(providerProfileCategory)
+  const activeProviderProfile = isProviderProfileScreen
+    ? providerProfileEntries.find((provider) => provider.id === providerProfileRoute?.providerId) ??
+      providerProfileEntries.find((provider) => provider.id === defaultProviderProfileId) ??
+      providerProfileEntries[0] ??
+      null
+    : null
+  const providerProfileServices = activeProviderProfile
+    ? buildProviderServices(activeProviderProfile, providerProfileCategory)
+    : []
+  const activeProviderService =
+    providerProfileServices.find((service) => service.id === selectedProfileServiceId) ??
+    providerProfileServices[0] ??
+    null
+  const selectedServiceDetail =
+    providerProfileServices.find((service) => service.id === selectedServiceDetailId) ?? null
+  const providerProjects = activeProviderProfile
+    ? buildProviderProjects(activeProviderProfile, providerProfileCategory).filter(
+        (project) => project.status === 'active'
+      )
+    : []
+  const providerPortfolioFilters = Array.from(new Set(providerProjects.map((project) => project.category)))
+  const visibleProviderProjects =
+    selectedPortfolioCategoryFilter === 'All'
+      ? providerProjects
+      : providerProjects.filter((project) => project.category === selectedPortfolioCategoryFilter)
+  const providerReviewDistribution = activeProviderProfile
+    ? buildProviderReviewDistribution(activeProviderProfile)
+    : []
+  const providerReviews = activeProviderProfile ? buildProviderReviews(activeProviderProfile) : []
+  const activeProviderReview =
+    providerReviews[selectedProviderReviewIndex] ?? providerReviews[0] ?? null
   const filteredServiceProviders = serviceProviderEntries
     .filter((provider) => {
       if (
@@ -1585,7 +2297,6 @@ function PublicHomePage({
     setSelectedProviderPriceBuckets([])
     setProviderSortOption('popularity')
     setProviderResultsPage(1)
-    setSelectedProviderProfile(null)
   }, [selectedServiceCategory.title])
 
   useEffect(() => {
@@ -1595,20 +2306,52 @@ function PublicHomePage({
   }, [providerResultsPage, totalProviderPages])
 
   useEffect(() => {
-    if (!selectedProviderProfile || typeof window === 'undefined') {
+    if (!activeProviderProfile) {
+      setSelectedProfileServiceId(null)
+      setSelectedServiceDetailId(null)
+      setSelectedPortfolioCategoryFilter('All')
+      setSelectedPortfolioProject(null)
+      setSelectedProviderReviewIndex(0)
+      return
+    }
+
+    setSelectedProfileServiceId(providerProfileServices[0]?.id ?? null)
+    setSelectedServiceDetailId(null)
+    setSelectedPortfolioCategoryFilter('All')
+    setSelectedPortfolioProject(null)
+    setSelectedProviderReviewIndex(0)
+  }, [activeProviderProfile?.id, providerProfileCategory.title])
+
+  useEffect(() => {
+    if ((!selectedPortfolioProject && !selectedServiceDetail) || typeof window === 'undefined') {
       return undefined
     }
 
+    const previousOverflow = document.body.style.overflow
+
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
-        setSelectedProviderProfile(null)
+        setSelectedPortfolioProject(null)
+        setSelectedServiceDetailId(null)
       }
     }
 
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', handleEscape)
 
-    return () => window.removeEventListener('keydown', handleEscape)
-  }, [selectedProviderProfile])
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [selectedPortfolioProject, selectedServiceDetail])
+
+  useEffect(() => {
+    if (selectedProviderReviewIndex < providerReviews.length) {
+      return
+    }
+
+    setSelectedProviderReviewIndex(0)
+  }, [providerReviews.length, selectedProviderReviewIndex])
 
   useEffect(() => {
     if (!partnerLoginOpen) {
@@ -1711,6 +2454,14 @@ function PublicHomePage({
   }, [categoriesPageFilterOpen])
 
   useEffect(() => {
+    if (!isProviderProfileScreen || typeof window === 'undefined') {
+      return
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [isProviderProfileScreen, activeProviderProfile?.id])
+
+  useEffect(() => {
     if (!isAiAssistScreen) {
       return undefined
     }
@@ -1759,6 +2510,7 @@ function PublicHomePage({
   }
 
   const handleOpenPartnerRegistration = () => {
+    setPartnerLoginOpen(false)
     setMobileNavOpen(false)
     setPartnerMenuOpen(false)
     setCategoriesMenuOpen(false)
@@ -1819,6 +2571,7 @@ function PublicHomePage({
 
   const selectCategoryFilter = (categoryTitle) => {
     setSelectedCategoryTitle(categoryTitle)
+    setVisibleCategoriesLimit(categoriesPageSize)
     setCategoriesPageFilterOpen(false)
     setCategoriesPageSearchTerm('')
   }
@@ -1858,12 +2611,51 @@ function PublicHomePage({
     setProviderResultsPage(1)
   }
 
-  const openProviderProfile = (provider) => {
-    setSelectedProviderProfile(provider)
+  const openProviderProfile = (provider, category = selectedServiceCategory) => {
+    handlePrimaryNavSelect()
+
+    if (typeof window !== 'undefined') {
+      window.location.hash = getProviderProfileHash(category.title, provider.id)
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    }
   }
 
-  const closeProviderProfile = () => {
-    setSelectedProviderProfile(null)
+  const handleBackToProviders = () => {
+    handlePrimaryNavSelect()
+
+    if (typeof window !== 'undefined') {
+      window.location.hash = getServiceProvidersHash(providerProfileCategory.title)
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    }
+  }
+
+  const handleViewProviderPortfolio = () => {
+    providerPortfolioSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleSelectProfileService = (serviceId) => {
+    setSelectedProfileServiceId(serviceId)
+    setSelectedServiceDetailId(serviceId)
+  }
+
+  const handleProviderQuoteRequest = () => {
+    handleOpenPartnerLogin()
+  }
+
+  const handleProviderContactRequest = () => {
+    handleOpenPartnerLogin()
+  }
+
+  const handleProviderChatNow = () => {
+    handleOpenPartnerLogin()
+  }
+
+  const closeSelectedPortfolioProject = () => {
+    setSelectedPortfolioProject(null)
+  }
+
+  const closeSelectedServiceDetail = () => {
+    setSelectedServiceDetailId(null)
   }
 
   const handleCreateAiChat = () => {
@@ -2117,6 +2909,8 @@ function PublicHomePage({
       className={`vn-home-shell${isCategoriesScreen ? ' is-categories-screen' : ''}${
         isServiceProvidersScreen ? ' is-service-providers-screen' : ''
       }${
+        isProviderProfileScreen ? ' is-provider-profile-screen' : ''
+      }${
         isAiAssistScreen ? ' is-ai-assist-screen' : ''
       }`}
       id="top"
@@ -2295,16 +3089,17 @@ function PublicHomePage({
                             Become a Partner
                             <ArrowButtonGif className="vn-home-partner-menu-primary-icon" />
                           </button>
-                          <a
+                          <button
+                            type="button"
                             className="vn-home-partner-menu-secondary"
-                            href="#for-business"
                             onClick={() => {
                               setMobileNavOpen(false)
                               setPartnerMenuOpen(false)
+                              handleOpenPartnerRegistration()
                             }}
                           >
                             Learn More
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </aside>
@@ -2324,10 +3119,12 @@ function PublicHomePage({
         className={`vn-home-main${isCategoriesScreen ? ' is-categories-screen' : ''}${
           isServiceProvidersScreen ? ' is-service-providers-screen' : ''
         }${
+          isProviderProfileScreen ? ' is-provider-profile-screen' : ''
+        }${
           isAiAssistScreen ? ' is-ai-assist-screen' : ''
         }`}
       >
-        {!isCategoriesScreen && !isServiceProvidersScreen && !isAiAssistScreen ? (
+        {!isCategoriesScreen && !isServiceProvidersScreen && !isProviderProfileScreen && !isAiAssistScreen ? (
           <section className="vn-home-hero">
             <div className="vn-home-shell-inner is-fluid">
               <div className="vn-home-hero-banner">
@@ -2349,6 +3146,8 @@ function PublicHomePage({
         <div
           className={`vn-home-content${isCategoriesScreen ? ' is-categories-page' : ''}${
             isServiceProvidersScreen ? ' is-service-providers-page' : ''
+          }${
+            isProviderProfileScreen ? ' is-provider-profile-page' : ''
           }${
             isAiAssistScreen ? ' is-ai-assist-page' : ''
           }`}
@@ -2477,7 +3276,7 @@ function PublicHomePage({
                     selectedCategory ? ' is-filtered' : ''
                   }`}
                 >
-                  {displayedCategories.map((category) => (
+                  {visibleCategories.map((category) => (
                     <article
                       key={category.title}
                       ref={(node) => {
@@ -2529,6 +3328,23 @@ function PublicHomePage({
                     </article>
                   ))}
                 </div>
+
+                {hasMoreCategories ? (
+                  <div className="vn-home-categories-page-more">
+                    <button
+                      type="button"
+                      className="vn-home-categories-page-more-button"
+                      onClick={() =>
+                        setVisibleCategoriesLimit((currentLimit) =>
+                          Math.min(currentLimit + categoriesPageSize, displayedCategories.length)
+                        )
+                      }
+                    >
+                      View More
+                      <Icon type="chevron-down" className="vn-home-categories-page-more-icon" />
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </section>
           ) : isServiceProvidersScreen ? (
@@ -2725,7 +3541,7 @@ function PublicHomePage({
                           <button
                             type="button"
                             className="vn-home-service-provider-card-button"
-                            onClick={() => openProviderProfile(provider)}
+                            onClick={() => openProviderProfile(provider, selectedServiceCategory)}
                           >
                             View Profile
                           </button>
@@ -2773,93 +3589,597 @@ function PublicHomePage({
                     </div>
                   </div>
                 </div>
-
-                {selectedProviderProfile ? (
-                  <div
-                    className="vn-home-provider-profile-modal-backdrop"
-                    role="presentation"
-                    onClick={closeProviderProfile}
+              </div>
+            </section>
+          ) : isProviderProfileScreen && activeProviderProfile ? (
+            <section className="vn-home-section vn-home-provider-page" id="provider-profile">
+              <div className="vn-home-shell-inner">
+                <div className="vn-home-provider-page-topbar">
+                  <button
+                    type="button"
+                    className="vn-home-provider-page-back"
+                    onClick={handleBackToProviders}
                   >
-                    <div
-                      className="vn-home-provider-profile-modal"
-                      role="dialog"
-                      aria-modal="true"
-                      aria-labelledby="provider-profile-title"
-                      onClick={(event) => event.stopPropagation()}
+                    <Icon type="arrow-right" className="vn-home-provider-page-back-icon" />
+                    <span>Back to Providers</span>
+                  </button>
+                </div>
+
+                <div className="vn-home-provider-page-hero">
+                  <div className="vn-home-provider-page-hero-main">
+                    <span
+                      className="vn-home-provider-page-logo-shell"
+                      style={{ background: providerProfileCategory.iconSurface }}
                     >
-                      <button
-                        type="button"
-                        className="vn-home-provider-profile-close"
-                        aria-label="Close provider profile"
-                        onClick={closeProviderProfile}
-                      >
-                        <Icon type="close" className="vn-home-provider-profile-close-icon" />
-                      </button>
+                      <span className="vn-home-provider-page-logo-mark">
+                        {activeProviderProfile.brandMark}
+                      </span>
+                    </span>
 
-                      <div className="vn-home-provider-profile-header">
-                        <span
-                          className="vn-home-provider-profile-avatar"
-                          style={{ background: selectedProviderProfile.accent }}
-                        >
-                          {selectedProviderProfile.initials}
+                    <div className="vn-home-provider-page-hero-copy">
+                      <div className="vn-home-provider-page-title-row">
+                        <div className="vn-home-provider-page-title-block">
+                          <h1>{activeProviderProfile.name}</h1>
+                          {activeProviderProfile.verified ? (
+                            <span className="vn-home-provider-page-verified">Verified</span>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="vn-home-provider-page-tags">
+                        {activeProviderProfile.serviceTags.map((serviceTag) => (
+                          <span key={serviceTag}>{serviceTag}</span>
+                        ))}
+                      </div>
+
+                      <p className="vn-home-provider-page-summary">{activeProviderProfile.description}</p>
+
+                      <div className="vn-home-provider-page-provider-count">
+                        <Icon type="users" className="vn-home-provider-page-metric-icon" />
+                        <strong>
+                          {providerProfileCategory.servicesLabel.replace(
+                            /\bServices\b/i,
+                            'Service Providers Available'
+                          )}
+                        </strong>
+                      </div>
+
+                      <div className="vn-home-provider-page-metrics">
+                        <span>
+                          <Icon type="location" className="vn-home-provider-page-metric-icon" />
+                          {activeProviderProfile.location}
                         </span>
+                        <span>
+                          <Icon type="calendar" className="vn-home-provider-page-metric-icon" />
+                          {activeProviderProfile.years}+ Years Experience
+                        </span>
+                        <span>
+                          <Icon type="calendar" className="vn-home-provider-page-metric-icon" />
+                          On-Time Delivery
+                        </span>
+                      </div>
 
-                        <div className="vn-home-provider-profile-copy">
-                          <p>Verified Service Provider</p>
-                          <div className="vn-home-provider-profile-title">
-                            <h2 id="provider-profile-title">{selectedProviderProfile.name}</h2>
-                            {selectedProviderProfile.verified ? <span>Verified</span> : null}
+                      <div className="vn-home-provider-page-stats-grid">
+                        <article className="vn-home-provider-page-stat">
+                          <span className="vn-home-provider-page-stat-icon-shell">
+                            <img
+                              src={providerProfileStatIcons.projects}
+                              alt=""
+                              className="vn-home-provider-page-stat-icon-image"
+                              loading="lazy"
+                            />
+                          </span>
+                          <div>
+                            <strong>{activeProviderProfile.rating.toFixed(1)}</strong>
+                            <span>({activeProviderProfile.reviews} Reviews)</span>
                           </div>
-                          <small>{selectedProviderProfile.serviceTags.join(' • ')}</small>
+                        </article>
+                        <article className="vn-home-provider-page-stat">
+                          <span className="vn-home-provider-page-stat-icon-shell">
+                            <img
+                              src={providerProfileStatIcons.expertise}
+                              alt=""
+                              className="vn-home-provider-page-stat-icon-image"
+                              loading="lazy"
+                            />
+                          </span>
+                          <div>
+                            <strong>{activeProviderProfile.completedProjects}+</strong>
+                            <span>Projects Completed</span>
+                          </div>
+                        </article>
+                        <article className="vn-home-provider-page-stat">
+                          <span className="vn-home-provider-page-stat-icon-shell">
+                            <img
+                              src={providerProfileStatIcons.delivery}
+                              alt=""
+                              className="vn-home-provider-page-stat-icon-image"
+                              loading="lazy"
+                            />
+                          </span>
+                          <div>
+                            <strong>{activeProviderProfile.onTimeDelivery}%</strong>
+                            <span>On-Time Delivery</span>
+                          </div>
+                        </article>
+                        <article className="vn-home-provider-page-stat">
+                          <span className="vn-home-provider-page-stat-icon-shell">
+                            <img
+                              src={providerProfileStatIcons.satisfaction}
+                              alt=""
+                              className="vn-home-provider-page-stat-icon-image"
+                              loading="lazy"
+                            />
+                          </span>
+                          <div>
+                            <strong>{activeProviderProfile.clientSatisfaction}%</strong>
+                            <span>Client Satisfaction</span>
+                          </div>
+                        </article>
+                      </div>
+
+                      <div className="vn-home-provider-page-actions">
+                        <button
+                          type="button"
+                          className="vn-home-provider-page-primary"
+                          onClick={handleProviderQuoteRequest}
+                        >
+                          Request Quote
+                        </button>
+                        <button
+                          type="button"
+                          className="vn-home-provider-page-secondary"
+                          onClick={handleProviderChatNow}
+                        >
+                          Chat Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <aside className="vn-home-provider-page-sidecard" aria-label="Provider highlight">
+                    <span className="vn-home-provider-page-sidecard-icon">
+                      <Icon type="briefcase" className="vn-home-provider-page-logo-svg" />
+                    </span>
+                    <p>{activeProviderProfile.trustNote}</p>
+                  </aside>
+                </div>
+
+                <div className="vn-home-provider-page-main">
+                  <section className="vn-home-provider-panel">
+                    <div className="vn-home-provider-panel-head">
+                      <div>
+                        <h2>About Provider</h2>
+                        <p>{activeProviderProfile.aboutDescription}</p>
+                      </div>
+                    </div>
+
+                    <div className="vn-home-provider-about-grid">
+                      <article className="vn-home-provider-about-card">
+                        <span className="vn-home-provider-about-card-icon">
+                          <img
+                            src={providerProfileStatIcons.projects}
+                            alt=""
+                            className="vn-home-provider-about-card-icon-image"
+                            loading="lazy"
+                          />
+                        </span>
+                        <strong>{activeProviderProfile.completedProjects}+</strong>
+                        <span>Projects Completed</span>
+                      </article>
+                      <article className="vn-home-provider-about-card">
+                        <span className="vn-home-provider-about-card-icon">
+                          <img
+                            src={providerProfileStatIcons.expertise}
+                            alt=""
+                            className="vn-home-provider-about-card-icon-image"
+                            loading="lazy"
+                          />
+                        </span>
+                        <strong>{activeProviderProfile.years}+ Years</strong>
+                        <span>Experience</span>
+                      </article>
+                      <article className="vn-home-provider-about-card">
+                        <span className="vn-home-provider-about-card-icon">
+                          <img
+                            src={providerProfileStatIcons.delivery}
+                            alt=""
+                            className="vn-home-provider-about-card-icon-image"
+                            loading="lazy"
+                          />
+                        </span>
+                        <strong>{activeProviderProfile.onTimeDelivery}%</strong>
+                        <span>On-Time Delivery</span>
+                      </article>
+                      <article className="vn-home-provider-about-card">
+                        <span className="vn-home-provider-about-card-icon">
+                          <img
+                            src={providerProfileStatIcons.satisfaction}
+                            alt=""
+                            className="vn-home-provider-about-card-icon-image"
+                            loading="lazy"
+                          />
+                        </span>
+                        <strong>{activeProviderProfile.clientSatisfaction}%</strong>
+                        <span>Client Satisfaction</span>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section className="vn-home-provider-panel">
+                    <div className="vn-home-provider-panel-head">
+                      <div>
+                        <h2>Services Offered</h2>
+                        <p>Explore the core services available from this provider.</p>
+                      </div>
+                    </div>
+
+                    <div className="vn-home-provider-services-grid">
+                      {providerProfileServices.map((service) => (
+                        <article
+                          key={service.id}
+                          className={`vn-home-provider-service-card${
+                            activeProviderService?.id === service.id ? ' is-active' : ''
+                          }`}
+                        >
+                          <div className="vn-home-provider-service-card-head">
+                            <span className="vn-home-provider-service-card-icon">
+                              <Icon
+                                type={getProviderServiceIconType(service.name, providerProfileCategory.title)}
+                                className="vn-home-provider-page-logo-svg"
+                              />
+                            </span>
+                            <div>
+                              <h3>{service.name}</h3>
+                              <p>{service.shortDescription}</p>
+                            </div>
+                          </div>
+
+                          <div className="vn-home-provider-service-card-meta">
+                            <span>{service.deliveryTime}</span>
+                            <span>{activeProviderProfile.serviceMode}</span>
+                          </div>
+
+                          <div className="vn-home-provider-service-card-price">
+                            <span>Starting from</span>
+                            <strong>{formatProviderPrice(service.startingPrice)}</strong>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="vn-home-provider-service-card-button"
+                            onClick={() => handleSelectProfileService(service.id)}
+                          >
+                            View Details
+                          </button>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section className="vn-home-provider-panel" ref={providerPortfolioSectionRef}>
+                    <div className="vn-home-provider-panel-head is-spaced">
+                      <div>
+                        <h2>Our Portfolio</h2>
+                        <p>Only active projects uploaded under this provider are shown here.</p>
+                      </div>
+
+                      {providerPortfolioFilters.length > 1 ? (
+                        <div className="vn-home-provider-portfolio-filters">
+                          <button
+                            type="button"
+                            className={selectedPortfolioCategoryFilter === 'All' ? 'is-active' : ''}
+                            onClick={() => setSelectedPortfolioCategoryFilter('All')}
+                          >
+                            All
+                          </button>
+                          {providerPortfolioFilters.map((portfolioCategory) => (
+                            <button
+                              type="button"
+                              key={portfolioCategory}
+                              className={
+                                selectedPortfolioCategoryFilter === portfolioCategory
+                                  ? 'is-active'
+                                  : ''
+                              }
+                              onClick={() => setSelectedPortfolioCategoryFilter(portfolioCategory)}
+                            >
+                              {portfolioCategory}
+                            </button>
+                          ))}
                         </div>
+                      ) : null}
+                    </div>
 
-                        <div className="vn-home-provider-profile-price">
-                          <span>Starting from</span>
-                          <strong>{formatProviderPrice(selectedProviderProfile.price)}</strong>
+                    {providerProjects.length > 0 ? (
+                      <div className="vn-home-provider-portfolio-grid">
+                        {visibleProviderProjects.map((project) => (
+                          <article key={project.id} className="vn-home-provider-portfolio-card">
+                            <button
+                              type="button"
+                              className="vn-home-provider-portfolio-card-thumb"
+                              onClick={() => setSelectedPortfolioProject(project)}
+                            >
+                              <img src={project.thumbnail} alt={project.title} loading="lazy" />
+                            </button>
+
+                            <div className="vn-home-provider-portfolio-card-body">
+                              <h3>{project.title}</h3>
+                              <span className="vn-home-provider-portfolio-card-category">
+                                {project.category}
+                              </span>
+                              <button
+                                type="button"
+                                className="vn-home-provider-portfolio-card-button"
+                                onClick={() => setSelectedPortfolioProject(project)}
+                              >
+                                View Project
+                              </button>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="vn-home-provider-empty-state">
+                        No portfolio projects added yet.
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="vn-home-provider-panel">
+                    <div className="vn-home-provider-panel-head">
+                      <div>
+                        <h2>Client Reviews</h2>
+                        <p>Average rating, rating distribution, and recent customer feedback.</p>
+                      </div>
+                    </div>
+
+                    <div className="vn-home-provider-reviews-layout">
+                      <div className="vn-home-provider-review-summary-card">
+                        <strong>{activeProviderProfile.rating.toFixed(1)}</strong>
+                        <span>out of 5</span>
+                        <div className="vn-home-provider-review-stars">
+                          {'★'.repeat(5)}
                         </div>
-                      </div>
+                        <small>Based on {activeProviderProfile.reviews} reviews</small>
 
-                      <div className="vn-home-provider-profile-metrics">
-                        <article>
-                          <strong>{selectedProviderProfile.rating.toFixed(1)}</strong>
-                          <span>{selectedProviderProfile.reviews} reviews</span>
-                        </article>
-                        <article>
-                          <strong>{selectedProviderProfile.years}+ Years</strong>
-                          <span>Industry experience</span>
-                        </article>
-                        <article>
-                          <strong>{selectedProviderProfile.location}</strong>
-                          <span>Service location</span>
-                        </article>
-                      </div>
-
-                      <div className="vn-home-provider-profile-section">
-                        <h3>About This Provider</h3>
-                        <p>
-                          {selectedProviderProfile.name} helps businesses with{' '}
-                          {selectedProviderProfile.serviceTags.join(', ').toLowerCase()} under the{' '}
-                          {selectedServiceCategory.title} category. The team focuses on responsive
-                          support, transparent pricing, and practical guidance for growing businesses.
-                        </p>
-                      </div>
-
-                      <div className="vn-home-provider-profile-section">
-                        <h3>Specializations</h3>
-                        <div className="vn-home-provider-profile-tags">
-                          {selectedProviderProfile.serviceTags.map((serviceTag) => (
-                            <span key={serviceTag}>{serviceTag}</span>
+                        <div className="vn-home-provider-review-distribution">
+                          {providerReviewDistribution.map((item) => (
+                            <div key={item.label} className="vn-home-provider-review-distribution-row">
+                              <span>{item.label}</span>
+                              <div>
+                                <i style={{ width: `${item.percentage}%` }}></i>
+                              </div>
+                              <strong>{item.count}</strong>
+                            </div>
                           ))}
                         </div>
                       </div>
 
-                      <div className="vn-home-provider-profile-actions">
-                        <button type="button" className="vn-home-provider-profile-primary">
-                          Send Request
+                      {activeProviderReview ? (
+                        <article className="vn-home-provider-review-card is-spotlight">
+                          <div className="vn-home-provider-review-card-head">
+                            <img src={activeProviderReview.avatar} alt={activeProviderReview.name} loading="lazy" />
+                            <div className="vn-home-provider-review-user">
+                              <div className="vn-home-provider-review-user-top">
+                                <h3>{activeProviderReview.name}</h3>
+                                <span className="vn-home-provider-review-badge">
+                                  {activeProviderReview.role}
+                                </span>
+                              </div>
+                              <div className="vn-home-provider-review-stars is-inline">
+                                {'★'.repeat(activeProviderReview.rating)}
+                              </div>
+                            </div>
+                          </div>
+                          <p>{activeProviderReview.text}</p>
+
+                          {providerReviews.length > 1 ? (
+                            <div className="vn-home-provider-review-dots" role="tablist" aria-label="Reviews">
+                              {providerReviews.map((review, index) => (
+                                <button
+                                  type="button"
+                                  key={review.id}
+                                  className={index === selectedProviderReviewIndex ? 'is-active' : ''}
+                                  aria-label={`Show review ${index + 1}`}
+                                  aria-pressed={index === selectedProviderReviewIndex}
+                                  onClick={() => setSelectedProviderReviewIndex(index)}
+                                />
+                              ))}
+                            </div>
+                          ) : null}
+                        </article>
+                      ) : null}
+                    </div>
+                  </section>
+                </div>
+
+                <div className="vn-home-provider-mobile-bar">
+                  <div>
+                    <span>Starting from</span>
+                    <strong>
+                      {formatProviderPrice(activeProviderService?.startingPrice ?? activeProviderProfile.price)}
+                    </strong>
+                  </div>
+                  <button type="button" onClick={handleProviderQuoteRequest}>
+                    Send Request
+                  </button>
+                </div>
+
+                {selectedServiceDetail ? (
+                  <div
+                    className="vn-home-provider-project-modal-backdrop"
+                    role="presentation"
+                    onClick={closeSelectedServiceDetail}
+                  >
+                    <div
+                      className="vn-home-provider-service-modal"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="provider-service-title"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="vn-home-provider-project-modal-close"
+                        aria-label="Close service details"
+                        onClick={closeSelectedServiceDetail}
+                      >
+                        <Icon type="close" className="vn-home-provider-project-modal-close-icon" />
+                      </button>
+
+                      <div className="vn-home-provider-service-modal-head">
+                        <span className="vn-home-provider-service-card-icon is-large">
+                          <Icon
+                            type={getProviderServiceIconType(
+                              selectedServiceDetail.name,
+                              providerProfileCategory.title
+                            )}
+                            className="vn-home-provider-page-logo-svg"
+                          />
+                        </span>
+                        <div>
+                          <h2 id="provider-service-title">{selectedServiceDetail.name}</h2>
+                          <p>{selectedServiceDetail.shortDescription}</p>
+                        </div>
+                      </div>
+
+                      <div className="vn-home-provider-service-modal-grid">
+                        <article>
+                          <span>Starting price</span>
+                          <strong>{formatProviderPrice(selectedServiceDetail.startingPrice)}</strong>
+                        </article>
+                        <article>
+                          <span>Delivery time</span>
+                          <strong>{selectedServiceDetail.deliveryTime}</strong>
+                        </article>
+                        <article>
+                          <span>Service mode</span>
+                          <strong>{activeProviderProfile.serviceMode}</strong>
+                        </article>
+                        <article>
+                          <span>Response time</span>
+                          <strong>{activeProviderProfile.responseTime}</strong>
+                        </article>
+                      </div>
+
+                      <div className="vn-home-provider-service-modal-points">
+                        <h3>What you can expect</h3>
+                        <ul>
+                          <li>Direct coordination with {activeProviderProfile.name}</li>
+                          <li>Transparent scope confirmation before starting</li>
+                          <li>Delivery aligned with the selected service timeline</li>
+                          <li>Support in {activeProviderProfile.languages.join(', ')}</li>
+                        </ul>
+                      </div>
+
+                      <div className="vn-home-provider-service-modal-actions">
+                        <button
+                          type="button"
+                          className="vn-home-provider-page-primary"
+                          onClick={() => {
+                            closeSelectedServiceDetail()
+                            handleProviderQuoteRequest()
+                          }}
+                        >
+                          Request Quote
                         </button>
-                        <button type="button" className="vn-home-provider-profile-secondary">
+                        <button
+                          type="button"
+                          className="vn-home-provider-page-secondary"
+                          onClick={() => {
+                            closeSelectedServiceDetail()
+                            handleProviderContactRequest()
+                          }}
+                        >
                           Contact Provider
                         </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {selectedPortfolioProject ? (
+                  <div
+                    className="vn-home-provider-project-modal-backdrop"
+                    role="presentation"
+                    onClick={closeSelectedPortfolioProject}
+                  >
+                    <div
+                      className="vn-home-provider-project-modal"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="provider-project-title"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="vn-home-provider-project-modal-close"
+                        aria-label="Close project details"
+                        onClick={closeSelectedPortfolioProject}
+                      >
+                        <Icon type="close" className="vn-home-provider-project-modal-close-icon" />
+                      </button>
+
+                      <div className="vn-home-provider-project-modal-media">
+                        <img
+                          src={selectedPortfolioProject.thumbnail}
+                          alt={selectedPortfolioProject.title}
+                        />
+                      </div>
+
+                      <div className="vn-home-provider-project-modal-copy">
+                        <div className="vn-home-provider-project-modal-title">
+                          <div>
+                            <span>{selectedPortfolioProject.category}</span>
+                            <h2 id="provider-project-title">{selectedPortfolioProject.title}</h2>
+                          </div>
+                          <strong>{selectedPortfolioProject.completion_date}</strong>
+                        </div>
+
+                        <p>{selectedPortfolioProject.full_description}</p>
+
+                        <div className="vn-home-provider-project-modal-grid">
+                          <article>
+                            <h3>Services Provided</h3>
+                            <div className="vn-home-provider-project-modal-tags">
+                              {selectedPortfolioProject.services_provided.map((item) => (
+                                <span key={item}>{item}</span>
+                              ))}
+                            </div>
+                          </article>
+                          <article>
+                            <h3>Technologies Used</h3>
+                            <div className="vn-home-provider-project-modal-tags">
+                              {selectedPortfolioProject.technologies.map((item) => (
+                                <span key={item}>{item}</span>
+                              ))}
+                            </div>
+                          </article>
+                        </div>
+
+                        <div className="vn-home-provider-project-modal-gallery">
+                          {selectedPortfolioProject.gallery_images.map((imagePath) => (
+                            <div
+                              key={`${selectedPortfolioProject.id}-${imagePath}`}
+                              className="vn-home-provider-project-modal-gallery-item"
+                            >
+                              <img src={imagePath} alt={selectedPortfolioProject.title} loading="lazy" />
+                            </div>
+                          ))}
+                        </div>
+
+                        {selectedPortfolioProject.project_url ? (
+                          <a
+                            href={selectedPortfolioProject.project_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="vn-home-provider-project-modal-link"
+                          >
+                            View Live Project
+                            <Icon type="arrow-right" className="vn-home-provider-project-modal-link-icon" />
+                          </a>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -3094,18 +4414,28 @@ function PublicHomePage({
                         </div>
 
                         <div className="vn-home-provider-stats">
-                          <span>
+                          <div className="vn-home-provider-stat">
                             <Icon type="calendar" className="vn-home-provider-meta-icon" />
-                            {provider.years}
-                          </span>
-                          <span>
+                            <span>
+                              <strong>{provider.years}</strong>
+                              <small>Experience</small>
+                            </span>
+                          </div>
+                          <div className="vn-home-provider-stat">
                             <Icon type="briefcase" className="vn-home-provider-meta-icon" />
-                            {provider.projects}
-                          </span>
+                            <span>
+                              <strong>{provider.projects.replace(' Projects', '')}</strong>
+                              <small>Projects</small>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="vn-home-provider-actions">
-                          <a href="#top" className="vn-home-provider-link">
+                          <a
+                            href={getProviderProfileHash(provider.profileCategory, provider.profileId)}
+                            className="vn-home-provider-link"
+                            onClick={handlePrimaryNavSelect}
+                          >
                             View Profile
                           </a>
                           <button type="button" className="vn-home-provider-button" onClick={handleOpenPartnerLogin}>
@@ -3114,54 +4444,6 @@ function PublicHomePage({
                         </div>
                       </article>
                     ))}
-                  </div>
-                </div>
-              </section>
-
-              <section className="vn-home-section" id="for-business">
-                <div className="vn-home-shell-inner">
-                  <div className="vn-home-promo-grid">
-                    <article className="vn-home-promo-card is-dark">
-                      <div className="vn-home-promo-icon">
-                        <img
-                          src="/promo-icons/file.gif"
-                          alt=""
-                          className="vn-home-promo-icon-image"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="vn-home-promo-copy">
-                        <h3>Can&apos;t Find the Right Professional?</h3>
-                        <p>
-                          Post your requirement and get responses from suitable verified professionals.
-                        </p>
-                      </div>
-                      <a className="vn-home-promo-button" href="#providers">
-                        Post Your Requirement
-                      </a>
-                    </article>
-
-                    <article className="vn-home-promo-card is-gold">
-                      <div className="vn-home-promo-icon">
-                        <img
-                          src="/promo-icons/briefcase.gif"
-                          alt=""
-                          className="vn-home-promo-icon-image"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="vn-home-promo-copy">
-                        <h3>Are You a Service Provider?</h3>
-                        <p>List your business on VyaparNest and grow your business online.</p>
-                      </div>
-                      <button
-                        type="button"
-                        className="vn-home-promo-button is-dark"
-                        onClick={handleOpenPartnerRegistration}
-                      >
-                        List Your Business
-                      </button>
-                    </article>
                   </div>
                 </div>
               </section>
@@ -3178,9 +4460,9 @@ function PublicHomePage({
                     {testimonials.map((testimonial) => (
                       <article key={testimonial.name} className="vn-home-testimonial-card">
                         <span className="vn-home-testimonial-quote-mark" aria-hidden="true">
-                          &ldquo;
+                          <Icon type="quote" className="vn-home-testimonial-quote-icon" />
                         </span>
-                        <p className="vn-home-testimonial-quote">&ldquo;{testimonial.quote}&rdquo;</p>
+                        <p className="vn-home-testimonial-quote">{testimonial.quote}</p>
                         <div className="vn-home-testimonial-foot">
                           <div className="vn-home-testimonial-person">
                             <div className="vn-home-testimonial-avatar">
@@ -3204,7 +4486,11 @@ function PublicHomePage({
                             aria-label={`${testimonial.stars} star rating`}
                           >
                             {Array.from({ length: testimonial.stars }).map((_, starIndex) => (
-                              <span key={`${testimonial.name}-star-${starIndex}`}>★</span>
+                              <Icon
+                                key={`${testimonial.name}-star-${starIndex}`}
+                                type="star"
+                                className="vn-home-testimonial-star-icon"
+                              />
                             ))}
                           </div>
                         </div>

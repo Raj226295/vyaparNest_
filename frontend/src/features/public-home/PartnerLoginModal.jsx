@@ -1,284 +1,114 @@
 import { useState } from 'react'
-import AryassBrandMark from './AryassBrandMark.jsx'
 import './PartnerLoginPage.css'
 
-function CloseIcon({ className = '' }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m6 6 12 12" />
-      <path d="M18 6 6 18" />
-    </svg>
-  )
+function AuthIcon({ type, className = '' }) {
+  const props = {
+    className,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: '1.9',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    'aria-hidden': true,
+  }
+
+  const paths = {
+    close: <><path d="m6 6 12 12" /><path d="M18 6 6 18" /></>,
+    user: <><circle cx="12" cy="8" r="3.5" /><path d="M5.5 20a6.5 6.5 0 0 1 13 0" /></>,
+    briefcase: <><rect x="3" y="7" width="18" height="12" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 12h18" /></>,
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    lock: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
+    eye: <><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></>,
+    eyeOff: <><path d="m3 3 18 18" /><path d="M10.6 6.2A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8" /><path d="M6.2 6.2C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6c1.1 0 2.1-.2 3-.5" /></>,
+    arrow: <><path d="M5 12h14" /><path d="m13 7 5 5-5 5" /></>,
+    check: <path d="m5 12 4 4L19 6" />,
+  }
+
+  return <svg {...props}>{paths[type]}</svg>
 }
 
-function ArrowRightIcon({ className = '' }) {
+function GoogleIcon({ className = '' }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m13 7 5 5-5 5" />
-    </svg>
-  )
-}
-
-function PhoneIcon({ className = '' }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6.8 4.9h3.3l1.1 3.8-1.9 1.9a13.3 13.3 0 0 0 4.1 4.1l1.9-1.9 3.8 1.1v3.3a1.9 1.9 0 0 1-2.1 1.9A16.1 16.1 0 0 1 4.9 7a1.9 1.9 0 0 1 1.9-2.1Z" />
-    </svg>
-  )
-}
-
-function ShieldIcon({ className = '' }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 3.9 6.3 6.3v4.1c0 4.1 2.4 7.6 5.7 9 3.3-1.4 5.7-4.9 5.7-9V6.3L12 3.9Z" />
-      <path d="m9.7 11.9 1.7 1.7 3.4-3.7" />
-    </svg>
-  )
-}
-
-function GridIcon({ className = '' }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="4.2" y="4.2" width="6.4" height="6.4" rx="1.4" />
-      <rect x="13.4" y="4.2" width="6.4" height="6.4" rx="1.4" />
-      <rect x="4.2" y="13.4" width="6.4" height="6.4" rx="1.4" />
-      <rect x="13.4" y="13.4" width="6.4" height="6.4" rx="1.4" />
-    </svg>
-  )
-}
-
-function IndiaFlagIcon({ className = '' }) {
-  return (
-    <svg viewBox="0 0 24 16" aria-hidden="true" className={className}>
-      <rect width="24" height="16" rx="2" fill="#ffffff" />
-      <rect width="24" height="5.34" rx="2" fill="#ff9933" />
-      <rect y="10.66" width="24" height="5.34" rx="2" fill="#138808" />
-      <circle cx="12" cy="8" r="2.15" fill="none" stroke="#1a3c8e" strokeWidth="0.9" />
-      <circle cx="12" cy="8" r="0.55" fill="#1a3c8e" />
-    </svg>
-  )
-}
-
-function CaretIcon({ className = '' }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m7 10 5 5 5-5" />
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#4285f4" d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.91h5.38a4.6 4.6 0 0 1-2 3.02v2.54h3.24c1.9-1.75 2.98-4.33 2.98-7.4Z" />
+      <path fill="#34a853" d="M12 22c2.7 0 4.97-.9 6.62-2.37l-3.24-2.54c-.9.6-2.05.96-3.38.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.62A10 10 0 0 0 12 22Z" />
+      <path fill="#fbbc05" d="M6.39 13.92A6 6 0 0 1 6.07 12c0-.67.11-1.32.32-1.92V7.46H3.04A10 10 0 0 0 2 12c0 1.61.38 3.14 1.04 4.54l3.35-2.62Z" />
+      <path fill="#ea4335" d="M12 5.95c1.47 0 2.79.51 3.83 1.5l2.87-2.88A9.62 9.62 0 0 0 12 2a10 10 0 0 0-8.96 5.46l3.35 2.62C7.18 7.71 9.39 5.95 12 5.95Z" />
     </svg>
   )
 }
 
 function PartnerLoginModal({ isOpen, modalRef, onClose, onCreateAccount, showCreateAccount = true }) {
-  const [countryCode, setCountryCode] = useState('+91')
-  const [mobileNumber, setMobileNumber] = useState('')
-  const isMobileValid = mobileNumber.length === 10
-  const stats = [
-    { value: '25+', label: 'Cities active' },
-    { value: '4.9/5', label: 'Partner rating' },
-    { value: '10K+', label: 'Verified leads' },
-  ]
-  const authBenefits = [
-    'Receive OTP verification in seconds.',
-    'Access your profile without remembering a password.',
-    'Continue directly to enquiries and partner tools.',
-  ]
+  const [role, setRole] = useState('user')
+  const [identifier, setIdentifier] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const isProvider = role === 'provider'
 
   return (
     <div className={`aryass-auth-overlay${isOpen ? ' is-open' : ''}`} aria-hidden={!isOpen}>
-      <div className="aryass-auth-backdrop" onClick={onClose} aria-hidden="true"></div>
+      <div className="aryass-auth-backdrop" onClick={onClose} aria-hidden="true" />
 
-      <section
-        ref={modalRef}
-        className="aryass-auth-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="aryass-auth-title"
-      >
-        <button
-          type="button"
-          className="aryass-auth-close"
-          onClick={onClose}
-          aria-label="Close login dialog"
-        >
-          <CloseIcon className="aryass-auth-close-icon" />
+      <section ref={modalRef} className="aryass-auth-dialog" role="dialog" aria-modal="true" aria-labelledby="aryass-auth-title">
+        <button type="button" className="aryass-auth-close" onClick={onClose} aria-label="Close login dialog">
+          <AuthIcon type="close" className="aryass-auth-close-icon" />
         </button>
 
         <div className="aryass-auth-layout">
-          <aside className="aryass-auth-showcase">
-            <div className="aryass-auth-topbar">
-              <span className="aryass-auth-top-tag">
-                <GridIcon className="aryass-auth-top-tag-icon" />
-                <span>Partner Access</span>
-              </span>
-            </div>
-
-            <AryassBrandMark tone="light" tagline={null} />
-
-            <div className="aryass-auth-showcase-copy">
-              <h2>Login to manage your partner growth.</h2>
-              <p>
-                Access VyaparNest to respond to premium leads, manage visibility, and continue
-                your verified business journey.
-              </p>
-            </div>
-
-            <div className="aryass-auth-showcase-stats" aria-label="Marketplace highlights">
-              {stats.map((stat) => (
-                <article key={stat.label} className="aryass-auth-showcase-stat">
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                </article>
-              ))}
-            </div>
-
-            <ul className="aryass-auth-showcase-list">
-              {authBenefits.map((benefit) => (
-                <li key={benefit}>
-                  <ShieldIcon className="aryass-auth-showcase-check" />
-                  <span>{benefit}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="aryass-auth-support-card">
-              <span className="aryass-auth-support-card-icon-shell" aria-hidden="true">
-                <PhoneIcon className="aryass-auth-support-card-icon" />
-              </span>
-              <div>
-                <strong>Your mobile number stays encrypted and secure.</strong>
-                <p>Use OTP verification to continue safely without sharing your password.</p>
-              </div>
-            </div>
-          </aside>
-
           <div className="aryass-auth-panel">
             <div className="aryass-auth-panel-copy">
-              <span className="aryass-auth-panel-kicker">Mobile Login</span>
-              <h2 id="aryass-auth-title">Login to VyaparNest</h2>
-              <p>Enter your mobile number to receive an OTP and continue.</p>
+              <h2 id="aryass-auth-title">Login</h2>
+              <span className="aryass-auth-title-mark" aria-hidden="true" />
+              <p>Access your account and continue your journey with VyaparNest.</p>
+            </div>
+
+            <div className="aryass-auth-role-tabs" role="tablist" aria-label="Account type">
+              <button type="button" role="tab" aria-selected={!isProvider} className={!isProvider ? 'is-active' : ''} onClick={() => setRole('user')}>
+                <AuthIcon type="user" /> User
+              </button>
+              <button type="button" role="tab" aria-selected={isProvider} className={isProvider ? 'is-active' : ''} onClick={() => setRole('provider')}>
+                <AuthIcon type="briefcase" /> Service Provider
+              </button>
             </div>
 
             <form className="aryass-auth-form" onSubmit={(event) => event.preventDefault()}>
               <label className="aryass-auth-field">
-                <span>Mobile Number</span>
+                <span>Email or Phone Number</span>
+                <span className="aryass-auth-input-shell">
+                  <AuthIcon type="mail" className="aryass-auth-input-icon" />
+                  <input type="text" autoComplete="username" value={identifier} onChange={(event) => setIdentifier(event.target.value)} placeholder="Enter email or phone number" />
+                </span>
+              </label>
 
-                <span className="aryass-auth-input-shell aryass-auth-phone-shell">
-                  <PhoneIcon className="aryass-auth-input-icon" />
-
-                  <span className="aryass-auth-phone-code">
-                    <IndiaFlagIcon className="aryass-auth-phone-flag" />
-                    <select
-                      aria-label="Country code"
-                      value={countryCode}
-                      onChange={(event) => setCountryCode(event.target.value)}
-                      className="aryass-auth-phone-code-select"
-                    >
-                      <option value="+91">+91</option>
-                    </select>
-                    <CaretIcon className="aryass-auth-phone-code-caret" />
-                  </span>
-
-                  <input
-                    type="tel"
-                    inputMode="numeric"
-                    autoComplete="tel"
-                    maxLength={10}
-                    value={mobileNumber}
-                    onChange={(event) =>
-                      setMobileNumber(event.target.value.replace(/\D/g, '').slice(0, 10))
-                    }
-                    placeholder="Enter your mobile number"
-                    aria-label="Mobile number"
-                  />
+              <label className="aryass-auth-field">
+                <span>Password</span>
+                <span className="aryass-auth-input-shell">
+                  <AuthIcon type="lock" className="aryass-auth-input-icon" />
+                  <input type={showPassword ? 'text' : 'password'} autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Enter your password" />
+                  <button type="button" className="aryass-auth-password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                    <AuthIcon type={showPassword ? 'eyeOff' : 'eye'} className="aryass-auth-password-toggle-icon" />
+                  </button>
                 </span>
               </label>
 
               <div className="aryass-auth-row">
-                <label className="aryass-auth-checkbox">
-                  <input type="checkbox" defaultChecked />
-                  <span>Keep me signed in on this device</span>
-                </label>
-
-                <a className="aryass-auth-support-link" href="mailto:support@vyaparnest.com">
-                  Need Help?
-                </a>
+                <label className="aryass-auth-checkbox"><input type="checkbox" /><span>Remember me</span></label>
+                <button type="button" className="aryass-auth-forgot">Forgot Password?</button>
               </div>
 
-              <button type="submit" className="aryass-auth-submit" disabled={!isMobileValid}>
-                <span>Send OTP</span>
-                <ArrowRightIcon className="aryass-auth-submit-icon" />
+              <button type="submit" className="aryass-auth-submit" disabled={!identifier.trim() || !password}>
+                Login
+                <AuthIcon type="arrow" className="aryass-auth-submit-icon" />
               </button>
             </form>
 
-            <div className="aryass-auth-footer">
-              {showCreateAccount ? (
-                <button type="button" className="aryass-auth-link-card" onClick={onCreateAccount}>
-                  <span>Don&apos;t have an account?</span>
-                  <strong>Become a Partner</strong>
-                  <ArrowRightIcon className="aryass-auth-link-icon" />
-                </button>
-              ) : null}
+            <div className="aryass-auth-divider"><span>or continue with</span></div>
+            <button type="button" className="aryass-auth-google"><GoogleIcon className="aryass-auth-google-icon" />Continue with Google</button>
 
-              <a className="aryass-auth-link-card" href="mailto:support@vyaparnest.com">
-                <span>Need help with onboarding?</span>
-                <strong>Contact Support</strong>
-                <ArrowRightIcon className="aryass-auth-link-icon" />
-              </a>
-            </div>
+            {showCreateAccount ? (
+              <p className="aryass-auth-create">New to VyaparNest? <button type="button" onClick={onCreateAccount}>Create Account</button></p>
+            ) : null}
           </div>
         </div>
       </section>

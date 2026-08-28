@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 import PublicHomePage from '../features/public-home/PublicHomePage.jsx'
 import PartnerRegistrationPage from '../features/public-home/PartnerRegistrationPage.jsx'
+import UserPanelPage from '../features/user-panel/UserPanelPage.jsx'
+import ProviderDashboard from '../features/provider-panel/ProviderDashboard.jsx'
 
 const partnerRegistrationHash = '#partner-register'
 const partnerLoginHash = '#partner-login'
 const categoriesHash = '#all-categories'
 const aiAssistHash = '#ai-assist'
+const userDashboardHash = '#user-dashboard'
+const providerDashboardHash = '#provider-dashboard'
 const serviceProvidersHashPrefix = '#service-providers/'
 
 function getCurrentScreen() {
@@ -27,6 +31,14 @@ function getCurrentScreen() {
 
   if (window.location.hash === aiAssistHash) {
     return 'ai-assist'
+  }
+
+  if (window.location.hash === userDashboardHash) {
+    return 'user-dashboard'
+  }
+
+  if (window.location.hash === providerDashboardHash) {
+    return 'provider-dashboard'
   }
 
   return 'home'
@@ -97,12 +109,18 @@ function App() {
 
   return (
     <>
-      <PublicHomePage
-        onOpenPartnerRegistration={openPartnerRegistration}
-        onOpenPartnerLogin={openPartnerLogin}
-        partnerLoginRequestId={partnerLoginRequestId}
-        currentScreen={currentScreen}
-      />
+      {currentScreen === 'user-dashboard' ? (
+        <UserPanelPage />
+      ) : currentScreen === 'provider-dashboard' ? (
+        <ProviderDashboard />
+      ) : (
+        <PublicHomePage
+          onOpenPartnerRegistration={openPartnerRegistration}
+          onOpenPartnerLogin={openPartnerLogin}
+          partnerLoginRequestId={partnerLoginRequestId}
+          currentScreen={currentScreen}
+        />
+      )}
 
       {currentScreen === 'partner-register' ? (
         <PartnerRegistrationPage onOpenPartnerLogin={openPartnerLogin} isOverlay />

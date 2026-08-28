@@ -12,37 +12,30 @@ const stepDefinitions = [
   },
   {
     key: 'business',
-    title: 'Business Information',
-    subtitle: 'Tell us about your business.',
+    title: 'Professional Details',
+    subtitle: 'Tell us about your professional profile.',
     description: 'Company and owner details',
     icon: 'briefcase',
   },
   {
     key: 'services',
-    title: 'Service Details',
-    subtitle: 'Tell customers what you offer.',
-    description: 'Categories, experience, website',
+    title: 'Services & Pricing',
+    subtitle: 'Tell customers what you offer and how you work.',
+    description: 'Categories, experience, and pricing',
     icon: 'services',
   },
   {
-    key: 'area',
-    title: 'Service Area',
-    subtitle: 'Choose where you provide your services.',
-    description: 'Coverage area and locations',
-    icon: 'globe',
-  },
-  {
     key: 'documents',
-    title: 'Documents Verification',
-    subtitle: 'Upload documents for verification.',
-    description: 'Verify your business profile',
+    title: 'Documents / KYC',
+    subtitle: 'Upload your documents for verification.',
+    description: 'Verify your professional profile',
     icon: 'shield',
   },
   {
     key: 'payment',
-    title: 'Complete Your Registration',
-    subtitle: 'Choose a subscription plan to activate your partner account.',
-    description: 'Secure activation and billing',
+    title: 'Review & Submit',
+    subtitle: 'Review your details and submit your onboarding.',
+    description: 'Final review and submission',
     icon: 'payment',
   },
 ]
@@ -150,6 +143,20 @@ const initialPincodeLookupState = {
   message: 'Enter a 6-digit Indian pincode to auto-fill your state and city.',
 }
 
+const registrationFlowStorageKey = 'vyaparnest-registration-flow'
+
+function getSavedRegistrationFlow() {
+  if (typeof window === 'undefined') {
+    return {}
+  }
+
+  try {
+    return JSON.parse(window.sessionStorage.getItem(registrationFlowStorageKey) || '{}')
+  } catch {
+    return {}
+  }
+}
+
 function formatCurrency(value) {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -216,6 +223,12 @@ function Icon({ name, className = '' }) {
           <path d="m13 7 5 5-5 5" />
         </svg>
       )
+    case 'chevron-left':
+      return (
+        <svg {...sharedProps}>
+          <path d="m14.5 5.5-6 6 6 6" />
+        </svg>
+      )
     case 'save':
       return (
         <svg {...sharedProps}>
@@ -230,11 +243,25 @@ function Icon({ name, className = '' }) {
           <path d="m5 12 4.2 4.2L19 6.6" />
         </svg>
       )
+    case 'clock':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="12" cy="12" r="8.2" />
+          <path d="M12 7.7v4.6l3.1 1.9" />
+        </svg>
+      )
     case 'shield':
       return (
         <svg {...sharedProps}>
           <path d="M12 3.9 6.3 6.3v4.1c0 4.1 2.4 7.6 5.7 9 3.3-1.4 5.7-4.9 5.7-9V6.3L12 3.9Z" />
           <path d="m9.7 11.9 1.7 1.7 3.4-3.7" />
+        </svg>
+      )
+    case 'lock':
+      return (
+        <svg {...sharedProps}>
+          <rect x="4.5" y="10" width="15" height="10" rx="2" />
+          <path d="M8 10V7.5a4 4 0 0 1 8 0V10" />
         </svg>
       )
     case 'help':
@@ -344,6 +371,14 @@ function Icon({ name, className = '' }) {
           <rect x="3.9" y="6.2" width="16.2" height="11.6" rx="2.4" />
           <path d="M3.9 10.3h16.2" />
           <path d="M8.2 14.3h3.4" />
+        </svg>
+      )
+    case 'card':
+      return (
+        <svg {...sharedProps}>
+          <rect x="3.5" y="5.8" width="17" height="12.4" rx="2.2" />
+          <path d="M3.5 10h17" />
+          <path d="M7.2 14.4h3.6" />
         </svg>
       )
     case 'wallet':
@@ -568,7 +603,12 @@ function StepIllustration({ step, paymentSuccessful }) {
 }
 
 function PartnerRegistrationPage({ isOverlay = false }) {
-  const [currentStep, setCurrentStep] = useState(0)
+  const [signupStage, setSignupStage] = useState(() => getSavedRegistrationFlow().signupStage || 'role')
+  const [selectedSignupRole, setSelectedSignupRole] = useState(() => getSavedRegistrationFlow().selectedSignupRole || null)
+  const [accountForm, setAccountForm] = useState({ fullName: '', email: '', phone: '', password: '', acceptedTerms: false })
+  const [accountErrors, setAccountErrors] = useState({})
+  const [currentStep, setCurrentStep] = useState(() => getSavedRegistrationFlow().currentStep || 0)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [completedSteps, setCompletedSteps] = useState([])
   const [formState, setFormState] = useState(initialFormState)
   const [fieldErrors, setFieldErrors] = useState({})
@@ -576,7 +616,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
   const [documentUploads, setDocumentUploads] = useState(initialDocumentState)
   const [selectedPlan, setSelectedPlan] = useState('professional')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('upi')
-  const [paymentSuccessful, setPaymentSuccessful] = useState(false)
+  const [paymentSuccessful, setPaymentSuccessful] = useState(() => Boolean(getSavedRegistrationFlow().paymentSuccessful))
   const uploadTimersRef = useRef({})
 
   const currentStepDefinition = stepDefinitions[currentStep]
@@ -617,6 +657,17 @@ function PartnerRegistrationPage({ isOverlay = false }) {
   const activationReference = `AR-${selectedPlanData.key.slice(0, 3).toUpperCase()}-${(
     formState.mobileNumber.replace(/\D/g, '').slice(-4) || '0000'
   ).padStart(4, '0')}`
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    window.sessionStorage.setItem(
+      registrationFlowStorageKey,
+      JSON.stringify({ signupStage, selectedSignupRole, currentStep, paymentSuccessful }),
+    )
+  }, [currentStep, paymentSuccessful, selectedSignupRole, signupStage])
 
   useEffect(() => {
     const uploadTimers = uploadTimersRef.current
@@ -761,7 +812,29 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       return
     }
 
+    if (hash !== '#partner-register') {
+      window.sessionStorage.removeItem(registrationFlowStorageKey)
+    }
+
     window.location.hash = hash
+  }
+
+  const handleAccountSubmit = (event) => {
+    event.preventDefault()
+    const errors = {}
+    if (!accountForm.fullName.trim()) errors.fullName = 'Full name is required.'
+    if (!/^\S+@\S+\.\S+$/.test(accountForm.email)) errors.email = 'Enter a valid email address.'
+    if (!/^\d{10}$/.test(accountForm.phone.replace(/\D/g, ''))) errors.phone = 'Enter a valid 10-digit phone number.'
+    if (accountForm.password.length < 8) errors.password = 'Password must be at least 8 characters.'
+    if (!accountForm.acceptedTerms) errors.terms = 'Please accept the terms to continue.'
+    setAccountErrors(errors)
+    if (!Object.keys(errors).length) {
+      if (selectedSignupRole === 'user') {
+        navigateToHome('#user-dashboard')
+      } else {
+        setSignupStage('onboarding')
+      }
+    }
   }
 
   const markStepCompleted = (stepIndex) => {
@@ -814,36 +887,12 @@ function PartnerRegistrationPage({ isOverlay = false }) {
     }
 
     if (stepIndex === 3) {
-      if (!formState.country.trim()) {
-        nextErrors.country = 'Country is required.'
-      }
-
-      if (!formState.state.trim()) {
-        nextErrors.state = 'State is required.'
-      }
-
-      if (!formState.city.trim()) {
-        nextErrors.city = 'City is required.'
-      }
-
-      if (!formState.pincode.trim()) {
-        nextErrors.pincode = 'Pincode is required.'
-      } else if (!/^\d{6}$/.test(formState.pincode.trim())) {
-        nextErrors.pincode = 'Enter a valid 6-digit pincode.'
-      }
-
-      if (!formState.serviceRadius.trim()) {
-        nextErrors.serviceRadius = 'Please choose a service radius.'
-      }
-    }
-
-    if (stepIndex === 4) {
       if (!documentUploads.aadhaarCard.fileName || documentUploads.aadhaarCard.progress < 100) {
         nextErrors.aadhaarCard = 'Upload Aadhaar Card to continue.'
       }
     }
 
-    if (stepIndex === 5) {
+    if (stepIndex === 4) {
       if (!selectedPlan) {
         nextErrors.selectedPlan = 'Choose a subscription plan.'
       }
@@ -882,11 +931,12 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       return
     }
 
-    navigateToHome('#top')
+    setSelectedSignupRole(null)
+    setSignupStage('role')
   }
 
   const handleProceedPayment = () => {
-    if (!validateCurrentStep(5)) {
+    if (!validateCurrentStep(4)) {
       return
     }
 
@@ -1146,7 +1196,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
     </div>
   )
 
-  const renderServiceArea = () => (
+  const _renderServiceArea = () => (
     <div className="partner-wizard-fields-grid two-column">
       <FieldBlock label="Country" required error={fieldErrors.country}>
         <SuggestionField
@@ -1297,9 +1347,9 @@ function PartnerRegistrationPage({ isOverlay = false }) {
     if (paymentSuccessful) {
       const successStats = [
         {
-          label: 'Activated Plan',
-          value: selectedPlanData.name,
-          icon: 'payment',
+          label: 'Verification status',
+          value: 'Pending review',
+          icon: 'clock',
         },
         {
           label: 'Primary Service',
@@ -1318,9 +1368,9 @@ function PartnerRegistrationPage({ isOverlay = false }) {
         },
       ]
       const successChecklist = [
-        `Your ${selectedPlanData.name} partner plan is now active and ready to receive premium leads.`,
-        'Your public partner profile is unlocked and can now appear in relevant marketplace results.',
-        'Business details, service areas, and uploaded documents have been securely saved to your account.',
+        'Our admin team will review your submitted business details and KYC documents.',
+        'Your profile will activate after approval and then appear in relevant marketplace results.',
+        'We will notify you as soon as your verification status is updated.',
       ]
 
       return (
@@ -1329,26 +1379,24 @@ function PartnerRegistrationPage({ isOverlay = false }) {
             <div className="partner-wizard-success-hero-copy">
               <div className="partner-wizard-success-status-row">
                 <div className="partner-wizard-success-icon-shell" aria-hidden="true">
-                  <Icon name="check" className="partner-wizard-success-icon" />
+                  <Icon name="clock" className="partner-wizard-success-icon" />
                 </div>
 
                 <div className="partner-wizard-success-title-stack">
-                  <p className="partner-wizard-success-kicker">Payment Successful</p>
-                  <h3>{partnerFirstName}, your partner account is now live</h3>
+                  <p className="partner-wizard-success-kicker">Verification Pending</p>
+                  <h3>{partnerFirstName}, your registration has been submitted</h3>
                 </div>
               </div>
 
               <p className="partner-wizard-success-copy">
-                Your {selectedPlanData.name} plan has been activated successfully. You can now
-                start receiving verified customer enquiries on VyaparNest.
+                Your profile is awaiting admin approval. It will activate after your submitted
+                details and KYC documents have been verified.
               </p>
 
               <div className="partner-wizard-success-pill-row">
-                <span className="partner-wizard-success-pill">100% Profile Completed</span>
-                <span className="partner-wizard-success-pill">Verified Activation</span>
-                <span className="partner-wizard-success-pill">
-                  Amount Paid: {formatCurrency(totalAmount)}
-                </span>
+                <span className="partner-wizard-success-pill">Profile Submitted</span>
+                <span className="partner-wizard-success-pill">Admin Review Required</span>
+                <span className="partner-wizard-success-pill">Reference: {activationReference}</span>
               </div>
             </div>
 
@@ -1356,9 +1404,9 @@ function PartnerRegistrationPage({ isOverlay = false }) {
               <button
                 type="button"
                 className="partner-wizard-primary-btn"
-                onClick={() => navigateToHome('#dashboard')}
+                onClick={() => navigateToHome('#provider-dashboard')}
               >
-                <span>Go To Dashboard</span>
+                <span>View Provider Dashboard</span>
                 <ArrowButtonGif className="partner-wizard-btn-icon" />
               </button>
 
@@ -1376,8 +1424,8 @@ function PartnerRegistrationPage({ isOverlay = false }) {
           <div className="partner-wizard-success-grid">
             <section className="partner-wizard-success-panel">
               <div className="partner-wizard-success-panel-head">
-                <h4>Activation Snapshot</h4>
-                <p>Your onboarding details are now linked to your live partner profile.</p>
+                <h4>Submitted Details</h4>
+                <p>Your onboarding details are securely saved for admin review.</p>
               </div>
 
               <div className="partner-wizard-success-stats-grid">
@@ -1395,8 +1443,8 @@ function PartnerRegistrationPage({ isOverlay = false }) {
 
             <section className="partner-wizard-success-panel">
               <div className="partner-wizard-success-panel-head">
-                <h4>Order Summary</h4>
-                <p>Secure confirmation of your completed partner registration payment.</p>
+                <h4>Registration Summary</h4>
+                <p>A confirmation of the details submitted for verification.</p>
               </div>
 
               <div className="partner-wizard-success-detail-list">
@@ -1413,24 +1461,24 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                   <strong>{formState.ownerName.trim() || formState.fullName.trim() || 'Partner'}</strong>
                 </div>
                 <div className="partner-wizard-success-detail-row">
-                  <span>Amount Paid</span>
-                  <strong>{formatCurrency(totalAmount)}</strong>
+                  <span>Primary Service</span>
+                  <strong>{formState.serviceCategory.trim() || 'Service Provider'}</strong>
                 </div>
               </div>
 
               <div className="partner-wizard-success-inline-meta">
                 <span className="partner-wizard-success-inline-chip">
-                  {selectedPaymentMethodData.label}
+                  KYC Submitted
                 </span>
-                <span className="partner-wizard-success-inline-chip">Secure Checkout</span>
-                <span className="partner-wizard-success-inline-chip">Active in {activationLocation}</span>
+                <span className="partner-wizard-success-inline-chip">Admin Approval Pending</span>
+                <span className="partner-wizard-success-inline-chip">Based in {activationLocation}</span>
               </div>
             </section>
 
             <section className="partner-wizard-success-panel is-full">
               <div className="partner-wizard-success-panel-head">
                 <h4>What Happens Next</h4>
-                <p>Your account is ready. Here is what is now active for you.</p>
+                <p>We will activate your provider profile once the review is complete.</p>
               </div>
 
               <ul className="partner-wizard-success-checklist">
@@ -1593,10 +1641,8 @@ function PartnerRegistrationPage({ isOverlay = false }) {
       case 2:
         return renderServiceDetails()
       case 3:
-        return renderServiceArea()
-      case 4:
         return renderDocuments()
-      case 5:
+      case 4:
         return renderPayment()
       default:
         return null
@@ -1605,12 +1651,200 @@ function PartnerRegistrationPage({ isOverlay = false }) {
 
   const pageTitle =
     paymentSuccessful && currentStep === totalSteps - 1
-      ? 'Partner Account Activated'
+      ? 'Provider Verification'
       : currentStepDefinition.title
   const pageSubtitle =
     paymentSuccessful && currentStep === totalSteps - 1
-      ? 'Your partner profile is fully verified and ready to receive business.'
+      ? 'Your submitted profile is awaiting admin approval for activation.'
       : currentStepDefinition.subtitle
+
+  if (signupStage === 'account') {
+    return (
+      <main className={`partner-account-page${isOverlay ? ' is-overlay' : ''}`}>
+        <section className="partner-account-shell" aria-labelledby="partner-account-title">
+          <button
+            type="button"
+            className="partner-flow-back"
+            onClick={() => {
+              setSelectedSignupRole(null)
+              setSignupStage('role')
+            }}
+          >
+            <Icon name="arrow-left" />
+            Back
+          </button>
+          <button type="button" className="partner-account-brand" onClick={() => navigateToHome('#top')} aria-label="Go to homepage">
+            <AryassBrandMark tone="light" tagline={null} className="partner-account-brand-mark" />
+          </button>
+          <header className="partner-account-heading">
+            <h1 id="partner-account-title">Create {selectedSignupRole === 'provider' ? 'Service Provider' : 'User'} Account</h1>
+            <p>Join VyaparNest to find opportunities and grow with confidence.</p>
+          </header>
+          <form className="partner-account-form" onSubmit={handleAccountSubmit} noValidate>
+            {[
+              ['fullName', 'Full Name', 'text', 'Enter your full name'],
+              ['email', 'Email Address', 'email', 'Enter your email address'],
+              ['phone', 'Phone Number', 'tel', 'Enter your 10-digit phone number'],
+              ['password', 'Password', 'password', 'Create a secure password'],
+            ].map(([key, label, type, placeholder]) => (
+              <label key={key} className={`partner-account-field${accountErrors[key] ? ' has-error' : ''}`}>
+                <span>{label}</span>
+                <span className="partner-account-input-wrap">
+                  <Icon name={key === 'password' ? 'shield' : key === 'email' ? 'mail' : key === 'phone' ? 'phone' : 'user'} />
+                  <input type={type} value={accountForm[key]} placeholder={placeholder} autoComplete={key === 'password' ? 'new-password' : key} onChange={(event) => { setAccountForm((current) => ({ ...current, [key]: key === 'phone' ? event.target.value.replace(/\D/g, '').slice(0, 10) : event.target.value })); setAccountErrors((current) => ({ ...current, [key]: '' })) }} />
+                </span>
+                {accountErrors[key] ? <small>{accountErrors[key]}</small> : null}
+              </label>
+            ))}
+            <label className="partner-account-terms">
+              <input type="checkbox" checked={accountForm.acceptedTerms} onChange={(event) => { setAccountForm((current) => ({ ...current, acceptedTerms: event.target.checked })); setAccountErrors((current) => ({ ...current, terms: '' })) }} />
+              <span>I agree to the Terms of Service and Privacy Policy.</span>
+            </label>
+            {accountErrors.terms ? <p className="partner-account-terms-error">{accountErrors.terms}</p> : null}
+            <button type="submit" className="partner-account-submit">Create Account <Icon name="arrow-right" /></button>
+          </form>
+          <p className="partner-account-login">Already have an account? <button type="button" onClick={() => navigateToHome('#partner-login')}>Login</button></p>
+        </section>
+      </main>
+    )
+  }
+
+  if (signupStage === 'role') {
+    return (
+      <main className={`partner-role-page${isOverlay ? ' is-overlay' : ''}`}>
+        <section className="partner-role-shell" aria-labelledby="partner-role-title">
+          <button type="button" className="partner-flow-back partner-role-back" onClick={() => navigateToHome('#partner-login')}>
+            <Icon name="arrow-left" />
+            Back to Login
+          </button>
+          <button
+            type="button"
+            className="partner-role-brand"
+            onClick={() => navigateToHome('#top')}
+            aria-label="Go to homepage"
+          >
+            <AryassBrandMark tone="light" tagline={null} className="partner-role-brand-mark" />
+          </button>
+
+          <div className="partner-role-progress" aria-label="Signup progress">
+            <span></span>
+          </div>
+
+          <header className="partner-role-heading">
+            <h1 id="partner-role-title">Choose Your Role</h1>
+            <p>Tell us what best describes you. You can always change this later.</p>
+          </header>
+
+          <div className="partner-role-cards">
+            <button
+              type="button"
+              className="partner-role-card is-hire"
+              onClick={() => {
+                setSelectedSignupRole('user')
+                setSignupStage('account')
+              }}
+            >
+              <span className="partner-role-card-icon">
+                <Icon name="user" />
+                <Icon name="services" className="partner-role-card-icon-detail" />
+              </span>
+              <strong>User</strong>
+              <span className="partner-role-card-mark" aria-hidden="true"></span>
+              <p>Find and connect with trusted professionals for your projects.</p>
+              <span className="partner-role-card-action">
+                Choose This Role
+                <Icon name="arrow-right" />
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className="partner-role-card is-offer"
+              onClick={() => {
+                setSelectedSignupRole('provider')
+                setSignupStage('account')
+              }}
+            >
+              <span className="partner-role-card-icon">
+                <Icon name="briefcase" />
+                <Icon name="user" className="partner-role-card-icon-detail" />
+              </span>
+              <strong>Service Provider</strong>
+              <span className="partner-role-card-mark" aria-hidden="true"></span>
+              <p>Showcase your skills, find clients, and grow your business.</p>
+              <span className="partner-role-card-action">
+                Choose This Role
+                <Icon name="arrow-right" />
+              </span>
+            </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  if (paymentSuccessful) {
+    const submittedDetails = [
+      ['Verification Status', 'Pending Review', 'clock'],
+      ['Primary Service', formState.serviceCategory || 'Service Provider', 'services'],
+      ['Coverage Area', activationLocation, 'globe'],
+      ['KYC Documents', 'Submitted', 'shield'],
+    ]
+
+    return (
+      <main className="provider-verification-page">
+        <div className="provider-verification-shell">
+          <button type="button" className="provider-verification-back" onClick={() => navigateToHome('#top')}>
+            <Icon name="arrow-left" /> Back to Home
+          </button>
+          <header className="provider-verification-heading">
+            <span className="provider-verification-heading-icon"><Icon name="shield" /></span>
+            <div><h1>Provider Verification Pending</h1><p>Your submitted profile is being reviewed by our verification team.</p></div>
+          </header>
+
+          <section className="provider-verification-hero">
+            <div className="provider-verification-art" aria-hidden="true">
+              <div className="provider-verification-art-card"><Icon name="note" /><span><Icon name="check" /></span></div>
+              <i></i><b></b>
+            </div>
+            <div className="provider-verification-hero-copy">
+              <span className="provider-verification-kicker"><Icon name="clock" /> Verification Pending</span>
+              <h2>{partnerFirstName}, your registration<br />has been <em>submitted</em></h2>
+              <p>Your profile will activate after admin approval. We are reviewing your submitted details and KYC documents.</p>
+              <div className="provider-verification-chips"><span>✓ Profile Submitted</span><span>⌘ Admin Review Required</span><span># Reference ID: {activationReference}</span></div>
+              <div className="provider-verification-actions">
+                <button type="button" className="provider-verification-primary" onClick={() => navigateToHome('#provider-dashboard')}>View Provider Dashboard <Icon name="arrow-right" /></button>
+                <button type="button" className="provider-verification-secondary" onClick={() => navigateToHome('#top')}>Back to Home <Icon name="arrow-right" /></button>
+              </div>
+            </div>
+          </section>
+
+          <div className="provider-verification-details-grid">
+            <section className="provider-verification-card">
+              <div className="provider-verification-card-head"><span><Icon name="note" /></span><div><h3>Submitted Details</h3><p>Your onboarding details are securely saved for admin review.</p></div></div>
+              <div className="provider-verification-stats">
+                {submittedDetails.map(([label, value, icon]) => <article key={label}><span><Icon name={icon} /></span><small>{label}</small><strong>{value}</strong></article>)}
+              </div>
+            </section>
+            <section className="provider-verification-card">
+              <div className="provider-verification-card-head"><span><Icon name="user" /></span><div><h3>Registration Summary</h3><p>A confirmation of the details submitted for verification.</p></div></div>
+              <div className="provider-verification-summary">
+                <p><span>Reference ID</span><strong>{activationReference}</strong></p><p><span>Business Name</span><strong>{formState.businessName || 'Provider Business'}</strong></p><p><span>Owner Name</span><strong>{formState.ownerName || formState.fullName || 'Provider'}</strong></p><p><span>Primary Service</span><strong>{formState.serviceCategory || 'Service Provider'}</strong></p>
+              </div>
+              <div className="provider-verification-summary-chips"><span>KYC Submitted</span><span>Admin Approval Pending</span><span>Based in India</span></div>
+            </section>
+          </div>
+
+          <section className="provider-verification-next">
+            <div><span className="provider-verification-next-icon"><Icon name="services" /></span><h3>What Happens Next</h3><p>We will activate your provider profile once the review is complete.</p></div>
+            <ol><li>Our admin team will review your submitted business details and KYC documents.</li><li>Your profile will activate after approval and appear in relevant marketplace results.</li><li>We will notify you as soon as your verification status is updated.</li></ol>
+            <span className="provider-verification-rocket" aria-hidden="true"><Icon name="arrow-right" /></span>
+          </section>
+          <footer className="provider-verification-security"><span><Icon name="shield" /></span><p><strong>Your data is safe and secure with us.</strong><small>We use industry-standard security measures to protect your information.</small></p><b><Icon name="lock" /> Secure & Encrypted</b></footer>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className={`partner-wizard-page${isOverlay ? ' is-overlay' : ''}`}>
@@ -1641,8 +1875,17 @@ function PartnerRegistrationPage({ isOverlay = false }) {
           </div>
         </header>
 
-        <div className="partner-wizard-layout">
+        <div className={`partner-wizard-layout${sidebarCollapsed ? ' is-sidebar-collapsed' : ''}`}>
           <aside className="partner-wizard-sidebar">
+            <button
+              type="button"
+              className="partner-wizard-sidebar-toggle"
+              aria-label={sidebarCollapsed ? 'Expand onboarding menu' : 'Collapse onboarding menu'}
+              aria-expanded={!sidebarCollapsed}
+              onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+            >
+              <Icon name="chevron-left" />
+            </button>
             <div className="partner-wizard-completion-card">
               <div
                 className="partner-wizard-completion-ring"
@@ -1723,7 +1966,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                         ? 'Review Payment'
                         : currentStep > 0
                           ? 'Back'
-                          : 'Back to Home'}
+                          : 'Back'}
                     </span>
                   </button>
 
@@ -1766,7 +2009,7 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                       onClick={handleNext}
                     >
                       <span>Next</span>
-                      <ArrowButtonGif className="partner-wizard-btn-icon" />
+                      <Icon name="arrow-right" className="partner-wizard-btn-icon" />
                     </button>
                   ) : (
                     <button
@@ -1774,10 +2017,27 @@ function PartnerRegistrationPage({ isOverlay = false }) {
                       className="partner-wizard-primary-btn"
                       onClick={handleProceedPayment}
                     >
-                      <span>Proceed to Payment</span>
-                      <ArrowButtonGif className="partner-wizard-btn-icon" />
+                      <span>Submit for Verification</span>
+                      <Icon name="arrow-right" className="partner-wizard-btn-icon" />
                     </button>
                   )}
+                </div>
+              </div>
+            ) : null}
+
+            {currentStep === 0 && !paymentSuccessful ? (
+              <div className="partner-wizard-basic-trust-strip" aria-label="Registration benefits">
+                <div>
+                  <span><Icon name="shield" /></span>
+                  <p><strong>100% Secure</strong><small>Your data is encrypted and protected.</small></p>
+                </div>
+                <div>
+                  <span><Icon name="check" /></span>
+                  <p><strong>Verified Platform</strong><small>Only verified partners get quality leads.</small></p>
+                </div>
+                <div>
+                  <span><Icon name="help" /></span>
+                  <p><strong>Support Anytime</strong><small>We are here to help at every step.</small></p>
                 </div>
               </div>
             ) : null}
