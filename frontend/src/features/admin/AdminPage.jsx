@@ -587,6 +587,13 @@ function AdminIcon({ type, className = '' }) {
           <path d="M11 17.2h2" />
         </svg>
       )
+    case 'email':
+      return (
+        <svg viewBox="0 0 24 24" className={classes} fill="none" stroke="currentColor" strokeWidth="1.8">
+          <rect x="3.5" y="5.5" width="17" height="13" rx="2.2" />
+          <path d="m4.5 7 7.5 5.5L19.5 7" />
+        </svg>
+      )
     case 'otp':
       return (
         <svg viewBox="0 0 24 24" className={classes} fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -646,6 +653,8 @@ function AdminPage() {
   const [loginStep, setLoginStep] = useState('phone')
   const [loginBusy, setLoginBusy] = useState(false)
   const [loginError, setLoginError] = useState('')
+  const [adminEmail, setAdminEmail] = useState('')
+  const [adminPassword, setAdminPassword] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [currentPage, setCurrentPage] = useState(1)
@@ -874,6 +883,22 @@ function AdminPage() {
       setLoginBusy(false)
       completeLogin(providerLabel)
     }, 1000)
+  }
+
+  const handleCredentialLogin = (event) => {
+    event.preventDefault()
+    setLoginError('')
+
+    if (adminEmail.trim().toLowerCase() !== 'rvardhan692@rku.ac.in' || adminPassword !== 'rvardhan692') {
+      setLoginError('Incorrect admin email or password.')
+      return
+    }
+
+    setLoginBusy(true)
+    window.setTimeout(() => {
+      setLoginBusy(false)
+      completeLogin('Email & Password')
+    }, 550)
   }
 
   const handleLogout = () => {
@@ -1830,12 +1855,35 @@ function AdminPage() {
             <div className="vn-admin-login-card-head">
               <div>
                 <h2>Admin Login</h2>
-                <p>Use mobile OTP or social shortcuts to open the VyaparNest admin panel.</p>
+                <p>Sign in with your authorized administrator email and password.</p>
               </div>
               <button type="button" className="vn-admin-theme-toggle" onClick={() => setIsDarkMode((value) => !value)}>
                 <AdminIcon type={isDarkMode ? 'sun' : 'moon'} />
               </button>
             </div>
+
+            <form className="vn-admin-direct-login" onSubmit={handleCredentialLogin}>
+              <label>
+                <span>Admin Email</span>
+                <div className="vn-admin-login-input">
+                  <AdminIcon type="email" className="vn-admin-login-input-icon" />
+                  <input type="email" autoComplete="username" value={adminEmail} onChange={(event) => setAdminEmail(event.target.value)} placeholder="Enter admin email" required />
+                </div>
+              </label>
+              <label>
+                <span>Password</span>
+                <div className="vn-admin-login-input">
+                  <AdminIcon type="lock" className="vn-admin-login-input-icon" />
+                  <input type="password" autoComplete="current-password" value={adminPassword} onChange={(event) => setAdminPassword(event.target.value)} placeholder="Enter admin password" required />
+                </div>
+              </label>
+              {loginError ? <p className="vn-admin-login-error">{loginError}</p> : null}
+              <button type="submit" className="vn-admin-button is-primary is-block" disabled={loginBusy || !adminEmail.trim() || !adminPassword}>
+                {loginBusy ? 'Signing in...' : 'Login to Admin Dashboard'}
+              </button>
+            </form>
+
+            <div className="vn-admin-login-alternative"><span>Alternative demo access</span></div>
 
             <div className="vn-admin-login-steps">
               <span className={loginStep === 'phone' ? 'is-active' : 'is-done'}>1. Mobile Number</span>
@@ -1884,7 +1932,7 @@ function AdminPage() {
                 </div>
               </div>
 
-              {loginError ? <p className="vn-admin-login-error">{loginError}</p> : null}
+              {loginStep === 'otp' && loginError ? <p className="vn-admin-login-error">{loginError}</p> : null}
 
               {loginStep === 'phone' ? (
                 <button type="button" className="vn-admin-button is-primary is-block" onClick={handleSendOtp} disabled={loginBusy}>

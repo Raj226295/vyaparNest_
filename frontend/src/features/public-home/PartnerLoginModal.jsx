@@ -44,7 +44,30 @@ function PartnerLoginModal({ isOpen, modalRef, onClose, onCreateAccount, showCre
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [loginError, setLoginError] = useState('')
   const isProvider = role === 'provider'
+  const handleLogin = (event) => {
+    event.preventDefault()
+    const normalizedIdentifier = identifier.trim().toLowerCase()
+
+    if (normalizedIdentifier === 'rvardhan692@rku.ac.in' && password === 'rvardhan692') {
+      window.localStorage.setItem('vyaparnest-admin-auth', 'true')
+      window.localStorage.setItem('vyaparnest-admin-user', JSON.stringify({ name: 'Raj Vardhan', role: 'Super Administrator', email: normalizedIdentifier, source: 'Email & Password' }))
+      setLoginError('')
+      onClose?.()
+      window.location.hash = '#admin'
+      return
+    }
+
+    if (!identifier.trim() || !password) {
+      setLoginError('Enter your email or phone number and password.')
+      return
+    }
+
+    setLoginError('')
+    onClose?.()
+    window.location.hash = isProvider ? '#provider-dashboard' : '#user-dashboard'
+  }
 
   return (
     <div className={`aryass-auth-overlay${isOpen ? ' is-open' : ''}`} aria-hidden={!isOpen}>
@@ -72,7 +95,7 @@ function PartnerLoginModal({ isOpen, modalRef, onClose, onCreateAccount, showCre
               </button>
             </div>
 
-            <form className="aryass-auth-form" onSubmit={(event) => event.preventDefault()}>
+            <form className="aryass-auth-form" onSubmit={handleLogin}>
               <label className="aryass-auth-field">
                 <span>Email or Phone Number</span>
                 <span className="aryass-auth-input-shell">
@@ -96,6 +119,8 @@ function PartnerLoginModal({ isOpen, modalRef, onClose, onCreateAccount, showCre
                 <label className="aryass-auth-checkbox"><input type="checkbox" /><span>Remember me</span></label>
                 <button type="button" className="aryass-auth-forgot">Forgot Password?</button>
               </div>
+
+              {loginError ? <p className="aryass-auth-error" role="alert">{loginError}</p> : null}
 
               <button type="submit" className="aryass-auth-submit" disabled={!identifier.trim() || !password}>
                 Login

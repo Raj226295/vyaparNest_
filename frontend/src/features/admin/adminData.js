@@ -52,16 +52,11 @@ export const adminNavigationGroups = [
 ]
 
 export const adminOverviewStats = [
-  { id: 'totalUsers', label: 'Total Users', value: '24,580', delta: '+12.4%', tone: 'ink' },
-  { id: 'totalProviders', label: 'Total Service Providers', value: '4,860', delta: '+8.2%', tone: 'gold' },
-  { id: 'pendingApprovals', label: 'Pending Provider Approvals', value: '148', delta: '14 urgent', tone: 'amber' },
-  { id: 'categories', label: 'Total Categories', value: '36', delta: '6 featured', tone: 'ink' },
-  { id: 'services', label: 'Total Services', value: '1,258', delta: '+42 this month', tone: 'gold' },
-  { id: 'requests', label: 'Total Service Requests', value: '18,920', delta: '+16.7%', tone: 'ink' },
-  { id: 'activeProjects', label: 'Active Projects', value: '2,416', delta: '328 high priority', tone: 'gold' },
-  { id: 'completedProjects', label: 'Completed Projects', value: '12,804', delta: '+11.1%', tone: 'ink' },
-  { id: 'pendingPayments', label: 'Pending Payments', value: '₹18.4L', delta: '42 invoices', tone: 'amber' },
-  { id: 'revenue', label: 'Total Revenue', value: '₹1.84Cr', delta: '+21.6%', tone: 'gold' },
+  { id: 'totalProviders', label: 'Total Providers', value: '1,248', delta: '+18.6% this month', tone: 'gold' },
+  { id: 'pendingApprovals', label: 'Pending Approvals', value: '24', delta: '6 added today', tone: 'amber' },
+  { id: 'totalClients', label: 'Total Clients', value: '5,734', delta: '+12.4% this month', tone: 'ink' },
+  { id: 'totalBookings', label: 'Total Bookings', value: '8,945', delta: '+15.3% this month', tone: 'gold' },
+  { id: 'revenue', label: 'Total Revenue', value: '₹12,45,890', delta: '+16.5% this month', tone: 'ink' },
 ]
 
 export const adminRevenueSeries = [

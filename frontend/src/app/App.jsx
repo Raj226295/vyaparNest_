@@ -3,6 +3,7 @@ import PublicHomePage from '../features/public-home/PublicHomePage.jsx'
 import PartnerRegistrationPage from '../features/public-home/PartnerRegistrationPage.jsx'
 import UserPanelPage from '../features/user-panel/UserPanelPage.jsx'
 import ProviderDashboard from '../features/provider-panel/ProviderDashboard.jsx'
+import AdminPage from '../features/admin/AdminPage.jsx'
 
 const partnerRegistrationHash = '#partner-register'
 const partnerLoginHash = '#partner-login'
@@ -11,6 +12,8 @@ const aiAssistHash = '#ai-assist'
 const userDashboardHash = '#user-dashboard'
 const providerDashboardHash = '#provider-dashboard'
 const providerVerificationHash = '#provider-verification'
+const adminLoginHash = '#admin-login'
+const adminHashPrefix = '#admin'
 const serviceProvidersHashPrefix = '#service-providers/'
 
 function getCurrentScreen() {
@@ -40,6 +43,10 @@ function getCurrentScreen() {
 
   if (window.location.hash === providerDashboardHash) {
     return 'provider-dashboard'
+  }
+
+  if (window.location.hash === adminLoginHash || window.location.hash.startsWith(adminHashPrefix)) {
+    return 'admin'
   }
 
   if (window.location.hash === providerVerificationHash) {
@@ -117,6 +124,10 @@ function App() {
   // prevents any user panel state from appearing beneath or above it.
   if (currentScreen === 'provider-verification') {
     return <PartnerRegistrationPage onOpenPartnerLogin={openPartnerLogin} forceVerification />
+  }
+
+  if (currentScreen === 'admin') {
+    return <AdminPage />
   }
 
   return (
