@@ -127,10 +127,24 @@ export const userRows = [
 
 export const categoryRows = [
   { id: 'C-01', name: 'Accounting', icon: 'tax.gif', image: 'accounting-services-hero-user.png', services: 128, status: 'Enabled', order: 1, subcategories: 8 },
-  { id: 'C-02', name: 'Website Development', icon: 'web.gif', image: 'guide-website-hover.png', services: 210, status: 'Enabled', order: 2, subcategories: 12 },
-  { id: 'C-03', name: 'Digital Marketing', icon: 'analytics.gif', image: 'guide-marketing-hover.png', services: 342, status: 'Enabled', order: 3, subcategories: 10 },
-  { id: 'C-04', name: 'Home Services', icon: 'cleaning-service.gif', image: 'cleaning-service.gif', services: 144, status: 'Enabled', order: 4, subcategories: 11 },
-  { id: 'C-05', name: 'AI Automation', icon: 'mission.gif', image: 'automation-hero.png', services: 69, status: 'Disabled', order: 5, subcategories: 5 },
+  { id: 'C-02', name: 'App Development', icon: 'applications.gif', image: 'web-developer.gif', services: 156, status: 'Enabled', order: 2, subcategories: 9 },
+  { id: 'C-03', name: 'Business Consultant', icon: 'user.gif', image: 'business-consulting-hero.png', services: 98, status: 'Enabled', order: 3, subcategories: 7 },
+  { id: 'C-04', name: 'Business Loans', icon: 'analytics.gif', image: 'guide-growth-hover.png', services: 64, status: 'Enabled', order: 4, subcategories: 6 },
+  { id: 'C-05', name: 'Website Development', icon: 'web.gif', image: 'guide-website-hover.png', services: 210, status: 'Enabled', order: 5, subcategories: 12 },
+  { id: 'C-06', name: 'Digital Marketing', icon: 'analytics.gif', image: 'guide-marketing-hover.png', services: 342, status: 'Enabled', order: 6, subcategories: 10 },
+  { id: 'C-07', name: 'Graphic Design', icon: 'graphic-designer.gif', image: 'guide-branding-hover.png', services: 186, status: 'Enabled', order: 7, subcategories: 11 },
+  { id: 'C-08', name: 'Video Editing', icon: 'movie-camera.gif', image: 'movie-camera.gif', services: 112, status: 'Enabled', order: 8, subcategories: 8 },
+  { id: 'C-09', name: 'GST & Tax Services', icon: 'tax.gif', image: 'accounting-services-hero-user.png', services: 89, status: 'Enabled', order: 9, subcategories: 8 },
+  { id: 'C-10', name: 'CA Services', icon: 'contract.gif', image: 'accounting-services-hero-user.png', services: 78, status: 'Enabled', order: 10, subcategories: 7 },
+  { id: 'C-11', name: 'Legal Consultant', icon: 'contract.gif', image: 'contract.gif', services: 75, status: 'Enabled', order: 11, subcategories: 7 },
+  { id: 'C-12', name: 'Company Registration', icon: 'mission.gif', image: 'business-consulting-hero.png', services: 92, status: 'Enabled', order: 12, subcategories: 6 },
+  { id: 'C-13', name: 'Social Media Marketing', icon: 'web-data.gif', image: 'automation-hero.png', services: 123, status: 'Enabled', order: 13, subcategories: 9 },
+  { id: 'C-14', name: 'SEO Services', icon: 'category-seo.gif', image: 'category-seo.gif', services: 168, status: 'Enabled', order: 14, subcategories: 8 },
+  { id: 'C-15', name: 'Content Writing', icon: 'category-comments.gif', image: 'category-comments.gif', services: 97, status: 'Enabled', order: 15, subcategories: 8 },
+  { id: 'C-16', name: 'Photography', icon: 'category-photo.gif', image: 'category-photo.gif', services: 84, status: 'Enabled', order: 16, subcategories: 7 },
+  { id: 'C-17', name: 'Interior Design', icon: 'vector.gif', image: 'guide-branding-hover.png', services: 73, status: 'Enabled', order: 17, subcategories: 7 },
+  { id: 'C-18', name: 'Home Services', icon: 'cleaning-service.gif', image: 'cleaning-service.gif', services: 144, status: 'Enabled', order: 18, subcategories: 11 },
+  { id: 'C-19', name: 'AI Automation', icon: 'mission.gif', image: 'automation-hero.png', services: 69, status: 'Enabled', order: 19, subcategories: 5 },
 ]
 
 export const serviceRows = [
