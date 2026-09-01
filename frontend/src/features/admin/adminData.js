@@ -11,7 +11,7 @@ export const adminNavigationGroups = [
       { id: 'providers', label: 'Service Providers', icon: 'briefcase' },
       { id: 'categories', label: 'Categories', icon: 'grid' },
       { id: 'services', label: 'Services', icon: 'layers' },
-      { id: 'portfolio', label: 'Portfolio Management', icon: 'gallery' },
+      { id: 'portfolio', label: 'Profile Management', icon: 'gallery' },
     ],
   },
   {
@@ -114,6 +114,7 @@ export const providerRows = [
   { id: 'P-1006', name: 'WebCraft Solutions', category: 'Website Development', city: 'Patna', status: 'Active', verified: 'Verified', earnings: '₹5.9L', rating: 4.8, requests: 126, portfolio: 8, documents: 5, joined: 'Jul 10, 2026' },
   { id: 'P-1007', name: 'CA LedgerLine Experts', category: 'CA Services', city: 'Chennai', status: 'Blocked', verified: 'Fraud Review', earnings: '₹1.1L', rating: 4.2, requests: 38, portfolio: 3, documents: 2, joined: 'Jul 08, 2026' },
   { id: 'P-1008', name: 'DigitalGrow Agency', category: 'Digital Marketing', city: 'Purnia', status: 'Active', verified: 'Verified', earnings: '₹6.6L', rating: 4.9, requests: 152, portfolio: 8, documents: 5, joined: 'Jul 05, 2026' },
+  { id: 'P-1009', name: 'Smart App Development', category: 'App Development', city: 'Pune', status: 'Active', verified: 'Verified', earnings: '₹8.2L', rating: 4.9, requests: 133, portfolio: 7, documents: 5, joined: 'Jul 02, 2026' },
 ]
 
 export const userRows = [

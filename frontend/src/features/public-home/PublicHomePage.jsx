@@ -9,6 +9,7 @@ const aiAssistHash = '#ai-assist'
 const workflowHash = '#how-it-works'
 const serviceProvidersHashPrefix = '#service-providers/'
 const providerProfileHashPrefix = '#provider-profile/'
+const providerProfileDesignsStorageKey = 'vyaparnest-provider-profile-designs-v1'
 const defaultProviderProfileCategoryTitle = 'Website Development'
 const defaultProviderProfileId = 'website-development-2'
 const defaultProviderProfileHash = `${providerProfileHashPrefix}Website%20Development/${defaultProviderProfileId}`
@@ -2159,6 +2160,17 @@ function PublicHomePage({
       providerProfileEntries[0] ??
       null
     : null
+  let managedProviderProfileDesign = null
+  if (activeProviderProfile && typeof window !== 'undefined') {
+    try {
+      const savedDesigns = JSON.parse(window.localStorage.getItem(providerProfileDesignsStorageKey) || '{}')
+      managedProviderProfileDesign = Object.values(savedDesigns).find(
+        (design) => design?.providerName === activeProviderProfile.name || design?.businessName === activeProviderProfile.name
+      ) || null
+    } catch {
+      managedProviderProfileDesign = null
+    }
+  }
   const providerProfileServices = activeProviderProfile
     ? buildProviderServices(activeProviderProfile, providerProfileCategory)
     : []
@@ -3592,7 +3604,17 @@ function PublicHomePage({
               </div>
             </section>
           ) : isProviderProfileScreen && activeProviderProfile ? (
-            <section className="vn-home-section vn-home-provider-page" id="provider-profile">
+            <section
+              className={`vn-home-section vn-home-provider-page${managedProviderProfileDesign ? ` is-admin-designed is-${managedProviderProfileDesign.template?.toLowerCase() || 'modern'}` : ''}`}
+              id="provider-profile"
+              style={managedProviderProfileDesign ? {
+                '--provider-admin-primary': managedProviderProfileDesign.primaryColor,
+                '--provider-admin-accent': managedProviderProfileDesign.accentColor,
+                '--provider-admin-background': managedProviderProfileDesign.backgroundColor,
+                '--provider-admin-text': managedProviderProfileDesign.textColor,
+                '--provider-admin-radius': `${managedProviderProfileDesign.cardRadius ?? 16}px`,
+              } : undefined}
+            >
               <div className="vn-home-shell-inner">
                 <div className="vn-home-provider-page-topbar">
                   <button
@@ -3619,7 +3641,7 @@ function PublicHomePage({
                     <div className="vn-home-provider-page-hero-copy">
                       <div className="vn-home-provider-page-title-row">
                         <div className="vn-home-provider-page-title-block">
-                          <h1>{activeProviderProfile.name}</h1>
+                          <h1>{managedProviderProfileDesign?.businessName || activeProviderProfile.name}</h1>
                           {activeProviderProfile.verified ? (
                             <span className="vn-home-provider-page-verified">Verified</span>
                           ) : null}
@@ -3632,7 +3654,7 @@ function PublicHomePage({
                         ))}
                       </div>
 
-                      <p className="vn-home-provider-page-summary">{activeProviderProfile.description}</p>
+                      <p className="vn-home-provider-page-summary">{managedProviderProfileDesign?.tagline || activeProviderProfile.description}</p>
 
                       <div className="vn-home-provider-page-provider-count">
                         <Icon type="users" className="vn-home-provider-page-metric-icon" />
@@ -3718,13 +3740,13 @@ function PublicHomePage({
                         </article>
                       </div>
 
-                      <div className="vn-home-provider-page-actions">
+                      <div className="vn-home-provider-page-actions" style={managedProviderProfileDesign?.showContact === false ? { display: 'none' } : undefined}>
                         <button
                           type="button"
                           className="vn-home-provider-page-primary"
                           onClick={handleProviderQuoteRequest}
                         >
-                          Request Quote
+                          {managedProviderProfileDesign?.ctaLabel || 'Request Quote'}
                         </button>
                         <button
                           type="button"
@@ -3746,11 +3768,14 @@ function PublicHomePage({
                 </div>
 
                 <div className="vn-home-provider-page-main">
-                  <section className="vn-home-provider-panel">
+                  <section
+                    className="vn-home-provider-panel"
+                    style={managedProviderProfileDesign?.showAbout === false ? { display: 'none' } : undefined}
+                  >
                     <div className="vn-home-provider-panel-head">
                       <div>
                         <h2>About Provider</h2>
-                        <p>{activeProviderProfile.aboutDescription}</p>
+                        <p>{managedProviderProfileDesign?.bio || activeProviderProfile.aboutDescription}</p>
                       </div>
                     </div>
 
@@ -3806,7 +3831,10 @@ function PublicHomePage({
                     </div>
                   </section>
 
-                  <section className="vn-home-provider-panel">
+                  <section
+                    className="vn-home-provider-panel"
+                    style={managedProviderProfileDesign?.showServices === false ? { display: 'none' } : undefined}
+                  >
                     <div className="vn-home-provider-panel-head">
                       <div>
                         <h2>Services Offered</h2>
@@ -3857,7 +3885,7 @@ function PublicHomePage({
                     </div>
                   </section>
 
-                  <section className="vn-home-provider-panel" ref={providerPortfolioSectionRef}>
+                  <section className="vn-home-provider-panel" ref={providerPortfolioSectionRef} style={managedProviderProfileDesign?.showPortfolio === false ? { display: 'none' } : undefined}>
                     <div className="vn-home-provider-panel-head is-spaced">
                       <div>
                         <h2>Our Portfolio</h2>
@@ -3926,7 +3954,10 @@ function PublicHomePage({
                     )}
                   </section>
 
-                  <section className="vn-home-provider-panel">
+                  <section
+                    className="vn-home-provider-panel"
+                    style={managedProviderProfileDesign?.showReviews === false ? { display: 'none' } : undefined}
+                  >
                     <div className="vn-home-provider-panel-head">
                       <div>
                         <h2>Client Reviews</h2>
