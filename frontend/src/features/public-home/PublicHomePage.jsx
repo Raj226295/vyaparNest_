@@ -1895,6 +1895,37 @@ function Icon({ type, className = '' }) {
           <path d="M8.2 18.5v-5.2h7.6v5.2" />
         </svg>
       )
+    case 'drawer-home':
+      return (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="m3.3 11.1 8-7.1a1 1 0 0 1 1.4 0l8 7.1v8.1a1.7 1.7 0 0 1-1.7 1.7h-4.2v-6.1H9.2v6.1H5a1.7 1.7 0 0 1-1.7-1.7v-8.1Z" />
+        </svg>
+      )
+    case 'drawer-categories':
+      return (
+        <svg {...sharedProps}>
+          <rect x="4" y="4" width="6.5" height="6.5" rx="1.2" />
+          <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2" />
+          <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2" />
+          <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2" />
+        </svg>
+      )
+    case 'drawer-ai':
+      return (
+        <svg {...sharedProps}>
+          <path d="M10.6 3.5 12.5 9l5.5 1.9-5.5 1.9-1.9 5.5-1.9-5.5-5.5-1.9L8.7 9l1.9-5.5Z" />
+          <path d="m18.4 15.1.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2Z" />
+        </svg>
+      )
+    case 'drawer-about':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="9.1" cy="9" r="2.8" />
+          <circle cx="16.7" cy="10.1" r="2.2" />
+          <path d="M4.3 19.2a5.1 5.1 0 0 1 9.6-2.4" />
+          <path d="M14.4 18.8a4.3 4.3 0 0 1 5.4-3.8" />
+        </svg>
+      )
     case 'graduation':
       return (
         <svg {...sharedProps}>
@@ -2082,6 +2113,8 @@ function PublicHomePage({
   currentScreen = 'home',
 }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [mobileSearchTerm, setMobileSearchTerm] = useState('')
   const [partnerMenuOpen, setPartnerMenuOpen] = useState(false)
   const [categoriesMenuOpen, setCategoriesMenuOpen] = useState(false)
   const [categoriesPageFilterOpen, setCategoriesPageFilterOpen] = useState(false)
@@ -2134,6 +2167,9 @@ function PublicHomePage({
       : categoryFilterOptions.find((category) => category.title === selectedCategoryTitle) ?? null
   const filteredCategoryOptions = categoryFilterOptions.filter((category) =>
     category.title.toLowerCase().includes(categoriesPageSearchTerm.trim().toLowerCase())
+  )
+  const mobileSearchResults = allCategoriesCards.filter((category) =>
+    category.title.toLowerCase().includes(mobileSearchTerm.trim().toLowerCase())
   )
   const displayedCategories = selectedCategory
     ? categoryFilterOptions.filter((category) => category.title === selectedCategory.title)
@@ -2292,7 +2328,22 @@ function PublicHomePage({
 
   useEffect(() => {
     setCategoriesMenuOpen(false)
+    setMobileSearchOpen(false)
+    setMobileSearchTerm('')
   }, [currentScreen])
+
+  useEffect(() => {
+    if (!mobileNavOpen || typeof document === 'undefined') {
+      return undefined
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [mobileNavOpen])
 
   useEffect(() => {
     if (!isCategoriesScreen) {
@@ -2918,7 +2969,7 @@ function PublicHomePage({
 
   return (
     <div
-      className={`vn-home-shell${isCategoriesScreen ? ' is-categories-screen' : ''}${
+      className={`vn-home-shell${mobileNavOpen ? ' is-mobile-menu-open' : ''}${isCategoriesScreen ? ' is-categories-screen' : ''}${
         isServiceProvidersScreen ? ' is-service-providers-screen' : ''
       }${
         isProviderProfileScreen ? ' is-provider-profile-screen' : ''
@@ -2937,6 +2988,12 @@ function PublicHomePage({
               <img src="/vyaparnest-home-logo-reference.jpeg" alt="VyaparNest" />
             </a>
 
+            <button type="button" className="vn-home-mobile-location-button">
+              <Icon type="location" />
+              <span>Purnia, Bihar</span>
+              <Icon type="chevron-down" />
+            </button>
+
             <button
               type="button"
               className="vn-home-menu-toggle"
@@ -2948,7 +3005,86 @@ function PublicHomePage({
               <Icon type={mobileNavOpen ? 'close' : 'menu'} className="vn-home-menu-toggle-icon" />
             </button>
 
+            <button type="button" className="vn-home-notification-button" aria-label="Notifications">
+              <img src="/mobile-nav-icons/notification.png" alt="" />
+              <span aria-hidden="true"></span>
+            </button>
+
             <div id="vn-home-nav-panel" className={`vn-home-nav-area${mobileNavOpen ? ' is-open' : ''}`}>
+              <div className="vn-home-mobile-drawer" aria-label="Mobile menu">
+                <div className="vn-home-mobile-drawer-head">
+                  <button type="button" aria-label="Close menu" onClick={() => setMobileNavOpen(false)}>
+                    <Icon type="close" />
+                  </button>
+                  <img src="/vyaparnest-home-logo-reference.jpeg" alt="VyaparNest" />
+                </div>
+
+                <nav className="vn-home-mobile-drawer-links" aria-label="Mobile primary navigation">
+                  {[
+                    { label: 'Home', href: homeHash, icon: 'drawer-home' },
+                    { label: 'Categories', href: categoriesHash, icon: 'drawer-categories' },
+                    { label: 'AI Assist', href: aiAssistHash, icon: 'drawer-ai' },
+                    { label: 'About Us', href: defaultProviderProfileHash, icon: 'drawer-about' },
+                  ].map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      className={link.label === 'Home' && currentScreen === 'home' ? 'is-active' : ''}
+                      onClick={handlePrimaryNavSelect}
+                    >
+                      <Icon type={link.icon} />
+                      <span>{link.label}</span>
+                      <Icon type="arrow-right" />
+                    </a>
+                  ))}
+                </nav>
+
+                <form
+                  className="vn-home-mobile-drawer-search"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    setMobileNavOpen(false)
+                    setMobileSearchOpen(true)
+                  }}
+                >
+                  <Icon type="search" />
+                  <input type="search" placeholder="Search services..." aria-label="Search services" />
+                  <button type="submit" aria-label="Search services">
+                    <Icon type="search" />
+                  </button>
+                </form>
+
+                <button type="button" className="vn-home-mobile-drawer-partner" onClick={handleOpenPartnerRegistration}>
+                  <Icon type="users" />
+                  <span>Partner with us</span>
+                  <Icon type="arrow-right" />
+                </button>
+
+                <button type="button" className="vn-home-mobile-drawer-login" onClick={handleOpenPartnerLogin}>
+                  <Icon type="users" />
+                  <span>Login</span>
+                  <Icon type="arrow-right" />
+                </button>
+
+                <div className="vn-home-mobile-drawer-socials">
+                  {footerSocials.map((social) => (
+                    <a key={social.label} href="#top" aria-label={social.label}>
+                      <Icon type={social.icon} />
+                    </a>
+                  ))}
+                </div>
+                <div className="vn-home-mobile-drawer-footer">
+                  <div>
+                    <a href="#top">Privacy Policy</a>
+                    <i></i>
+                    <a href="#top">Terms &amp; Conditions</a>
+                    <i></i>
+                    <a href="#top">Help &amp; Support</a>
+                  </div>
+                  <p>© 2026 VyaparNest. All rights reserved.</p>
+                </div>
+              </div>
+
               <div className="vn-home-nav-primary">
                 <nav className="vn-home-nav-links" aria-label="Primary">
                   {primaryNavLinks.map((link) => {
@@ -3150,6 +3286,15 @@ function PublicHomePage({
                   playsInline
                 />
                 <div className="vn-home-hero-video-overlay"></div>
+                <div className="vn-home-mobile-hero-copy">
+                  <h1>
+                    Find Trusted
+                    <br />
+                    Professionals.
+                    <br />
+                    <b>Grow Your Business.</b>
+                  </h1>
+                </div>
               </div>
             </div>
           </section>
@@ -4635,6 +4780,73 @@ function PublicHomePage({
           </div>
         </div>
       </footer>
+
+      {mobileSearchOpen ? (
+        <div className="vn-home-mobile-search-sheet" role="dialog" aria-modal="true" aria-label="Search services">
+          <div className="vn-home-mobile-search-sheet-head">
+            <strong>Search Services</strong>
+            <button type="button" aria-label="Close search" onClick={() => setMobileSearchOpen(false)}>
+              <Icon type="close" />
+            </button>
+          </div>
+          <label className="vn-home-mobile-search-field">
+            <Icon type="search" />
+            <input
+              autoFocus
+              type="search"
+              value={mobileSearchTerm}
+              onChange={(event) => setMobileSearchTerm(event.target.value)}
+              placeholder="Search a service or category"
+              aria-label="Search a service or category"
+            />
+          </label>
+          <div className="vn-home-mobile-search-results">
+            {mobileSearchResults.slice(0, 6).map((category) => (
+              <button
+                type="button"
+                key={category.title}
+                onClick={() => {
+                  setMobileSearchOpen(false)
+                  openServiceProvidersPage(category.title)
+                }}
+              >
+                {renderCategoryVisual(category, 'vn-home-mobile-search-result-image', 'vn-home-mobile-search-result-icon')}
+                <span>
+                  <strong>{category.title}</strong>
+                  <small>{category.experts}</small>
+                </span>
+                <Icon type="arrow-right" />
+              </button>
+            ))}
+            {mobileSearchTerm && mobileSearchResults.length === 0 ? <p>No matching services found.</p> : null}
+          </div>
+        </div>
+      ) : null}
+
+      {!isProviderProfileScreen && !isAiAssistScreen ? (
+        <nav className="vn-home-mobile-bottom-nav" aria-label="Mobile navigation">
+          <a href="#top" className={currentScreen === 'home' ? 'is-active' : ''}>
+            <img src="/mobile-nav-icons/home.png" alt="" />
+            <span>Home</span>
+          </a>
+          <a href={categoriesHash} className={isCategoriesScreen ? 'is-active' : ''}>
+            <img src="/mobile-nav-icons/categories.png" alt="" />
+            <span>Categories</span>
+          </a>
+          <button type="button" className={mobileSearchOpen ? 'is-active' : ''} onClick={() => setMobileSearchOpen(true)}>
+            <img src="/mobile-nav-icons/search.png" alt="" />
+            <span>Search</span>
+          </button>
+          <button type="button" onClick={handleOpenPartnerLogin}>
+            <img src="/mobile-nav-icons/messages.png" alt="" />
+            <span>Messages</span>
+          </button>
+          <button type="button" onClick={handleOpenPartnerLogin}>
+            <img src="/mobile-nav-icons/profile.png" alt="" />
+            <span>Profile</span>
+          </button>
+        </nav>
+      ) : null}
 
       <PartnerLoginModal
         isOpen={partnerLoginOpen}
