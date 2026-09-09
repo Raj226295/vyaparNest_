@@ -1766,6 +1766,75 @@
 }
 
 @media (max-width: 720px) {
+  .partner-wizard-plans-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .partner-wizard-plan-card {
+    align-content: start;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 10px 8px;
+    border-radius: 12px;
+  }
+
+  .partner-wizard-plan-head {
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .partner-wizard-plan-head strong {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: 0.82rem;
+    line-height: 1.15;
+  }
+
+  .partner-wizard-plan-tag {
+    min-height: 18px;
+    padding: 0 6px;
+    font-size: 0.54rem;
+    line-height: 1;
+  }
+
+  .partner-wizard-plan-price {
+    gap: 2px;
+    font-size: 1.08rem;
+    line-height: 1.15;
+  }
+
+  .partner-wizard-plan-price small,
+  .partner-wizard-plan-card p,
+  .partner-wizard-plan-features li {
+    font-size: 0.64rem;
+  }
+
+  .partner-wizard-plan-card > p {
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .partner-wizard-plan-features {
+    gap: 4px;
+  }
+
+  .partner-wizard-plan-features li {
+    gap: 5px;
+    line-height: 1.25;
+  }
+
+  .partner-wizard-plan-check {
+    width: 11px;
+    height: 11px;
+    margin-top: 1px;
+  }
+
   .partner-wizard-topbar {
     flex-direction: column;
     align-items: stretch;

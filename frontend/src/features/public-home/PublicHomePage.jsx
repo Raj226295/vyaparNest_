@@ -1951,6 +1951,14 @@ function Icon({ type, className = '' }) {
           <path d="M4 12h16" />
         </svg>
       )
+    case 'image':
+      return (
+        <svg {...sharedProps}>
+          <rect x="3.5" y="5" width="17" height="14" rx="2.2" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="m5.5 17 4.2-4 3.1 2.8 2.2-2 3.5 3.2" />
+        </svg>
+      )
     case 'compare':
       return (
         <svg {...sharedProps}>
@@ -1964,6 +1972,21 @@ function Icon({ type, className = '' }) {
         <svg {...sharedProps}>
           <path d="m4.5 11.6 14.8-6.2-3.4 13.2-4.1-4.1-4.7-2.9Z" />
           <path d="m11.8 14.5 2.2-2.2" />
+        </svg>
+      )
+    case 'share':
+      return (
+        <svg {...sharedProps}>
+          <circle cx="18" cy="5" r="2.2" />
+          <circle cx="6" cy="12" r="2.2" />
+          <circle cx="18" cy="19" r="2.2" />
+          <path d="m8 10.9 7.9-4.6M8 13.1l7.9 4.6" />
+        </svg>
+      )
+    case 'heart':
+      return (
+        <svg {...sharedProps}>
+          <path d="M20.4 5.8a5 5 0 0 0-7.1 0L12 7.1l-1.3-1.3a5 5 0 0 0-7.1 7.1L12 21l8.4-8.1a5 5 0 0 0 0-7.1Z" />
         </svg>
       )
     case 'paperclip':
@@ -2136,6 +2159,7 @@ function PublicHomePage({
   const [selectedProviderServiceTypes, setSelectedProviderServiceTypes] = useState([])
   const [selectedProviderPriceBuckets, setSelectedProviderPriceBuckets] = useState([])
   const [providerResultsPage, setProviderResultsPage] = useState(1)
+  const [mobileProviderFiltersOpen, setMobileProviderFiltersOpen] = useState(false)
   const [selectedProfileServiceId, setSelectedProfileServiceId] = useState(null)
   const [selectedServiceDetailId, setSelectedServiceDetailId] = useState(null)
   const [selectedPortfolioCategoryFilter, setSelectedPortfolioCategoryFilter] = useState('All')
@@ -3548,15 +3572,56 @@ function PublicHomePage({
                   </div>
                 </div>
 
+                <button
+                  type="button"
+                  className={`vn-home-service-providers-mobile-filter${mobileProviderFiltersOpen ? ' is-open' : ''}`}
+                  onClick={() => setMobileProviderFiltersOpen((isOpen) => !isOpen)}
+                  aria-expanded={mobileProviderFiltersOpen}
+                  aria-controls="provider-filters"
+                >
+                  <Icon type="compare" />
+                  <span>Filters</span>
+                  {selectedProviderServiceTypes.length + selectedProviderPriceBuckets.length > 0 ? (
+                    <strong>{selectedProviderServiceTypes.length + selectedProviderPriceBuckets.length}</strong>
+                  ) : null}
+                  <Icon type="chevron-down" />
+                </button>
+
+                <button
+                  type="button"
+                  className={`vn-home-service-providers-filter-backdrop${mobileProviderFiltersOpen ? ' is-open' : ''}`}
+                  onClick={() => setMobileProviderFiltersOpen(false)}
+                  aria-label="Close filters"
+                  tabIndex={mobileProviderFiltersOpen ? 0 : -1}
+                />
+
                 <div className="vn-home-service-providers-layout">
-                  <aside className="vn-home-service-providers-filters">
+                  <aside
+                    id="provider-filters"
+                    className={`vn-home-service-providers-filters${mobileProviderFiltersOpen ? ' is-mobile-open' : ''}`}
+                  >
+                    <div className="vn-home-service-providers-sheet-head">
+                      <span className="vn-home-service-providers-sheet-handle" />
+                      <div>
+                        <Icon type="compare" />
+                        <span><strong>Filters</strong><small>Find the right service providers</small></span>
+                        {selectedProviderServiceTypes.length + selectedProviderPriceBuckets.length > 0 ? (
+                          <b>{selectedProviderServiceTypes.length + selectedProviderPriceBuckets.length}</b>
+                        ) : null}
+                      </div>
+                      <button type="button" onClick={() => setMobileProviderFiltersOpen(false)} aria-label="Close filters">×</button>
+                    </div>
+
                     <div className="vn-home-service-providers-filters-head">
                       <h2>Filter Providers</h2>
                       <Icon type="compare" className="vn-home-service-providers-filters-head-icon" />
                     </div>
 
-                    <div className="vn-home-service-providers-filter-group">
-                      <h3>Service Type</h3>
+                    <div className="vn-home-service-providers-filter-group is-service-type">
+                      <div className="vn-home-service-providers-filter-title">
+                        <h3>Service Type</h3>
+                        <button type="button" onClick={() => setSelectedProviderServiceTypes([])}>Clear All</button>
+                      </div>
                       <div className="vn-home-service-providers-filter-list">
                         {serviceProviderTypes.map((serviceType) => (
                           <label key={serviceType} className="vn-home-service-providers-filter-check">
@@ -3571,7 +3636,7 @@ function PublicHomePage({
                       </div>
                     </div>
 
-                    <div className="vn-home-service-providers-filter-group">
+                    <div className="vn-home-service-providers-filter-group is-location">
                       <h3>Provider Location</h3>
                       <div className="vn-home-service-providers-location-search">
                         <input
@@ -3588,7 +3653,7 @@ function PublicHomePage({
                       </div>
                     </div>
 
-                    <div className="vn-home-service-providers-filter-group">
+                    <div className="vn-home-service-providers-filter-group is-price">
                       <h3>Price Range</h3>
                       <div className="vn-home-service-providers-filter-list">
                         {serviceProviderPriceBuckets.map((bucket) => (
@@ -3604,6 +3669,8 @@ function PublicHomePage({
                       </div>
                     </div>
 
+                    <div className="vn-home-service-providers-custom-range">
+                      <h3>Custom Range</h3>
                     <div className="vn-home-service-providers-price-inputs">
                       <input
                         type="number"
@@ -3627,14 +3694,34 @@ function PublicHomePage({
                         aria-label="Maximum price"
                       />
                     </div>
+                    </div>
 
+                    <div className="vn-home-service-providers-sheet-actions">
+                    <button
+                      type="button"
+                      className="vn-home-service-providers-reset"
+                      onClick={() => {
+                        setSelectedProviderServiceTypes([])
+                        setSelectedProviderPriceBuckets([])
+                        setProviderLocationSearch('')
+                        setProviderMinPrice('')
+                        setProviderMaxPrice('')
+                        setProviderResultsPage(1)
+                      }}
+                    >
+                      Reset Filters
+                    </button>
                     <button
                       type="button"
                       className="vn-home-service-providers-apply"
-                      onClick={() => setProviderResultsPage(1)}
+                      onClick={() => {
+                        setProviderResultsPage(1)
+                        setMobileProviderFiltersOpen(false)
+                      }}
                     >
-                      Apply Filters
+                      Apply Filters ({selectedProviderServiceTypes.length + selectedProviderPriceBuckets.length})
                     </button>
+                    </div>
                   </aside>
 
                   <div className="vn-home-service-providers-results">
@@ -3664,6 +3751,14 @@ function PublicHomePage({
                     <div className="vn-home-service-providers-results-list">
                       {paginatedServiceProviders.map((provider) => (
                         <article key={provider.id} className="vn-home-service-provider-card">
+                          <div className="vn-home-service-provider-card-media">
+                            <img
+                              src={selectedServiceCategory.heroImage ?? selectedServiceCategory.image}
+                              alt=""
+                              loading="lazy"
+                            />
+                            <span><Icon type="image" /> {6 + (provider.reviews % 7)}+ Photos</span>
+                          </div>
                           <div className="vn-home-service-provider-card-main">
                             <span
                               className="vn-home-service-provider-card-avatar"
@@ -3675,13 +3770,12 @@ function PublicHomePage({
                             <div className="vn-home-service-provider-card-copy">
                               <div className="vn-home-service-provider-card-title">
                                 <h3>{provider.name}</h3>
-                                {provider.verified ? <span>Verified</span> : null}
+                                {provider.verified ? <span><Icon type="check-circle" /> Verified</span> : null}
                               </div>
                               <p>{provider.serviceTags.join(' • ')}</p>
                               <small>
-                                <span>{provider.location}</span>
-                                <span>•</span>
-                                <span>{provider.years}+ Years Experience</span>
+                                <span><Icon type="location" /> {provider.location}</span>
+                                <span><Icon type="briefcase" /> {provider.years}+ Years Experience</span>
                               </small>
                             </div>
                           </div>
@@ -3700,7 +3794,10 @@ function PublicHomePage({
                             className="vn-home-service-provider-card-button"
                             onClick={() => openProviderProfile(provider, selectedServiceCategory)}
                           >
-                            View Profile
+                            View Profile <Icon type="arrow-right" />
+                          </button>
+                          <button type="button" className="vn-home-service-provider-card-favourite" aria-label={`Save ${provider.name}`}>
+                            ♡
                           </button>
                         </article>
                       ))}
@@ -3770,6 +3867,10 @@ function PublicHomePage({
                     <Icon type="arrow-right" className="vn-home-provider-page-back-icon" />
                     <span>Back to Providers</span>
                   </button>
+                  <div className="vn-home-provider-page-topbar-actions">
+                    <button type="button"><Icon type="share" /> Share</button>
+                    <button type="button"><Icon type="heart" /> Save</button>
+                  </div>
                 </div>
 
                 <div className="vn-home-provider-page-hero">
@@ -3788,7 +3889,7 @@ function PublicHomePage({
                         <div className="vn-home-provider-page-title-block">
                           <h1>{managedProviderProfileDesign?.businessName || activeProviderProfile.name}</h1>
                           {activeProviderProfile.verified ? (
-                            <span className="vn-home-provider-page-verified">Verified</span>
+                            <span className="vn-home-provider-page-verified"><Icon type="check-circle" /> Verified</span>
                           ) : null}
                         </div>
                       </div>
@@ -3809,6 +3910,15 @@ function PublicHomePage({
                             'Service Providers Available'
                           )}
                         </strong>
+                      </div>
+
+                      <div className="vn-home-provider-page-mobile-intro">
+                        <img
+                          src={providerProfileCategory.heroImage ?? providerProfileCategory.image}
+                          alt=""
+                          loading="lazy"
+                        />
+                        <span><Icon type="send" /> Watch Introduction</span>
                       </div>
 
                       <div className="vn-home-provider-page-metrics">
@@ -3891,20 +4001,28 @@ function PublicHomePage({
                           className="vn-home-provider-page-primary"
                           onClick={handleProviderQuoteRequest}
                         >
-                          {managedProviderProfileDesign?.ctaLabel || 'Request Quote'}
+                          {managedProviderProfileDesign?.ctaLabel || 'Request Quote'} <Icon type="arrow-right" />
                         </button>
                         <button
                           type="button"
                           className="vn-home-provider-page-secondary"
                           onClick={handleProviderChatNow}
                         >
-                          Chat Now
+                          <Icon type="message-circle" /> Chat Now
                         </button>
                       </div>
                     </div>
                   </div>
 
                   <aside className="vn-home-provider-page-sidecard" aria-label="Provider highlight">
+                    <div className="vn-home-provider-page-sidecard-media">
+                      <img
+                        src={providerProfileCategory.heroImage ?? providerProfileCategory.image}
+                        alt=""
+                        loading="lazy"
+                      />
+                      <span><Icon type="send" /> Watch Introduction</span>
+                    </div>
                     <span className="vn-home-provider-page-sidecard-icon">
                       <Icon type="briefcase" className="vn-home-provider-page-logo-svg" />
                     </span>
@@ -3995,6 +4113,13 @@ function PublicHomePage({
                             activeProviderService?.id === service.id ? ' is-active' : ''
                           }`}
                         >
+                          <div className="vn-home-provider-service-card-media">
+                            <img
+                              src={providerProfileCategory.heroImage ?? providerProfileCategory.image}
+                              alt=""
+                              loading="lazy"
+                            />
+                          </div>
                           <div className="vn-home-provider-service-card-head">
                             <span className="vn-home-provider-service-card-icon">
                               <Icon
@@ -4023,7 +4148,7 @@ function PublicHomePage({
                             className="vn-home-provider-service-card-button"
                             onClick={() => handleSelectProfileService(service.id)}
                           >
-                            View Details
+                            View Details <Icon type="arrow-right" />
                           </button>
                         </article>
                       ))}
